@@ -1,0 +1,95 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:padding="15dp" >
+
+   	<RelativeLayout
+   	    android:id="@+id/menu_details"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" >
+        
+   	    <ProgressBar
+   	        android:id="@+id/progress"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			style="@android:style/Widget.ProgressBar.Horizontal"
+			android:max="100"
+			android:progressDrawable="@layout/progressbar_custom" />
+       
+        <TextView
+        	android:id="@+id/menu_price"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:textSize="23sp"
+        	android:background="@layout/price_style"
+        	android:layout_centerVertical="true"
+        	android:padding="7dp"
+        	android:layout_margin="10dp"
+        	android:typeface="serif" />
+        
+    	<TextView
+        	android:id="@+id/menu_name"
+        	android:layout_toRightOf="@id/menu_price"
+        	android:layout_marginTop="7dp"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:textSize="20sp" />
+    	
+    	<ImageButton
+    	    android:id="@+id/favorite"
+    	    android:layout_toRightOf="@id/menu_price"
+    	    android:layout_alignParentBottom="true"
+    	    android:layout_marginBottom="7dp"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:src="@drawable/ic_action_star"
+    	    android:background="#00ffffff" />
+    	
+    	<ImageButton
+    	    android:id="@+id/show_review"
+    	    android:layout_toRightOf="@id/favorite"
+    	    android:layout_alignParentBottom="true"
+    	    android:layout_marginBottom="7dp"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:src="@drawable/ic_action_show_review"
+    	    android:background="#00ffffff" />
+    	
+    	<ImageButton
+    	    android:id="@+id/write_review"
+    	    android:layout_toRightOf="@id/show_review"
+    	    android:layout_alignParentBottom="true"
+    	    android:layout_marginBottom="7dp"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:src="@drawable/ic_action_write_review"
+    	    android:background="#00ffffff" />
+    	
+    	<Button
+    	    android:id="@+id/like"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_alignParentBottom="true"
+    	    android:layout_toRightOf="@id/write_review"
+    	    android:text="@string/like" />
+    	
+    	<Button
+    	    android:id="@+id/dislike"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_alignParentBottom="true"
+    	    android:layout_toRightOf="@id/like"
+    	    android:text="@string/dislike" />
+    
+    </RelativeLayout>
+    
+   	<TextView
+  	    android:id="@+id/no_menu"
+  	    android:layout_width="wrap_content"
+  	    android:layout_height="wrap_content"
+  	    android:layout_centerInParent="true"
+  	    android:text="@string/no_menu"
+  	    android:visibility="gone" />
+   	
+</RelativeLayout>
