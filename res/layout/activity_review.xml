@@ -1,0 +1,70 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="${relativePackage}.${activityClass}" >
+
+    <RelativeLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+     	android:background="#82ffab06"
+     	android:paddingLeft="10dp"
+     	android:paddingRight="10dp"
+     	android:paddingTop="5dp"
+     	android:paddingBottom="5dp" >
+     	
+        <TextView
+        	android:id="@+id/activity_review_title"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:textSize="22sp"
+        	android:textColor="#ffffff"
+        	android:textStyle="bold"
+        	android:layout_centerVertical="true"
+        	android:text="후기를 작성해주세요." />
+    
+        <ImageButton
+            android:id="@+id/open_sidebar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_drawer"
+            android:background="#00ffffff"
+            android:padding="15dp"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:layout_marginRight="-5dp" />
+        
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+       	android:layout_below="@id/top_bar" >
+        
+   	 	<EditText
+        	android:id="@+id/review"
+        	android:layout_width="match_parent"
+        	android:layout_height="match_parent"
+        	android:inputType="textMultiLine"
+        	android:layout_margin="20dp"
+        	android:gravity="top"
+        	android:padding="15dp"
+  			android:background="@layout/review"
+        	android:layout_weight="9" />
+    
+    	<Button
+        	android:id="@+id/submit"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:text="저장"
+        	android:layout_gravity="center"
+        	android:layout_margin="15dp"
+        	android:layout_weight="1" />
+    	</LinearLayout>
+
+</RelativeLayout>
