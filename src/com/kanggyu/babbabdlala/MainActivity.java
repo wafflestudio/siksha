@@ -23,7 +23,7 @@ public class MainActivity extends Activity
 	private ExpandableListAdapter listAdapter;
 	
 	private String[] restaurants;
-	private ArrayList<String> menuContents;
+	private ArrayList<String> menuContents = null;
 	private ArrayList<ArrayList<String>> menus;
 	
 	private ImageButton sidebarBtn;
