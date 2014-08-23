@@ -39,5 +39,5 @@ public class ReviewActivity extends Activity implements OnClickListener
 			case R.id.submit :
 				Toast.makeText(this, "저장 완료.", Toast.LENGTH_SHORT).show();
 		}
-	}
+	}//yeah2
 }
