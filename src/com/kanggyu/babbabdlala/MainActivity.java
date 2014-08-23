@@ -222,5 +222,5 @@ public class MainActivity extends Activity
     	private ImageButton writeReviewBtn;
     	private ImageButton likeBtn;
     	private ImageButton hateBtn;
-	}//yeah
+	}
 }
