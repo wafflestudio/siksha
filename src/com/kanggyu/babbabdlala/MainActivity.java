@@ -45,6 +45,8 @@ public class MainActivity extends Activity
         restaurantList.setAdapter(listAdapter);
         
         sidebarBtn = (ImageButton)findViewById(R.id.open_sidebar);
+        
+        new GraduateParsingTask().execute((Void) null);
     }
     
     private void loadRestaurantData()
