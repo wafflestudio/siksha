@@ -21,9 +21,10 @@ public class MainActivity extends Activity
 {
 	private ExpandableListView restaurantList;
 	private ExpandableListAdapter listAdapter;
+	// 식당 리스트뷰를 출력하는 ExpandableListView 변수와 ListView를 위한 Adapter.
 	
-	private String[] restaurants;
-	private ArrayList<String> menuContents;
+	private String[] restaurants; // 식당 이름의 모음.
+	private ArrayList<String> menuContents = null; // 
 	private ArrayList<ArrayList<String>> menus;
 	
 	private ImageButton sidebarBtn;
@@ -34,6 +35,9 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+
+        new ParsingTask().execute((Void)null);
+        
         
         restaurantList = (ExpandableListView)findViewById(R.id.restaurant_list); 
         restaurants = getResources().getStringArray(R.array.restaurant_list);
@@ -45,6 +49,8 @@ public class MainActivity extends Activity
         restaurantList.setAdapter(listAdapter);
         
         sidebarBtn = (ImageButton)findViewById(R.id.open_sidebar);
+        
+        new GraduateParsingTask().execute((Void) null);
     }
     
     private void loadRestaurantData()

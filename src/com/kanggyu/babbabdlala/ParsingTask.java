@@ -26,7 +26,7 @@ public class ParsingTask extends AsyncTask<Void, Void, Boolean> {
 			String[] supper = new String[5];
 			
 			doc = Jsoup.connect("http://www.snuco.com/html/restaurant/restaurant_menu2.asp?date=2014-08-28").get();
-			Elements cafeteria = doc.select("table:has(img[alt=상품명]) tr:contains("+cafeName+")");
+			Elements cafeteria = doc.select("table:has(img[alt=�품�) tr:contains("+cafeName+")");
 			String lunchFullMenu = cafeteria.select("td:nth-child(5)").text();
 			String supperFullMenu = cafeteria.select("td:nth-child(7)").text();
 			//lunch menu array 
@@ -58,25 +58,25 @@ public class ParsingTask extends AsyncTask<Void, Void, Boolean> {
 		return result;
 	}
 	protected String checkPrice(String menu){
-		if (menu.charAt(0)=='ⓐ'){
+		if (menu.charAt(0)=='){
 			return menu.substring(1)+"1700";
 		}
-		else if (menu.charAt(0)=='ⓑ'){
+		else if (menu.charAt(0)=='){
 			return menu.substring(1)+"2000";
 		}
-		else if (menu.charAt(0)=='ⓒ'){
+		else if (menu.charAt(0)=='){
 			return menu.substring(1)+"2500";
 		}
-		else if (menu.charAt(0)=='ⓓ'){
+		else if (menu.charAt(0)=='){
 			return menu.substring(1)+"3000";
 		}
-		else if (menu.charAt(0)=='ⓔ'){
+		else if (menu.charAt(0)=='){
 			return menu.substring(1)+"3500";
 		}
-		else if (menu.charAt(0)=='ⓕ'){
+		else if (menu.charAt(0)=='){
 			return menu.substring(1)+"4000";
 		}
-		else if (menu.charAt(0)=='ⓖ'){
+		else if (menu.charAt(0)=='){
 			return menu.substring(1)+"4500";
 		}
 		else {
