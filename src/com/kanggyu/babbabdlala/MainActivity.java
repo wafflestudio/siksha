@@ -19,63 +19,67 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity
 {
-	private ExpandableListView restaurantList;
+	private ExpandableListView cafeList;
 	private ExpandableListAdapter listAdapter;
-	// 식당 리스트뷰를 출력하는 ExpandableListView 변수와 ListView를 위한 Adapter.
+	// 식당 리스트뷰를 출력하는 ExpandableListView 변수와 ListView의 레이아웃과 스크롤을 담당하는 Adapter.
 	
-	private String[] restaurants; // 식당 이름의 모음.
-	private ArrayList<String> menuContents = null; // 
-	private ArrayList<ArrayList<String>> menus;
+	private String[] cafes; // 식당 이름들을 담은 배열.
+	private ArrayList<String> menus = null; // 한 식당 메뉴들의 배열.
+	private ArrayList<ArrayList<String>> cafesIncludeMenus; // 각자의 메뉴들을 담고 있는 식당들의 배열.
+	// ArrayList<String>은 배열입니다. 단, String[]과 다르게 선언할 때 크기를 안 정해도 됩니다. 동적으로 크기를 늘리거나 줄일 수 있는 배열이거든요.
 	
-	private ImageButton sidebarBtn;
+	private ImageButton sidebarBtn; // 사이드바를 나오게 하는 버튼. 
 	
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_NO_TITLE); // 앱 상단에 제목 뜨는 Bar를 없앤다.
         setContentView(R.layout.activity_main);
 
-        new ParsingTask().execute((Void)null);
+        cafeList = (ExpandableListView)findViewById(R.id.restaurant_list); 
+        cafes = getResources().getStringArray(R.array.restaurant_list);
+        // res -> value -> strings.xml에 가면 식당 이름들이 담긴 string-array가 있어요!
         
+        menus = new ArrayList<String>();
+        cafesIncludeMenus = new ArrayList<ArrayList<String>>();
+        // 그냥 변수 객체 생성...
         
-        restaurantList = (ExpandableListView)findViewById(R.id.restaurant_list); 
-        restaurants = getResources().getStringArray(R.array.restaurant_list);
-        menuContents = new ArrayList<String>();
-        menus = new ArrayList<ArrayList<String>>();
-        loadRestaurantData();
+        loadRestaurantData(); // 각 식당마다 메뉴들을 불러오는 함수에요. 자세한 함수 구현은 아래에 있어요.
         
-        listAdapter = new ExpandableListAdapter(MainActivity.this, restaurantList, restaurants, menus);
-        restaurantList.setAdapter(listAdapter);
+        listAdapter = new ExpandableListAdapter(MainActivity.this, cafeList, cafes, cafesIncludeMenus);
+        // ExpandableListView 변수 생성...
+        cafeList.setAdapter(listAdapter); // Expand
         
         sidebarBtn = (ImageButton)findViewById(R.id.open_sidebar);
     }
     
     private void loadRestaurantData()
     {
-    	// Web parsing
-        menuContents.add("제육볶음");
-        menuContents.add("치킨텐더");
+    	new ParsingTask().execute((Void)null);
         
-        for(int i = 0; i < restaurants.length; i++)
-        	menus.add(menuContents);
+        for(int i = 0; i < cafes.length; i++)
+        	cafesIncludeMenus.add(menus);
     }
     
     private class ExpandableListAdapter extends BaseExpandableListAdapter
     {
-    	private String[] restaurants;
-    	private ArrayList<ArrayList<String>> menus;
+    	private String[] cafes;
+    	private ArrayList<ArrayList<String>> cafesIncludeMenus;
    
     	private LayoutInflater inflater;
-    	private ExpandableListView restaurantList;
+    	private ExpandableListView cafeList;
     	
     	private int previousExpanded = -1;
+    	// ListView에 있는 어떤 식당을 누를 때, 이미 다른 식당의 하위 메뉴가 펼쳐져 있는지 나타내는 변수라고 생각해두자. 
+    	// 아무 식당의 하위 메뉴가 펼쳐져 있지 않을 때, previousExpanded == -1이다.
 
-    	ExpandableListAdapter(Context context, ExpandableListView restaurantList, String[] restaurants, ArrayList<ArrayList<String>> menus)
+    	// 이 Adpater의 생성자. 파라미터로 여러가지를 받아와서 이 Adpater 클래스의 변수에 저장한다.
+    	ExpandableListAdapter(Context context, ExpandableListView cafeList, String[] cafes, ArrayList<ArrayList<String>> cafesIncludeMenus)
     	{
-            this.restaurants = restaurants;
-            this.menus = menus;
-            this.restaurantList = restaurantList;
+            this.cafes = cafes;
+            this.cafesIncludeMenus = cafesIncludeMenus;
+            this.cafeList = cafeList;
      
             inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     	}
@@ -84,14 +88,17 @@ public class MainActivity extends Activity
     	public void onGroupExpanded(int groupPosition)
     	{
     		if(previousExpanded != -1)
-    			restaurantList.collapseGroup(previousExpanded);
+    			cafeList.collapseGroup(previousExpanded);
+    		// 리스트뷰에서 어떤 식당을 누를 때, 이미 다른 식당의 하위 메뉴가 펼쳐져 있으면 그 열려진 식당의 하위 메뉴를 닫는다.
+    		
     		previousExpanded = groupPosition;
+    		// 마지막으로 눌러본 식당의 Index를 previousExpanded에 담는다.
     	}
     	
     	@Override
     	public int getGroupCount()
     	{
-    		return restaurants.length;
+    		return cafes.length;
     	}
     	
     	@Override
@@ -103,19 +110,19 @@ public class MainActivity extends Activity
     	@Override
     	public String getGroup(int groupPosition)
     	{
-    		return restaurants[groupPosition];
+    		return cafes[groupPosition];
     	}
     	
     	@Override
     	public String getChild(int groupPosition, int childPosition)
     	{
-    		return menus.get(groupPosition).get(childPosition);
+    		return cafesIncludeMenus.get(groupPosition).get(childPosition);
     	}
     	
     	@Override
     	public int getChildrenCount(int groupPosition)
     	{
-    		return menus.get(groupPosition).size();
+    		return cafesIncludeMenus.get(groupPosition).size();
     	}
     	
     	@Override
@@ -140,14 +147,14 @@ public class MainActivity extends Activity
     			viewHolder = new ViewHolder();
     			convertView = inflater.inflate(R.layout.restaurant_list, null);
     			
-    			viewHolder.restaurantName = (TextView)convertView.findViewById(R.id.restaurant_name);
+    			viewHolder.cafeName = (TextView)convertView.findViewById(R.id.restaurant_name);
     			
     			convertView.setTag(viewHolder);
     		}
     		else
     			viewHolder = (ViewHolder)convertView.getTag();
     	
-    		viewHolder.restaurantName.setText(restaurants[groupPosition] + " " + groupPosition);
+    		viewHolder.cafeName.setText(cafes[groupPosition]);
     		
     		return convertView;
     	}
@@ -162,13 +169,13 @@ public class MainActivity extends Activity
     			viewHolder = new ViewHolder();
     			convertView = inflater.inflate(R.layout.menu_details, null);
     			
-    			viewHolder.restaurantMenu = (TextView)convertView.findViewById(R.id.menu_name);
+    			viewHolder.cafeMenu = (TextView)convertView.findViewById(R.id.menu_name);
     			viewHolder.progressBar = (ProgressBar)convertView.findViewById(R.id.progress);
     			viewHolder.favoriteBtn = (ImageButton)convertView.findViewById(R.id.favorite);
     	        viewHolder.showReviewBtn = (ImageButton)convertView.findViewById(R.id.show_review);
     	        viewHolder.writeReviewBtn = (ImageButton)convertView.findViewById(R.id.write_review);
     	        viewHolder.likeBtn = (ImageButton)convertView.findViewById(R.id.like);
-    	        viewHolder.hateBtn = (ImageButton)convertView.findViewById(R.id.hate);
+    	        viewHolder.dislikeBtn = (ImageButton)convertView.findViewById(R.id.hate);
     	       
     	        convertView.setTag(viewHolder);
     		}
@@ -185,7 +192,7 @@ public class MainActivity extends Activity
         			progressBar.incrementProgressBy(5);
         		}
 	        });
-	        viewHolder.hateBtn.setOnClickListener(new OnClickListener()
+	        viewHolder.dislikeBtn.setOnClickListener(new OnClickListener()
 	        {
 				@Override
 				public void onClick(View v)
@@ -201,7 +208,7 @@ public class MainActivity extends Activity
 	        		startActivity(new Intent(MainActivity.this, ReviewActivity.class));
 	        	}
 	        });
-    		viewHolder.restaurantMenu.setText(menus.get(groupPosition).get(childPosition) + " " + groupPosition + " " + childPosition);
+    		viewHolder.cafeMenu.setText(cafesIncludeMenus.get(groupPosition).get(childPosition));
     		
     		return convertView;
     	}
@@ -215,14 +222,14 @@ public class MainActivity extends Activity
     
 	private static class ViewHolder
 	{
-		private TextView restaurantName;
-    	private TextView restaurantMenu;	
+		private TextView cafeName;
+    	private TextView cafeMenu;	
     	private ProgressBar progressBar;
     	
     	private ImageButton favoriteBtn;
     	private ImageButton showReviewBtn;
     	private ImageButton writeReviewBtn;
     	private ImageButton likeBtn;
-    	private ImageButton hateBtn;
+    	private ImageButton dislikeBtn;
 	}
 }
