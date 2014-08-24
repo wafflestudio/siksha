@@ -25,7 +25,7 @@
     </RelativeLayout>
     
    	<ExpandableListView
-    	android:id="@+id/restaurant_list"
+    	android:id="@+id/cafe_list"
        	android:layout_width="match_parent"
        	android:layout_height="match_parent"
        	android:groupIndicator="@null"

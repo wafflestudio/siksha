@@ -23,7 +23,7 @@
         	android:textColor="#ffffff"
         	android:textStyle="bold"
         	android:layout_centerVertical="true"
-        	android:text="후기를 작성해주세요." />
+        	android:text="@string/please_review" />
     
         <ImageButton
             android:id="@+id/open_sidebar"
@@ -61,7 +61,7 @@
         	android:id="@+id/submit"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
-        	android:text="저장"
+        	android:text="@string/submit"
         	android:layout_gravity="center"
         	android:layout_margin="15dp"
         	android:layout_weight="1" />

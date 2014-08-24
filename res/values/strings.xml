@@ -4,18 +4,21 @@
     <string name="app_name">밥밥디라라</string>
     <string name="title_activity_review">ReviewActivity</string>
     
+    <string name="please_review">후기를 작성해주세요.</string>
+    <string name="submit">저장</string>
+    
     <string name="price_2000">2.0</string>
     <string name="price_2500">2.5</string>
     <string name="price_3000">3.0</string>
     <string name="price_3500">3.5</string>
     <string name="price_4000">4.0</string>
     
-    <string name="operating_hour_example">오후 5:30 ~ 오후 7:30</string>
-	<string name="location_example">위치</string>
+    <string name="operating_hour">오후 5:30 ~ 오후 7:30</string>
+	<string name="location">위치</string>
 	<string name="like">좋아</string>
-	<string name="hate">싫어</string>
+	<string name="dislike">싫어</string>
 	
-    <string-array name="restaurant_list">
+    <string-array name="cafe_list">
         <item>301동 식당</item>
         <item>302동 식당</item>
         <item>공대 간이 식당</item>
