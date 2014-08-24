@@ -67,27 +67,22 @@
     	    android:src="@drawable/ic_action_write_review"
     	    android:background="#00ffffff" />
     	
-    	<ImageButton
+    	<Button
     	    android:id="@+id/like"
     	    android:layout_width="wrap_content"
     	    android:layout_height="wrap_content"
     	    android:layout_alignParentBottom="true"
     	    android:layout_toRightOf="@id/write_review"
-    	    android:src="@drawable/ic_like"
-    	    android:background="#00ffffff"
-    	    android:scaleX="0.75"
-            android:scaleY="0.75" />
+    	    android:text="좋아" />
     	
-    	<ImageButton
-    	    android:id="@+id/hate"
+    	<Button
+    	    android:id="@+id/dislike"
     	    android:layout_width="wrap_content"
     	    android:layout_height="wrap_content"
     	    android:layout_alignParentBottom="true"
     	    android:layout_toRightOf="@id/like"
-    	    android:src="@drawable/ic_hate"
-    	    android:background="#00ffffff"
-    	    android:scaleX="0.75"
-            android:scaleY="0.75" />
+    	    android:text="싫어"
+    	    android:background="#00ffffff" />
     
     </RelativeLayout>
    	
