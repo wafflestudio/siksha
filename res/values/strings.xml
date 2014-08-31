@@ -2,21 +2,18 @@
 <resources>
 
     <string name="app_name">밥밥디라라</string>
-    <string name="title_activity_review">ReviewActivity</string>
+    <string name="title_activity_main">밥 밥 디 라 라</string>
+    <string name="title_activity_review">음식 어땠어요?</string>
     
-    <string name="please_review">후기를 작성해주세요.</string>
-    <string name="submit">저장</string>
+    <string name="submit">확인</string>
     
-    <string name="price_2000">2.0</string>
-    <string name="price_2500">2.5</string>
-    <string name="price_3000">3.0</string>
-    <string name="price_3500">3.5</string>
-    <string name="price_4000">4.0</string>
+   	<string name="operating_hour">운영 시간</string>
+   	<string name="location">식당 위치</string>
     
-    <string name="operating_hour">오후 5:30 ~ 오후 7:30</string>
-	<string name="location">위치</string>
 	<string name="like">좋아</string>
 	<string name="dislike">싫어</string>
+	
+	<string name="no_menu">메뉴가 없습니다.</string>
 	
     <string-array name="cafe_list">
         <item>301동 식당</item>
@@ -24,15 +21,15 @@
         <item>공대 간이 식당</item>
         <item>학생회관 식당</item>
         <item>자하연 식당</item>
+ 		<item>농생대 3식당</item>
+        <item>사범대 4식당</item>
+        <item>두레미담</item>
         <item>기숙사 919동 식당</item>
         <item>대학원 기숙사 식당</item>
-        <item>농생대 식당</item>
-        <item>제3식당</item>
-        <item>제4식당</item>
+        <item>대학원 220동 식당</item>
         <item>상아회관 식당</item>
-        <item>동원관 식당</item>
-        <item>감골 식당</item>
-        <item>대학원 220동 식당</item>        
+        <item>동원생활관 식당</item>
+        <item>감골 식당</item>       
     </string-array>
         
     <string-array name="sidebar_list">

@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
@@ -7,7 +7,7 @@
    	<RelativeLayout
    	    android:id="@+id/menu_details"
         android:layout_width="match_parent"
-        android:layout_height="120dp" >
+        android:layout_height="100dp" >
         
    	    <ProgressBar
    	        android:id="@+id/progress"
@@ -22,7 +22,6 @@
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:textSize="23sp"
-        	android:text="@string/price_2000"
         	android:background="@layout/price_style"
         	android:layout_centerVertical="true"
         	android:padding="7dp"
@@ -73,7 +72,7 @@
     	    android:layout_height="wrap_content"
     	    android:layout_alignParentBottom="true"
     	    android:layout_toRightOf="@id/write_review"
-    	    android:text="좋아" />
+    	    android:text="@string/like" />
     	
     	<Button
     	    android:id="@+id/dislike"
@@ -81,9 +80,16 @@
     	    android:layout_height="wrap_content"
     	    android:layout_alignParentBottom="true"
     	    android:layout_toRightOf="@id/like"
-    	    android:text="싫어"
-    	    android:background="#00ffffff" />
+    	    android:text="@string/dislike" />
     
     </RelativeLayout>
+    
+   	<TextView
+  	    android:id="@+id/no_menu"
+  	    android:layout_width="wrap_content"
+  	    android:layout_height="wrap_content"
+  	    android:layout_centerInParent="true"
+  	    android:text="@string/no_menu"
+  	    android:visibility="gone" />
    	
-</LinearLayout>
+</RelativeLayout>

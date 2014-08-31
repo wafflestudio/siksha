@@ -23,7 +23,7 @@
         	android:textColor="#ffffff"
         	android:textStyle="bold"
         	android:layout_centerVertical="true"
-        	android:text="@string/please_review" />
+        	android:text="@string/title_activity_review" />
     
         <ImageButton
             android:id="@+id/open_sidebar"
