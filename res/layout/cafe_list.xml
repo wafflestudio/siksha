@@ -3,31 +3,20 @@
     android:layout_height="wrap_content"
     android:padding="15dp" >
     
-    <TextView
+     <TextView
         android:id="@+id/cafe_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         android:textSize="22sp"
-        android:textStyle="bold"
-        android:gravity="center_vertical" />
+        android:textStyle="bold" />
     
-    <TextView
-        android:id="@+id/operating_hour"
-        android:layout_below="@id/cafe_name"
+    <Button
+        android:id="@+id/show_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:layout_marginRight="10dp"
-        android:text="@string/operating_hour" />
-    
-    <TextView
-        android:id="@+id/location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/cafe_name"
-        android:layout_toRightOf="@id/operating_hour"
-        android:textSize="12sp"
-        android:text="@string/location" />
+        android:text="정보"
+        android:layout_alignParentRight="true"
+        android:focusable="false"
+    	android:focusableInTouchMode="false" />
         
  </RelativeLayout>
