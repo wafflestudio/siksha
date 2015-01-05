@@ -1,4 +1,4 @@
-package com.kanggyu.babbabdlala;
+package com.wafflestudio.babbabdrara;
 
 import java.util.HashMap;
 
@@ -9,9 +9,7 @@ import android.widget.TextView;
 
 public class CafeInfoDialog extends Dialog
 {
-	private TextView hourTitle;
 	private TextView hourDetails;
-	private TextView locationTitle;
 	private TextView locationDetails;
 	
 	public CafeInfoDialog(Context context, String cafeName, HashMap<String, String> operatingHours, HashMap<String, String> locations)
