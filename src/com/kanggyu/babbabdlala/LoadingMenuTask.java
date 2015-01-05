@@ -14,6 +14,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -55,9 +56,17 @@ public class LoadingMenuTask
 		private final String[] jikYoungCafes = {"학생회관식당", "3식당", "기숙사식당", "자하연식당", "302동식당", "동원관식당", "감골식당"};
 		private final String[] junJikYoungCafes = {"4식당", "두레미담", "301동식당", "공대간이식당", "솔밭간이식당", "상아회관", "220동식당"};
 		
+		private int nowHour;
+		private int nowMinute;
+		private int nowAmPm;
+		
 		@Override
 		protected void onPreExecute()
 		{
+			nowHour = Calendar.getInstance().get(Calendar.AM_PM);
+			nowAmPm = Calendar.getInstance().get(Calendar.HOUR);
+			nowMinute = Calendar.getInstance().get(Calendar.MINUTE);
+				
 			dialog = new ProgressDialog(context);
 			dialog.setCancelable(false);
 			dialog.setTitle("잠시만 기다려주세요!");
@@ -108,11 +117,10 @@ public class LoadingMenuTask
 			
 			public Graduate()
 			{
+				todayIndex = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1;
 				weeklyBreakfast = new ArrayList<ArrayList<String>>();
 				weeklyLunch = new ArrayList<ArrayList<String>>();
 				weeklySupper = new ArrayList<ArrayList<String>>();
-				
-				todayIndex = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1;
 				
 				selecting();
 			}
@@ -219,11 +227,33 @@ public class LoadingMenuTask
 				}
 				
 				ArrayList<String> temp = new ArrayList<String>();
-				for(int i = 0; i < weeklyLunch.size(); i++)
+				
+				if(nowAmPm == 0 && nowHour < 10)
+				{	
+					for(int i = 0; i < weeklyBreakfast.size(); i++)
+					{
+						String str = weeklyBreakfast.get(i).get(todayIndex);
+						if(!str.equals("") && !str.equals(" "))
+							temp.add(str);
+					}
+				}
+				else if((nowAmPm == 0 && nowHour >= 10) && (nowAmPm == 1 && nowHour < 4))
 				{
-					String str = weeklyLunch.get(i).get(todayIndex);
-					if(!str.equals("") && !str.equals(" "))
-						temp.add(str);
+					for(int i = 0; i < weeklyLunch.size(); i++)
+					{
+						String str = weeklyLunch.get(i).get(todayIndex);
+						if(!str.equals("") && !str.equals(" "))
+							temp.add(str);
+					}
+				}
+				else
+				{
+					for(int i = 0; i < weeklySupper.size(); i++)
+					{
+						String str = weeklySupper.get(i).get(todayIndex);
+						if(!str.equals("") && !str.equals(" "))
+							temp.add(str);
+					}
 				}
 				map.put("아워홈", temp);
 			}
@@ -264,9 +294,29 @@ public class LoadingMenuTask
 					supperAll.add(supper);
 					
 					ArrayList<String> temp = new ArrayList<String>();
+					
+					if(nowAmPm == 0 && nowHour < 10)
+					{
+						for(int j = 0; j < breakfast.length; j++)
+							temp.add(breakfast[j].trim());
+					}
+					else if((nowAmPm == 0 && nowHour >= 10) && (nowAmPm == 1 && nowHour < 4))
+					{
+						for(int j = 0; j < lunch.length; j++)
+							temp.add(lunch[j].trim());
+					}
+					else
+					{
+						for(int j = 0; j < supper.length; j++)
+							temp.add(supper[j].trim());
+					}
+					map.put(jikYoungCafes[i], temp);
+					
+					/*
+					ArrayList<String> temp = new ArrayList<String>();
 					for(int j = 0; j < lunch.length; j++)
 						temp.add(lunch[j].trim());
-					map.put(jikYoungCafes[i], temp);
+					map.put(jikYoungCafes[i], temp);*/
 				}
 			}
 			
@@ -323,11 +373,20 @@ public class LoadingMenuTask
 					setPrice(supper);
 					
 					lunchAll.add(lunch);
-					supperAll.add(supper);
+					supperAll.add(supper); 
 					
 					ArrayList<String> temp = new ArrayList<String>();
-					for(int j = 0; j < lunch.length; j++)
-						temp.add(lunch[j].trim());
+					
+					if((nowAmPm == 1 && nowHour >= 5) && (nowAmPm == 1 && nowHour < 12))
+					{
+						for(int j = 0; j < supper.length; j++)
+							temp.add(supper[j].trim());
+					}
+					else
+					{
+						for(int j = 0; j < lunch.length; j++)
+							temp.add(lunch[j].trim());
+					}
 					map.put(junJikYoungCafes[i], temp);
 				}	
 			}
