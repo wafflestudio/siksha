@@ -8,8 +8,8 @@
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-     	android:background="#8229922c"
-     	android:padding="5dp" >
+     	android:background="#ffff9426"
+     	android:padding="8dp" >
      	
         <TextView
             android:id="@+id/activity_main_title"
@@ -21,18 +21,6 @@
             android:textColor="#ffffff"
             android:textStyle="bold"
             android:textSize="23sp" />
-    
-        <ImageButton
-            android:id="@+id/open_sidebar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/ic_drawer"
-            android:background="#00ffffff"
-            android:padding="15dp"
-            android:scaleX="1.5"
-            android:scaleY="1.5"
-            android:layout_marginRight="-5dp" />
         
     </RelativeLayout>
     
