@@ -12,6 +12,7 @@ import org.jsoup.select.Elements;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,6 +24,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class LoadingMenuTask {
+
+
 	private static HashMap<String, ArrayList<String>> map;
 	private Context context;
 	private ExpandableListView cafeList;
@@ -51,7 +54,7 @@ public class LoadingMenuTask {
 		private ProgressDialog dialog;
 		
 		private final String[] jikYoungCafes = {"학생회관식당", "3식당", "기숙사식당", "자하연식당", "302동식당", "동원관식당", "감골식당"};
-		private final String[] junJikYoungCafes = {"4식당", "두레미담", "301동식당", "공대간이식당", "솔밭간이식당", "상아회관", "220동식당"};
+		private final String[] junJikYoungCafes = {"4식당", "두레미담", "301동식당", "공대간이식당", "상아회관", "220동식당"};
 		
 		private int nowHour;
 		private int nowAmPm;
@@ -74,9 +77,11 @@ public class LoadingMenuTask {
 		{
 			try
 			{
-				graduatePage = Jsoup.connect("http://dorm.snu.ac.kr/dk_board/facility/food.php").get();
-				jikYoungPage = Jsoup.connect("http://www.snuco.com/html/restaurant/restaurant_menu1.asp").get();
-				junJikYoungPage = Jsoup.connect("http://www.snuco.com/html/restaurant/restaurant_menu2.asp").get();
+				graduatePage = Jsoup.connect("http://dorm.snu.ac.kr/dk_board/facility/food.php").timeout(10000).get();
+				jikYoungPage = Jsoup.connect("http://www.snuco.com/html/restaurant/restaurant_menu1.asp").timeout(10000).get();
+				junJikYoungPage = Jsoup.connect("http://www.snuco.com/html/restaurant/restaurant_menu2.asp").timeout(10000).get();
+
+
 			}
 			catch(Exception e)
 			{
@@ -386,16 +391,18 @@ public class LoadingMenuTask {
 				for(int i = 0; i < junJikYoungCafes.length; i++)
 				{
 					Elements tr = junJikYoungTable.select("tr:contains(" + junJikYoungCafes[i] + ")");
-					
+
+                    //Log.e("HI","gwangrae is stupid");
+
 					String preLunch = tr.select("td:nth-child(5)").text();
 					String preSupper = tr.select("td:nth-child(7)").text();
 					
 					String preLunch2 = preLunch.replaceAll(" ","/");
 					String preSupper2 = preSupper.replaceAll(" ","/");
 					
-					String[] lunch = preLunch2.split("/");
-					String[] supper = preSupper2.split("/");
-					
+					String[] lunch = preLunch2.split(" ");
+					String[] supper = preSupper2.split(" ");
+
 					setPrice(lunch);
 					setPrice(supper);
 					

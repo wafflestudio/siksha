@@ -67,7 +67,6 @@ public class MainActivity extends Activity {
     	locations.put("상아회관 식당", "연건캠퍼스 19동");
     	locations.put("동원관 식당", "113동 (경영대 옆)");
     	locations.put("감골 식당", "101동 (사회대 옆)");
-    	
     
     	 matching.put("301동 식당", "301동식당");
     	 matching.put("302동 식당", "302동식당");
