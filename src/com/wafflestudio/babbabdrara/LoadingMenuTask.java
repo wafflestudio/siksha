@@ -400,8 +400,8 @@ public class LoadingMenuTask {
 					String preLunch2 = preLunch.replaceAll(" ","/");
 					String preSupper2 = preSupper.replaceAll(" ","/");
 					
-					String[] lunch = preLunch2.split(" ");
-					String[] supper = preSupper2.split(" ");
+					String[] lunch = preLunch2.split("/");
+					String[] supper = preSupper2.split("/");
 
 					setPrice(lunch);
 					setPrice(supper);
