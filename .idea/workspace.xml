@@ -17,7 +17,11 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="app: com.wafflestudio.babbabdlala" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f4ece051-ef36-4643-a362-c38428acd263" name="Default" comment="" />
+    <list default="true" id="f4ece051-ef36-4643-a362-c38428acd263" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/wafflestudio/babbabdirara/CafeInfoDialog.java" afterPath="$PROJECT_DIR$/src/com/wafflestudio/babbabdirara/CafeInfoDialog.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/wafflestudio/babbabdirara/LoadingMenuTask.java" afterPath="$PROJECT_DIR$/src/com/wafflestudio/babbabdirara/LoadingMenuTask.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/wafflestudio/babbabdirara/MainActivity.java" afterPath="$PROJECT_DIR$/src/com/wafflestudio/babbabdirara/MainActivity.java" />
+    </list>
     <ignored path="babbabdrara.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -39,12 +43,38 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="MainActivity.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="MainActivity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/wafflestudio/babbabdirara/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.107334524" vertical-offset="0" max-vertical-offset="1350">
+            <state vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="1410">
               <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LoadingMenuTask.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/wafflestudio/babbabdirara/LoadingMenuTask.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.7316637" vertical-offset="8126" max-vertical-offset="8745">
+              <caret line="569" column="44" selection-start-line="569" selection-start-column="44" selection-end-line="569" selection-end-column="44" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#4088#4096#0" expanded="true" />
+                <element signature="e#5110#5118#0" expanded="true" />
+                <element signature="e#6127#6135#0" expanded="true" />
+                <element signature="e#6971#6979#0" expanded="true" />
+                <element signature="e#9417#9425#0" expanded="true" />
+                <element signature="e#12639#12647#0" expanded="true" />
+                <element signature="e#16511#16512#0" expanded="true" />
+                <element signature="e#16536#16537#0" expanded="true" />
+                <element signature="e#16614#16615#0" expanded="true" />
+                <element signature="e#16640#16641#0" expanded="true" />
+                <element signature="e#17628#17905#0" expanded="true" />
+                <element signature="e#17896#17897#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -647,6 +677,9 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/.idea/workspace.xml" />
+        <option value="$PROJECT_DIR$/src/com/wafflestudio/babbabdirara/MainActivity.java" />
+        <option value="$PROJECT_DIR$/src/com/wafflestudio/babbabdirara/CafeInfoDialog.java" />
+        <option value="$PROJECT_DIR$/src/com/wafflestudio/babbabdirara/LoadingMenuTask.java" />
       </list>
     </option>
   </component>
@@ -1100,14 +1133,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/wafflestudio/babbabdirara/LoadingMenuTask.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.21929824" vertical-offset="0" max-vertical-offset="9195">
-          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.91549295" vertical-offset="155" max-vertical-offset="570">
@@ -1132,14 +1157,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/wafflestudio/babbabdirara/CafeInfoDialog.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5263158" vertical-offset="0" max-vertical-offset="405">
-          <caret line="17" column="49" selection-start-line="17" selection-start-column="49" selection-end-line="17" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33802816" vertical-offset="0" max-vertical-offset="810">
@@ -1156,11 +1173,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/wafflestudio/babbabdirara/CafeInfoDialog.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.32200357" vertical-offset="0" max-vertical-offset="559">
+          <caret line="17" column="4" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/wafflestudio/babbabdirara/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.107334524" vertical-offset="0" max-vertical-offset="1350">
+        <state vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="1410">
           <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/wafflestudio/babbabdirara/LoadingMenuTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7316637" vertical-offset="8126" max-vertical-offset="8745">
+          <caret line="569" column="44" selection-start-line="569" selection-start-column="44" selection-end-line="569" selection-end-column="44" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#4088#4096#0" expanded="true" />
+            <element signature="e#5110#5118#0" expanded="true" />
+            <element signature="e#6127#6135#0" expanded="true" />
+            <element signature="e#6971#6979#0" expanded="true" />
+            <element signature="e#9417#9425#0" expanded="true" />
+            <element signature="e#12639#12647#0" expanded="true" />
+            <element signature="e#16511#16512#0" expanded="true" />
+            <element signature="e#16536#16537#0" expanded="true" />
+            <element signature="e#16614#16615#0" expanded="true" />
+            <element signature="e#16640#16641#0" expanded="true" />
+            <element signature="e#17628#17905#0" expanded="true" />
+            <element signature="e#17896#17897#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

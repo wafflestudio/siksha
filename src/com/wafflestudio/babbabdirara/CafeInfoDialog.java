@@ -7,13 +7,11 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 
-public class CafeInfoDialog extends Dialog
-{
+public class CafeInfoDialog extends Dialog {
 	private TextView hourDetails;
 	private TextView locationDetails;
 	
-	public CafeInfoDialog(Context context, String cafeName, HashMap<String, String> operatingHours, HashMap<String, String> locations)
-	{
+	public CafeInfoDialog(Context context, String cafeName, HashMap<String, String> operatingHours, HashMap<String, String> locations) {
 		super(context);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.cafe_info);
