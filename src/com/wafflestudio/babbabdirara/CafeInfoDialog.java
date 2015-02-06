@@ -1,11 +1,11 @@
-package com.wafflestudio.babbabdrara;
-
-import java.util.HashMap;
+package com.wafflestudio.babbabdirara;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.view.Window;
 import android.widget.TextView;
+
+import java.util.HashMap;
 
 public class CafeInfoDialog extends Dialog
 {

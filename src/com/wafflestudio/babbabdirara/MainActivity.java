@@ -1,11 +1,11 @@
-package com.wafflestudio.babbabdrara;
-
-import java.util.HashMap;
+package com.wafflestudio.babbabdirara;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
 import android.widget.ExpandableListView;
+
+import java.util.HashMap;
 
 public class MainActivity extends Activity {
 
