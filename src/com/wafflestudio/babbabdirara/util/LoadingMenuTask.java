@@ -1,4 +1,4 @@
-package com.wafflestudio.babbabdirara;
+package com.wafflestudio.babbabdirara.util;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -12,6 +12,10 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.wafflestudio.babbabdirara.MainActivity;
+import com.wafflestudio.babbabdirara.R;
+import com.wafflestudio.babbabdirara.dialog.CafeInfoDialog;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
