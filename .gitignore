@@ -30,7 +30,7 @@ proguard/
 *.iml
 *.ipr
 *.iws
-.idea/workspace.xml
+.idea/
 
 .metadata
 .apt_generated
