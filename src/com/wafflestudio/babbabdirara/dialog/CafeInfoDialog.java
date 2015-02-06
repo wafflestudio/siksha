@@ -1,9 +1,11 @@
-package com.wafflestudio.babbabdirara;
+package com.wafflestudio.babbabdirara.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.view.Window;
 import android.widget.TextView;
+
+import com.wafflestudio.babbabdirara.R;
 
 import java.util.HashMap;
 
@@ -16,8 +18,8 @@ public class CafeInfoDialog extends Dialog {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.cafe_info);
 		
-		hourDetails = (TextView)findViewById(R.id.operating_hour_details);
-		locationDetails = (TextView)findViewById(R.id.location_details);
+		hourDetails = (TextView) findViewById(R.id.operating_hour_details);
+		locationDetails = (TextView) findViewById(R.id.location_details);
 		hourDetails.setText(operatingHours.get(cafeName));
 		locationDetails.setText(locations.get(cafeName));
 	}

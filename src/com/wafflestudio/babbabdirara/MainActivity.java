@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.Window;
 import android.widget.ExpandableListView;
 
+import com.wafflestudio.babbabdirara.util.LoadingMenuTask;
+
 import java.util.HashMap;
 
 public class MainActivity extends Activity {
@@ -24,7 +26,7 @@ public class MainActivity extends Activity {
     setContentView(R.layout.activity_main);
 
     cafes = getResources().getStringArray(R.array.cafe_list); // > string.xml
-    cafeList = (ExpandableListView)findViewById(R.id.cafe_list); // > activity_main
+    cafeList = (ExpandableListView) findViewById(R.id.cafe_list); // > activity_main
 
     operatingHours = new HashMap<String, String>();
     locations = new HashMap<String, String>();
