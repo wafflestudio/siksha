@@ -25,8 +25,12 @@
         <item>220동 식당</item>
         <item>상아회관 식당</item>
     </string-array>
-        
-	
+
+
     <string name="widget_activity_main">식당이름+날짜</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+    <string name="empty_string">선택된 식당이 없습니다.</string>
 	
 </resources>

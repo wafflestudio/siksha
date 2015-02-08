@@ -4,29 +4,54 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="19" />
-    
+
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <android:uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/id_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-          
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="com.wafflestudio.babbabdrara.MainActivity"/>
+                <action android:name="com.wafflestudio.babbabdirara.MainActivity" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+
+        <receiver android:name=".BabWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.wafflestudio.babbabdirara.DATA_FETCHED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/bab_widget_provider_info" />
+        </receiver>
+
+        <activity android:name=".BabWidgetProviderConfigureActivity" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+        <service
+            android:name=".WidgetRemoteService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service android:name=".WidgetFetchService" />
     </application>
 
 </manifest>
