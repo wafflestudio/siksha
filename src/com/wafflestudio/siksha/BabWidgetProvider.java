@@ -1,4 +1,4 @@
-package com.wafflestudio.babbabdirara;
+package com.wafflestudio.siksha;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -10,6 +10,9 @@ import android.widget.RemoteViews;
 
 import java.util.ArrayList;
 
+import com.wafflestudio.siksha.widget.WidgetRemoteService;
+import com.wafflestudio.siksha.BabWidgetProviderConfigureActivity;
+import com.wafflestudio.siksha.widget.WidgetFetchService;
 
 /**
  * Implementation of App Widget functionality.

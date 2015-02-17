@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wafflestudio.babbabdirara"
+    package="com.wafflestudio.siksha"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -8,34 +8,32 @@
         android:minSdkVersion="11"
         android:targetSdkVersion="19" />
 
+    <!-- Permission -->
     <uses-permission android:name="android.permission.INTERNET" />
-
-    <android:uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/id_launcher"
+        android:icon="@drawable/temporal_ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name="com.wafflestudio.siksha.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="com.wafflestudio.babbabdirara.MainActivity" />
+                <action android:name="com.wafflestudio.siksha.MainActivity" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <receiver android:name=".BabWidgetProvider" >
+        <receiver android:name="com.wafflestudio.siksha.BabWidgetProvider" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.wafflestudio.babbabdirara.DATA_FETCHED" />
+                <action android:name="com.wafflestudio.siksha.DATA_FETCHED" />
             </intent-filter>
 
             <meta-data
@@ -43,15 +41,15 @@
                 android:resource="@xml/bab_widget_provider_info" />
         </receiver>
 
-        <activity android:name=".BabWidgetProviderConfigureActivity" >
+        <activity android:name="com.wafflestudio.siksha.BabWidgetProviderConfigureActivity" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
         <service
-            android:name=".WidgetRemoteService"
+            android:name="com.wafflestudio.siksha.WidgetRemoteService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
-        <service android:name=".WidgetFetchService" />
+        <service android:name="com.wafflestudio.siksha.WidgetFetchService" />
     </application>
 
 </manifest>

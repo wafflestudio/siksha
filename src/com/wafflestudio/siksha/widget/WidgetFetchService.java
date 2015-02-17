@@ -1,12 +1,13 @@
-package com.wafflestudio.babbabdirara;
+package com.wafflestudio.siksha.widget;
 
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+
+import com.wafflestudio.siksha.BabWidgetProvider;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,9 +15,6 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 
-/**
- * Created by Gyeongin on 2015-02-05.
- */
 public class WidgetFetchService extends Service {
     private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private final static String jikYoungUrl = "http://www.snuco.com/html/restaurant/restaurant_menu1.asp";

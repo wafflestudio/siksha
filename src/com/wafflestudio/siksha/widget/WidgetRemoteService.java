@@ -1,4 +1,4 @@
-package com.wafflestudio.babbabdirara;
+package com.wafflestudio.siksha.widget;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -9,9 +9,9 @@ import android.widget.RemoteViewsService;
 
 import java.util.ArrayList;
 
-/**
- * Created by Gyeongin on 2015-02-05.
- */
+import com.wafflestudio.siksha.BabWidgetProvider;
+import com.wafflestudio.siksha.R;
+
 public class WidgetRemoteService extends RemoteViewsService {
 
     @Override
