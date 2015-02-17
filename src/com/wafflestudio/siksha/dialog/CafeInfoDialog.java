@@ -1,11 +1,11 @@
-package com.wafflestudio.babbabdirara.dialog;
+package com.wafflestudio.siksha.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.view.Window;
 import android.widget.TextView;
 
-import com.wafflestudio.babbabdirara.R;
+import com.wafflestudio.siksha.R;
 
 import java.util.HashMap;
 

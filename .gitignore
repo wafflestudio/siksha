@@ -31,6 +31,7 @@ proguard/
 *.ipr
 *.iws
 .idea/
+.idea
 
 .metadata
 .apt_generated

@@ -1,11 +1,11 @@
-package com.wafflestudio.babbabdirara;
+package com.wafflestudio.siksha;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.widget.ExpandableListView;
-
-import com.wafflestudio.babbabdirara.util.LoadingMenuTask;
+import com.wafflestudio.siksha.util.LoadingMenuTask;
 
 import java.util.HashMap;
 
@@ -32,9 +32,8 @@ public class MainActivity extends Activity {
     locations = new HashMap<String, String>();
     matching = new HashMap<String, String>();
 
-    loadingMenuTask = new LoadingMenuTask(MainActivity.this, cafeList);
-
     loadingCafeData();
+    loadingMenuTask = new LoadingMenuTask(MainActivity.this, cafeList);
   }
 
   private void loadingCafeData() {
@@ -83,8 +82,6 @@ public class MainActivity extends Activity {
     matching.put("상아회관 식당", "상아회관");
     matching.put("동원관 식당", "동원관식당");
     matching.put("감골 식당", "감골식당");
-
-    loadingMenuTask.new Parsing().execute((Void)null);
   }
 
 }
