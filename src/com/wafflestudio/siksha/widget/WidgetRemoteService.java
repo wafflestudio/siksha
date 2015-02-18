@@ -9,7 +9,6 @@ import android.widget.RemoteViewsService;
 
 import java.util.ArrayList;
 
-import com.wafflestudio.siksha.BabWidgetProvider;
 import com.wafflestudio.siksha.R;
 
 public class WidgetRemoteService extends RemoteViewsService {

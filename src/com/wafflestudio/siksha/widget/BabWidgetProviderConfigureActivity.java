@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha;
+package com.wafflestudio.siksha.widget;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+
+import com.wafflestudio.siksha.R;
 
 public class BabWidgetProviderConfigureActivity extends Activity {
 

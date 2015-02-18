@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.wafflestudio.siksha.BabWidgetProvider" >
+        <receiver android:name=".widget.BabWidgetProvider" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.wafflestudio.siksha.DATA_FETCHED" />
@@ -42,7 +42,7 @@
                 android:resource="@xml/bab_widget_provider_info" />
         </receiver>
 
-        <activity android:name="com.wafflestudio.siksha.BabWidgetProviderConfigureActivity" >
+        <activity android:name=".widget.BabWidgetProviderConfigureActivity" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
