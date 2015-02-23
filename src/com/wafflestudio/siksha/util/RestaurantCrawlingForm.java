@@ -10,7 +10,7 @@ public class RestaurantCrawlingForm {
   @SerializedName("menus")
   public RestaurantInfo[] menus;
 
-  public class RestaurantInfo {
+  public static class RestaurantInfo {
 
     @SerializedName("name")
     public String name;

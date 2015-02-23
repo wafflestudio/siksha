@@ -2,6 +2,7 @@ package com.wafflestudio.siksha.util;
 
 import android.content.Context;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -44,14 +45,52 @@ public class LoadingMenuTask {
 
   public RestaurantCrawlingForm[] forms = new RestaurantCrawlingForm[NUM_RESTAURANTS];
 
-  public LoadingMenuTask(Context context, ExpandableListView restaurantList) {
+  private android.os.Handler handler = new android.os.Handler() {
+    @Override
+    public void handleMessage(Message msg) {
+      switch (msg.what) {
+        case 200 :
+          Log.d("zz", msg.what + "");
+          new Crawling(context, restaurantList);
+          break;
+        default :
+          Log.d("dd", msg.what + "");
+          new CrawlingFromJsoup(context, restaurantList);
+      }
+    }
+  };
+
+  public LoadingMenuTask(final Context context, final ExpandableListView restaurantList) {
     this.context = context;
     this.restaurantList = restaurantList;
 
-    new Crawling(context, restaurantList);
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          URL url = new URL(BASE_URL + "/graduate");
+          HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+          connection.setConnectTimeout(2 * 1000);
+          connection.setReadTimeout(3 * 1000);
+
+          Log.d("Here?", connection + "");
+          handler.sendEmptyMessage(connection.getResponseCode());
+        }
+        catch (Exception e) {
+          e.printStackTrace();
+          handler.sendEmptyMessage(0);
+        }
+      }
+    }).start();
   }
 
-  public static class Crawling {
+  // 안드로이드 정책상 백그라운드 쓰레드에서 백그라운드 쓰레드를 호출 ㄴㄴ
+  // getResponseCode()를 백그라운드 쓰레드에서 돌리고 있잖아.
+  // code == 200 -> 서버와 성공적인 통신 -> new Crawling() 호출 -> But, Crawling 클래스은 백그라운드 쓰레드에서 작업하는게 있어.
+  // getResponseCode()를 일단 백그라운드에서 받았잖아. -> 이거를 handler를 통해서 ui thread로 넘겨 -> 핸들러를 통해서 넘어온 ui thread에서
+  // new Crawling()을 호출. -> ui thread에서 background 호출출
+
+ public static class Crawling {
 
     private HashMap<String, RestaurantCrawlingForm> map;
     private ExpandableListView restaurantList;
@@ -77,6 +116,10 @@ public class LoadingMenuTask {
             for (int i = 0; i < NUM_RESTAURANTS; i++) {
               Future<RestaurantCrawlingForm> future = completionService.take();
               RestaurantCrawlingForm form = future.get();
+
+              if (form == null) {
+
+              }
               map.put(form.restaurant, form);
             }
           }
@@ -108,7 +151,7 @@ public class LoadingMenuTask {
       try {
         URL url = new URL(BASE_URL + route);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setReadTimeout(10 * 1000);
+        connection.setReadTimeout(3 * 1000);
 
         if (connection.getResponseCode() == 200) {
           InputStream is = connection.getInputStream();
@@ -158,6 +201,10 @@ public class LoadingMenuTask {
       }
     }
   }
+
+
+
+
 
   private static class ExpandableListAdapter extends BaseExpandableListAdapter {
 
