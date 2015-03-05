@@ -37,7 +37,7 @@ import java.util.concurrent.Future;
 
 public class LoadingMenuTask {
 
-  public static final String BASE_URL = "http://dev.wafflestudio.net:4210";
+  public static final String BASE_URL = "http://kanggyu94.fun25.co.kr:13203/";
   private static final int NUM_RESTAURANTS = RestaurantInfoUtil.restaurants.length;
 
   private Context context;

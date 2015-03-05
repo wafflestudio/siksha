@@ -7,6 +7,7 @@ package com.wafflestudio.siksha.util;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -355,11 +356,16 @@ public class Parsing extends AsyncTask<Void, Void, Boolean> {
         String preLunch = tr.select("td:nth-child(5)").text();
         String preSupper = tr.select("td:nth-child(7)").text();
 
+        Log.d("zz", preSupper);
+
         String preLunch2 = preLunch.replaceAll(" ", "/");
         String preSupper2 = preSupper.replaceAll(" ", "/");
 
         String[] lunch = preLunch2.split("/");
         String[] supper = preSupper2.split("/");
+
+
+
 
         setPrice(lunch);
         setPrice(supper);
