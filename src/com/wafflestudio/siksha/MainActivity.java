@@ -34,6 +34,9 @@ public class MainActivity extends Activity {
 
     loadingCafeData();
     loadingMenuTask = new LoadingMenuTask(MainActivity.this, cafeList);
+
+    AlarmUtil.setAlarm(MainActivity.this);
+
   }
 
   private void loadingCafeData() {
