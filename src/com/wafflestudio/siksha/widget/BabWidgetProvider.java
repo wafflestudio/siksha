@@ -17,39 +17,37 @@ import com.wafflestudio.siksha.R;
  * App Widget Configuration implemented in {@link BabWidgetProviderConfigureActivity BabWidgetProviderConfigureActivity}
  */
 public class BabWidgetProvider extends AppWidgetProvider {
-    public static final String DATA_FETCHED = "com.wafflestudio.babbabdirara.DATA_FETCHED";
-    public static final String CAFE_LIST = "com.wafflestudio.babbabdirara.CAFE_LIST";
-    public static final String CAFE_MENU_LIST = "com.wafflestudio.babbabdirara.CAFE_MENU_LIST";
+    public static final String CONFIGURATION_FINISHED = "com.wafflestudio.siksha.CONFIGURATION_FINISHED";
+    public static final String DATA_FETCHED = "com.wafflestudio.siksha.DATA_FETCHED";
+    public static final String CAFE_LIST = "com.wafflestudio.siksha.CAFE_LIST";
+    public static final String CAFE_MENU_LIST = "com.wafflestudio.siksha.CAFE_MENU_LIST";
     public static final int randomNumber = 50;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.e("Update", "aa");
-        /*
         final int N = appWidgetIds.length;
         for (int i = 0; i < N; i++) {
-            Intent fetchIntent = new Intent(context, WidgetFetchService.class);
-            fetchIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
-            Log.e("Update", "WidgetId" + Integer.toString(appWidgetIds[i]));
-            int input = Integer.valueOf(BabWidgetProviderConfigureActivity.loadTitlePref(context, appWidgetIds[i]));
-            Log.e("Update", "WidgetSetting" + Integer.toString(input));
-
-            ArrayList<String> cafeList = new ArrayList<String>();
-            if (input % 2 == 1) {
-                cafeList.add(WidgetFetchService.jikYoungCafes[0]);
+            Log.e("Update", "WidgetId" + Integer.toString(appWidgetIds[i]) + Boolean.toString(BabWidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])));
+            if (BabWidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])) {
+                int input = Integer.valueOf(BabWidgetProviderConfigureActivity.loadTitlePref(context, appWidgetIds[i]));
+                ArrayList<String> cafeList = new ArrayList<String>();
+                if (input % 2 == 1) {
+                    cafeList.add(WidgetFetchService.jikYoungCafes[0]);
+                }
+                for (int j = 1; j < 7; j++) {
+                    input = input / 2;
+                    if (input % 2 == 1)
+                        cafeList.add(WidgetFetchService.jikYoungCafes[j]);
+                }
+                for (int j = 0; j < cafeList.size(); j++)
+                    Log.e("Update", cafeList.get(j));
+                Intent fetchIntent = new Intent(context, WidgetFetchService.class);
+                fetchIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
+                fetchIntent.putStringArrayListExtra(BabWidgetProvider.CAFE_LIST, cafeList);
+                context.startService(fetchIntent);
             }
-            for (int j = 1; j < 7; j++) {
-                input = input / 2;
-                if (input % 2 == 1)
-                    cafeList.add(WidgetFetchService.jikYoungCafes[j]);
-            }
-            for (int j = 0; j < cafeList.size(); j++)
-                Log.e("Update", cafeList.get(j));
-
-            fetchIntent.putStringArrayListExtra(BabWidgetProvider.CAFE_LIST, cafeList);
-            context.startService(fetchIntent);
         }
-        */
 
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
@@ -69,10 +67,10 @@ public class BabWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        if (intent.getAction().equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
+        if (intent.getAction().equals(CONFIGURATION_FINISHED)) {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             int input = Integer.valueOf(BabWidgetProviderConfigureActivity.loadTitlePref(context, appWidgetId));
-            Log.e("REUpdate", Integer.toString(appWidgetId));
+            Log.e("Config_Finished", Integer.toString(appWidgetId));
 
             ArrayList<String> cafeList = new ArrayList<String>();
             if (input % 2 == 1) {
@@ -84,7 +82,7 @@ public class BabWidgetProvider extends AppWidgetProvider {
                     cafeList.add(WidgetFetchService.jikYoungCafes[j]);
             }
             for (int j = 0; j < cafeList.size(); j++)
-                Log.e("REUpdate", cafeList.get(j));
+                Log.e("Config_Finished", cafeList.get(j));
 
             Intent fetchIntent = new Intent(context, WidgetFetchService.class);
             fetchIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
@@ -108,6 +106,7 @@ public class BabWidgetProvider extends AppWidgetProvider {
     public void onDeleted(Context context, int[] appWidgetIds) {
         final int N = appWidgetIds.length;
         for (int i = 0; i < N; i++) {
+            BabWidgetProviderConfigureActivity.removeWidgetId(context, appWidgetIds[i]);
             BabWidgetProviderConfigureActivity.deleteTitlePref(context, appWidgetIds[i]);
         }
     }

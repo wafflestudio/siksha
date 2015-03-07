@@ -33,6 +33,7 @@
         <receiver android:name=".widget.BabWidgetProvider" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.wafflestudio.siksha.CONFIGURATION_FINISHED" />
                 <action android:name="com.wafflestudio.siksha.DATA_FETCHED" />
             </intent-filter>
 
@@ -47,9 +48,9 @@
             </intent-filter>
         </activity>
         <service
-            android:name="com.wafflestudio.siksha.widget.WidgetRemoteService"
+            android:name=".widget.WidgetRemoteService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
-        <service android:name="com.wafflestudio.siksha.widget.WidgetFetchService" />
+        <service android:name=".widget.WidgetFetchService" />
 
         <receiver android:name=".AlarmService_Service" android:process=":remote" />
 
