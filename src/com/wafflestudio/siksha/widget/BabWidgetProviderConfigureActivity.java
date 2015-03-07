@@ -11,12 +11,16 @@ import android.widget.EditText;
 
 import com.wafflestudio.siksha.R;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class BabWidgetProviderConfigureActivity extends Activity {
 
     private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     EditText mAppWidgetText;
-    private static final String PREFS_NAME = "com.wafflestudio.babbabdirara.BabWidgetProvider";
+    private static final String PREFS_NAME = "com.wafflestudio.siksha.BabWidgetProvider";
     private static final String PREF_PREFIX_KEY = "babwidget_";
+    private static final String PREF_WIDGET_ID = "babwidgetids";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,7 @@ public class BabWidgetProviderConfigureActivity extends Activity {
                         final Context context = BabWidgetProviderConfigureActivity.this;
 
                         String widgetText = mAppWidgetText.getText().toString();
+                        addWidgetId(context, appWidgetId);
                         saveTitlePref(context, appWidgetId, widgetText);
                         startWidget(widgetText);
                     }
@@ -52,41 +57,50 @@ public class BabWidgetProviderConfigureActivity extends Activity {
             finish();
             return;
         }
-
-        mAppWidgetText.setText(loadTitlePref(BabWidgetProviderConfigureActivity.this, appWidgetId));
     }
 
     private void startWidget(String widgetText) {
         Intent intent = new Intent();
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         setResult(RESULT_OK, intent);
-        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.setAction(BabWidgetProvider.CONFIGURATION_FINISHED);
         sendBroadcast(intent);
-
-        /*
-        Intent fetchIntent = new Intent(this, WidgetFetchService.class);
-        fetchIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        Log.e("Configure", Integer.toString(appWidgetId));
-        Log.e("Configure", widgetText);
-
-        int input = Integer.valueOf(widgetText);
-        ArrayList<String> cafeList = new ArrayList<String>();
-        if (input % 2 == 1)
-            cafeList.add(WidgetFetchService.jikYoungCafes[0]);
-        for (int i = 1; i < 7; i++) {
-            input = input / 2;
-            if (input % 2 == 1)
-                cafeList.add(WidgetFetchService.jikYoungCafes[i]);
-        }
-
-        for (int i = 0; i < cafeList.size(); i++) {
-            Log.e("Configure", cafeList.get(i));
-        }
-
-        fetchIntent.putStringArrayListExtra(BabWidgetProvider.CAFE_LIST, cafeList);
-        startService(fetchIntent);
-        */
         finish();
+    }
+
+    static void addWidgetId(Context context, int appWidgetId) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        Set<String> idSet = prefs.getStringSet(PREF_WIDGET_ID, null);
+        if (idSet == null) {
+            idSet = new HashSet<String>();
+        }
+
+        idSet.add(Integer.toString(appWidgetId));
+        SharedPreferences.Editor editPrefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        editPrefs.putStringSet(PREF_WIDGET_ID, idSet);
+        editPrefs.commit();
+    }
+
+    static boolean isValidId(Context context, int appWidgetId) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        Set<String> idSet = prefs.getStringSet(PREF_WIDGET_ID, null);
+        if (idSet == null) {
+            idSet = new HashSet<String>();
+        }
+        return idSet.contains(Integer.toString(appWidgetId));
+    }
+
+    static void removeWidgetId(Context context, int appWidgetId) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        Set<String> idSet = prefs.getStringSet(PREF_WIDGET_ID, null);
+        if (idSet == null) {
+            return;
+        }
+
+        idSet.remove(Integer.toString(appWidgetId));
+        SharedPreferences.Editor editPrefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        editPrefs.putStringSet(PREF_WIDGET_ID, idSet);
+        editPrefs.commit();
     }
 
     static void saveTitlePref(Context context, int appWidgetId, String text) {
@@ -101,7 +115,7 @@ public class BabWidgetProviderConfigureActivity extends Activity {
         if (titleValue != null) {
             return titleValue;
         } else {
-            return "2";
+            return "1";
         }
     }
 
