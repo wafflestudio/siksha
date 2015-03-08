@@ -19,14 +19,19 @@
         android:icon="@drawable/temporal_ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
         <activity
             android:name="com.wafflestudio.siksha.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="com.wafflestudio.siksha.MainActivity" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".widget.BabWidgetProviderConfigureActivity" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
 
@@ -41,15 +46,14 @@
                 android:resource="@xml/bab_widget_provider_info" />
         </receiver>
 
-        <activity android:name=".widget.BabWidgetProviderConfigureActivity" >
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
+        <service
+            android:name="com.wafflestudio.siksha.util.DownloadingJson" />
         <service
             android:name="com.wafflestudio.siksha.WidgetRemoteService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
-        <service android:name="com.wafflestudio.siksha.WidgetFetchService" />
+        <service
+            android:name="com.wafflestudio.siksha.WidgetFetchService" />
+
     </application>
 
 </manifest>

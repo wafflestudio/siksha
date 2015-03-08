@@ -9,14 +9,14 @@ import com.wafflestudio.siksha.R;
 
 import java.util.HashMap;
 
-public class CafeInfoDialog extends Dialog {
+public class RestaurantInfoDialog extends Dialog {
 	private TextView hourDetails;
 	private TextView locationDetails;
 	
-	public CafeInfoDialog(Context context, String cafeName, HashMap<String, String> operatingHours, HashMap<String, String> locations) {
+	public RestaurantInfoDialog(Context context, String cafeName, HashMap<String, String> operatingHours, HashMap<String, String> locations) {
 		super(context);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.cafe_info);
+		setContentView(R.layout.restaurant_info);
 		
 		hourDetails = (TextView) findViewById(R.id.operating_hour_details);
 		locationDetails = (TextView) findViewById(R.id.location_details);

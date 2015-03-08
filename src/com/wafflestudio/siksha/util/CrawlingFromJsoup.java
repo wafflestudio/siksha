@@ -1,9 +1,5 @@
 package com.wafflestudio.siksha.util;
 
-/**
- * Created by hwangseongman on 2015. 2. 24..
- */
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -19,7 +15,7 @@ import android.widget.TextView;
 
 import com.wafflestudio.siksha.MainActivity;
 import com.wafflestudio.siksha.R;
-import com.wafflestudio.siksha.dialog.CafeInfoDialog;
+import com.wafflestudio.siksha.dialog.RestaurantInfoDialog;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -29,9 +25,8 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-
 public class CrawlingFromJsoup {
-
+/*
 private static HashMap<String, ArrayList<String>> map;
 private Context context;
 private ExpandableListView cafeList;
@@ -96,7 +91,7 @@ public class Parsing extends AsyncTask<Void, Void, Boolean> {
       jikYoung = new JikYoung();
       junJikYoung = new JunJikYoung();
 
-      listAdapter = new ExpandableListAdapter(context, cafeList, MainActivity.cafes, MainActivity.operatingHours, MainActivity.locations, MainActivity.matching);
+      listAdapter = new ExpandableListAdapter(context, cafeList, RestaurantInfoUtil.restaurants, MainActivity.operatingHours, MainActivity.locations, MainActivity.matching);
       cafeList.setAdapter(listAdapter);
     }
 
@@ -504,14 +499,12 @@ public class Parsing extends AsyncTask<Void, Void, Boolean> {
 
       if (convertView == null) {
         // when view is not made yet
-        convertView = LayoutInflater.from(context).inflate(R.layout.cafe_list, null);
-        // layout > cafe_list.xml
-        // inflating = making View from code in xml
+        convertView = LayoutInflater.from(context).inflate(R.layout.restaurant_list, null);
       }
 
-      cafeName = (TextView)convertView.findViewById(R.id.cafe_name); // >> cafe_list.xml
-      cafeInfo = (Button)convertView.findViewById(R.id.show_info); // >> cafe_list.xml
-      cafeName.setText(name); // set cafe name on each View
+      cafeName = (TextView)convertView.findViewById(R.id.restaurant_name);
+      cafeInfo = (Button)convertView.findViewById(R.id.show_info);
+      cafeName.setText(name);
 
       signal = (TextView)convertView.findViewById(R.id.signal);
       signal.setText(signalInGroup);
@@ -519,7 +512,7 @@ public class Parsing extends AsyncTask<Void, Void, Boolean> {
       cafeInfo.setOnClickListener(new View.OnClickListener() {
         // when click info
         public void onClick(View v) {
-          CafeInfoDialog dialog = new CafeInfoDialog(context, name, operatingHours, locations);
+          RestaurantInfoDialog dialog = new RestaurantInfoDialog(context, name, operatingHours, locations);
           dialog.setCanceledOnTouchOutside(true);
           dialog.show();
         }
@@ -577,5 +570,5 @@ public class Parsing extends AsyncTask<Void, Void, Boolean> {
       return view;
     }
   }
-
+*/
 }

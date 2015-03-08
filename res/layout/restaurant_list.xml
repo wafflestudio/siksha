@@ -4,23 +4,12 @@
     android:padding="15dp" >
     
      <TextView
-        android:id="@+id/cafe_name"
+        android:id="@+id/restaurant_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="22sp"
         android:textStyle="bold" />
-     
-     <TextView
-        android:id="@+id/signal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/cafe_name"
-        android:textSize="12sp"
-        android:textColor="#ffff9426"
-        android:textStyle="bold"
-		 />
-     
-    
+
     <Button
         android:id="@+id/show_info"
         android:layout_alignParentRight="true"
@@ -35,4 +24,4 @@
         android:focusable="false"
     	android:focusableInTouchMode="false" />
        
-     </RelativeLayout>
+</RelativeLayout>
