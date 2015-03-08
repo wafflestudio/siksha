@@ -21,6 +21,7 @@ public class MainActivity extends Activity {
     requestWindowFeature(Window.FEATURE_NO_TITLE); // remove bar at the top
     setContentView(R.layout.activity_main);
 
+    AlarmUtil.registerAlarm(this);
     RestaurantInfoUtil.getInstance().loadingRestaurantInfos();
 
     expandableListView = (ExpandableListView) findViewById(R.id.expandable_list_view);
