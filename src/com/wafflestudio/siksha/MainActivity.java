@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Window;
 import android.widget.ExpandableListView;
 
+import com.wafflestudio.siksha.util.AlarmUtil;
 import com.wafflestudio.siksha.util.LoadingMenuFromJson;
 import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 
@@ -25,6 +26,8 @@ public class MainActivity extends Activity {
 
     expandableListView = (ExpandableListView) findViewById(R.id.expandable_list_view);
     new LoadingMenuFromJson(this, expandableListView);
+
+    AlarmUtil.setAlarm(this);
   }
 
   private void registerReceiver() {
