@@ -46,8 +46,8 @@ public class DownloadingJson extends IntentService {
     try {
       URL url = new URL(SERVER_URL);
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-      connection.setConnectTimeout(5 * 1000);
-      connection.setReadTimeout(5 * 1000);
+      connection.setConnectTimeout(10 * 1000);
+      connection.setReadTimeout(10 * 1000);
 
       if (connection.getResponseCode() == 200) {
         Log.d("connection", "success");
@@ -92,9 +92,7 @@ public class DownloadingJson extends IntentService {
   }
 
   public void sendSignalToWidget() {
-    Intent widgetUpdate = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-    widgetUpdate.setClass(getApplicationContext(), BabWidgetProvider.class);
-    widgetUpdate.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+    Intent widgetUpdate = new Intent(BabWidgetProvider.DATA_FETCHED);
     sendBroadcast(widgetUpdate);
   }
 

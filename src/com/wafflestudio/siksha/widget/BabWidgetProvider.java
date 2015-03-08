@@ -8,9 +8,13 @@ import android.net.Uri;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import java.util.ArrayList;
-
 import com.wafflestudio.siksha.R;
+import com.wafflestudio.siksha.util.CalendarUtil;
+import com.wafflestudio.siksha.util.DownloadingJson;
+import com.wafflestudio.siksha.util.SharedPreferenceUtil;
+
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Implementation of App Widget functionality.
@@ -19,44 +23,35 @@ import com.wafflestudio.siksha.R;
 public class BabWidgetProvider extends AppWidgetProvider {
     public static final String CONFIGURATION_FINISHED = "com.wafflestudio.siksha.CONFIGURATION_FINISHED";
     public static final String DATA_FETCHED = "com.wafflestudio.siksha.DATA_FETCHED";
-    public static final String CAFE_LIST = "com.wafflestudio.siksha.CAFE_LIST";
-    public static final String CAFE_MENU_LIST = "com.wafflestudio.siksha.CAFE_MENU_LIST";
     public static final int randomNumber = 50;
+
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        Log.e("Update", "aa");
-        final int N = appWidgetIds.length;
-        for (int i = 0; i < N; i++) {
-            Log.e("Update", "WidgetId" + Integer.toString(appWidgetIds[i]) + Boolean.toString(BabWidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])));
-            if (BabWidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])) {
-                int input = Integer.valueOf(BabWidgetProviderConfigureActivity.loadTitlePref(context, appWidgetIds[i]));
-                ArrayList<String> cafeList = new ArrayList<String>();
-                if (input % 2 == 1) {
-                    cafeList.add(WidgetFetchService.jikYoungCafes[0]);
+        Log.e("WidgetOnUpdate", "aa");
+        String recordedDate = SharedPreferenceUtil.load(context, SharedPreferenceUtil.PREF_NAME, "json_date");
+        Log.e("recordedDate", recordedDate);
+        if (recordedDate.equals(CalendarUtil.getCurrentDate())) {
+            final int N = appWidgetIds.length;
+            for (int i = 0; i < N; i++) {
+                Log.e("WidgetOnUpdate", "WidgetId" + Integer.toString(appWidgetIds[i]) + Boolean.toString(BabWidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])));
+                if (BabWidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])) {
+                    RemoteViews remoteViews = updateWidgetListView(context, appWidgetIds[i]);
+                    appWidgetManager.updateAppWidget(appWidgetIds[i], null);
+                    appWidgetManager.updateAppWidget(appWidgetIds[i], remoteViews);
                 }
-                for (int j = 1; j < 7; j++) {
-                    input = input / 2;
-                    if (input % 2 == 1)
-                        cafeList.add(WidgetFetchService.jikYoungCafes[j]);
-                }
-                for (int j = 0; j < cafeList.size(); j++)
-                    Log.e("Update", cafeList.get(j));
-                Intent fetchIntent = new Intent(context, WidgetFetchService.class);
-                fetchIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
-                fetchIntent.putStringArrayListExtra(BabWidgetProvider.CAFE_LIST, cafeList);
-                context.startService(fetchIntent);
             }
         }
-
+        else {
+            context.startService(new Intent(context, DownloadingJson.class));
+        }
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
-    private RemoteViews updateWidgetListView(Context context, ArrayList<String> cafeMenuList, int appWidgetId) {
+    private RemoteViews updateWidgetListView(Context context, int appWidgetId) {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.bab_widget_provider);
         Intent remoteIntent = new Intent(context, WidgetRemoteService.class);
         remoteIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        remoteIntent.putStringArrayListExtra(BabWidgetProvider.CAFE_MENU_LIST, cafeMenuList);
         remoteIntent.setData(Uri.fromParts("content", String.valueOf(appWidgetId + randomNumber), null));
         remoteViews.setRemoteAdapter(R.id.listViewWidget, remoteIntent);
         // setting an empty view in case of no data
@@ -69,36 +64,36 @@ public class BabWidgetProvider extends AppWidgetProvider {
         super.onReceive(context, intent);
         if (intent.getAction().equals(CONFIGURATION_FINISHED)) {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-            int input = Integer.valueOf(BabWidgetProviderConfigureActivity.loadTitlePref(context, appWidgetId));
-            Log.e("Config_Finished", Integer.toString(appWidgetId));
+            Log.e("WidgetOnReceive_Config_Finished", Integer.toString(appWidgetId));
 
-            ArrayList<String> cafeList = new ArrayList<String>();
-            if (input % 2 == 1) {
-                cafeList.add(WidgetFetchService.jikYoungCafes[0]);
+            String recordedDate = SharedPreferenceUtil.load(context, SharedPreferenceUtil.PREF_NAME, "json_date");
+            Log.e("recordedDate", recordedDate);
+            if (recordedDate.equals(CalendarUtil.getCurrentDate())) {
+                Log.e("WidgetOnReceive_Config_Finished", "WidgetId" + Integer.toString(appWidgetId) + Boolean.toString(BabWidgetProviderConfigureActivity.isValidId(context, appWidgetId)));
+                RemoteViews remoteViews = updateWidgetListView(context, appWidgetId);
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                appWidgetManager.updateAppWidget(appWidgetId, null);
+                appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
             }
-            for (int j = 1; j < 7; j++) {
-                input = input / 2;
-                if (input % 2 == 1)
-                    cafeList.add(WidgetFetchService.jikYoungCafes[j]);
-            }
-            for (int j = 0; j < cafeList.size(); j++)
-                Log.e("Config_Finished", cafeList.get(j));
 
-            Intent fetchIntent = new Intent(context, WidgetFetchService.class);
-            fetchIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-            fetchIntent.putStringArrayListExtra(BabWidgetProvider.CAFE_LIST, cafeList);
-            context.startService(fetchIntent);
+            else {
+                context.startService(new Intent(context, DownloadingJson.class));
+            }
         }
+
         if (intent.getAction().equals(DATA_FETCHED)) {
-            Log.e("Receive", "Success");
-            int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-            Log.e("Receive", Integer.toString(appWidgetId));
-            ArrayList<String> cafeMenuList = intent.getStringArrayListExtra(BabWidgetProvider.CAFE_MENU_LIST);
-            Log.e("Receive", cafeMenuList.get(0));
-            RemoteViews remoteViews = updateWidgetListView(context, cafeMenuList, appWidgetId);
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            appWidgetManager.updateAppWidget(appWidgetId, null);
-            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+            Log.e("WidgetOnReceive_DATA_FETCHED", "Broadcast_Received");
+            Set<String> idSet = BabWidgetProviderConfigureActivity.getAllWidgetIds(context);
+            Iterator<String> iterator = idSet.iterator();
+
+            while (iterator.hasNext()) {
+                int appWidgetId = Integer.valueOf(iterator.next());
+                Log.e("WidgetOnReceive_DATA_FETCHED", Integer.toString(appWidgetId));
+                RemoteViews remoteViews = updateWidgetListView(context, appWidgetId);
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                appWidgetManager.updateAppWidget(appWidgetId, null);
+                appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+            }
         }
     }
 
