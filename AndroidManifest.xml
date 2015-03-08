@@ -48,7 +48,7 @@
         </receiver>
 
         <receiver
-            android:name=".AlarmService_Service" android:process=":remote" />
+            android:name=".AlarmServiceReceiver" android:process=":remote" />
 
         <service
             android:name="com.wafflestudio.siksha.util.DownloadingJson" />
