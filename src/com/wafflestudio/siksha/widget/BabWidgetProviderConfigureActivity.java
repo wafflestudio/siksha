@@ -90,6 +90,15 @@ public class BabWidgetProviderConfigureActivity extends Activity {
         return idSet.contains(Integer.toString(appWidgetId));
     }
 
+    static Set<String> getAllWidgetIds(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        Set<String> idSet = prefs.getStringSet(PREF_WIDGET_ID, null);
+        if (idSet == null) {
+            idSet = new HashSet<String>();
+        }
+        return idSet;
+    }
+
     static void removeWidgetId(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
         Set<String> idSet = prefs.getStringSet(PREF_WIDGET_ID, null);

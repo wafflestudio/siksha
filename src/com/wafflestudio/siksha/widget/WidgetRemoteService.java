@@ -10,6 +10,8 @@ import android.widget.RemoteViewsService;
 import java.util.ArrayList;
 
 import com.wafflestudio.siksha.R;
+import com.wafflestudio.siksha.util.LoadingMenuFromJson;
+import com.wafflestudio.siksha.util.RestaurantCrawlingForm;
 
 public class WidgetRemoteService extends RemoteViewsService {
 
@@ -22,26 +24,43 @@ public class WidgetRemoteService extends RemoteViewsService {
 }
 
 class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFactory {
-    private ArrayList<String> cafeIncludeMenus = new ArrayList<String>();
+    private ArrayList<String> cafeList;
+    private ArrayList<RestaurantCrawlingForm> cafeMenuList;
     private Context context = null;
     private int appWidgetId;
+    public final static String[] jikYoungCafes = {"학생회관식당", "3식당", "기숙사식당", "자하연식당", "302동식당", "동원관식당", "감골식당"};
 
     public WidgetListViewFactory(Context context, Intent intent) {
         this.context = context;
         appWidgetId = Integer.valueOf(intent.getData().getSchemeSpecificPart()) - BabWidgetProvider.randomNumber;
-        ArrayList<String> cafeMenuList = intent.getStringArrayListExtra(BabWidgetProvider.CAFE_MENU_LIST);
-        if (cafeMenuList != null) {
-            cafeIncludeMenus = cafeMenuList;
-            Log.e("Factory", cafeMenuList.get(0));
+
+        int input = Integer.valueOf(BabWidgetProviderConfigureActivity.loadTitlePref(context, appWidgetId));
+        Log.e("WidgetListViewFactory", Integer.toString(input));
+        cafeList = new ArrayList<String>();
+        if (input % 2 == 1) {
+            cafeList.add(jikYoungCafes[0]);
         }
-        else {
-            cafeIncludeMenus = new ArrayList<String>();
+        for (int j = 1; j < 7; j++) {
+            input = input / 2;
+            if (input % 2 == 1)
+                cafeList.add(jikYoungCafes[j]);
+        }
+
+        RestaurantCrawlingForm[] forms = new LoadingMenuFromJson.ParsingJson(context).getParsedForms();
+        cafeMenuList = new ArrayList<RestaurantCrawlingForm>();
+        for (int i = 0; i < cafeList.size(); i++) {
+            for (int j = 0; j < forms.length; j++) {
+                if (cafeList.get(i).equals(forms[j].restaurant)) {
+                    cafeMenuList.add(forms[j]);
+                    break;
+                }
+            }
         }
     }
 
     @Override
     public int getCount() {
-        return cafeIncludeMenus.size();
+        return cafeMenuList.size();
     }
 
     @Override
@@ -52,10 +71,13 @@ class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public RemoteViews getViewAt(int position) {
         final RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.bab_widget_list_row);
-        String item = cafeIncludeMenus.get(position);
-        String[] itemList = item.split("!");
-        remoteView.setTextViewText(R.id.heading, itemList[0]);
-        remoteView.setTextViewText(R.id.content, itemList[1]);
+        RestaurantCrawlingForm item = cafeMenuList.get(position);
+        String content = "";
+        for (int i = 0; i < item.menus.length; i++) {
+            content = content + item.menus[i].name + item.menus[i].time + item.menus[i].price;
+        }
+        remoteView.setTextViewText(R.id.heading, item.restaurant);
+        remoteView.setTextViewText(R.id.content, content);
 
         return remoteView;
     }

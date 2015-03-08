@@ -55,10 +55,6 @@
         <service
             android:name=".widget.WidgetRemoteService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
-        <service
-            android:name="com.wafflestudio.siksha.WidgetFetchService" />
-        <service
-            android:name=".widget.WidgetFetchService" />
 
     </application>
 
