@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha;
+package com.wafflestudio.siksha.util;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

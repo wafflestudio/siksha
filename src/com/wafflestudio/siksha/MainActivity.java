@@ -1,13 +1,20 @@
 package com.wafflestudio.siksha;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
-import com.wafflestudio.siksha.dialog.DownloadingRetryDialog;
+import com.wafflestudio.siksha.dialog.RestaurantInfoDialog;
 import com.wafflestudio.siksha.util.AlarmUtil;
 import com.wafflestudio.siksha.util.FontUtil;
 import com.wafflestudio.siksha.util.LoadingMenuFromJson;
@@ -32,13 +39,53 @@ public class MainActivity extends Activity {
 
     title = (TextView) findViewById(R.id.activity_main_title);
     expandableListView = (ExpandableListView) findViewById(R.id.expandable_list_view);
-    title.setTypeface(FontUtil.fontAPAritaDotumMedium);
+    title.setTypeface(FontUtil.fontAPAritaDotumSemiBold);
 
     setExpandableListView();
   }
 
   public void setExpandableListView() {
+    expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+      @Override
+      public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
+          RestaurantInfoDialog dialog = new RestaurantInfoDialog(MainActivity.this, RestaurantInfoUtil.restaurants[position]);
+          dialog.setCanceledOnTouchOutside(true);
+          dialog.show();
+
+          return true;
+        }
+
+        return false;
+      }
+    });
+    expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+      @Override
+      public void onGroupExpand(int groupPosition) {
+        int groupSize = RestaurantInfoUtil.restaurants.length;
+
+        for(int i = 0; i < groupSize; i++) {
+          if (i != groupPosition)
+            expandableListView.collapseGroup(i);
+        }
+      }
+    });
+    setGroupIndicatorPosition();
+
     new LoadingMenuFromJson(this, expandableListView).initSetting();
+  }
+
+  private void setGroupIndicatorPosition() {
+    DisplayMetrics displayMetrics = new DisplayMetrics();
+    getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+    int width = displayMetrics.widthPixels;
+    expandableListView.setIndicatorBounds(width - getDpFromPixel(25), width - getDpFromPixel(10));
+  }
+
+  public int getDpFromPixel(float pixels) {
+    final float scale = getResources().getDisplayMetrics().density;
+    return (int) (pixels * scale + 0.5f);
   }
 
   private void registerReceiver() {

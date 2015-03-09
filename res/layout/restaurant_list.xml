@@ -3,25 +3,10 @@
     android:layout_height="wrap_content"
     android:padding="15dp" >
     
-     <TextView
+    <TextView
         android:id="@+id/restaurant_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:textStyle="bold" />
-
-    <Button
-        android:id="@+id/show_info"
-        android:layout_alignParentRight="true"
-        android:layout_width="30sp"
-        android:layout_height="30sp"
-        android:text="i"
-        android:textSize="20sp"
-        android:typeface="serif"        
-        android:background="@layout/button_style"
-        android:padding="1dp"
-        android:layout_margin="1dp"
-        android:focusable="false"
-    	android:focusableInTouchMode="false" />
+        android:textSize="21sp" />
        
 </RelativeLayout>
