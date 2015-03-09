@@ -6,21 +6,41 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.wafflestudio.siksha.R;
+import com.wafflestudio.siksha.util.FontUtil;
+import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 
 import java.util.HashMap;
 
 public class RestaurantInfoDialog extends Dialog {
-	private TextView hourDetails;
+  private TextView operatingHoursTitle;
+  private TextView locationTitle;
+	private TextView operatingHoursDetails;
 	private TextView locationDetails;
+
+  private HashMap<String, String> operatingHours;
+  private HashMap<String, String> locations;
+  private HashMap<String, String> matchings;
 	
-	public RestaurantInfoDialog(Context context, String cafeName, HashMap<String, String> operatingHours, HashMap<String, String> locations) {
+	public RestaurantInfoDialog(Context context, String restaurantName) {
 		super(context);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.restaurant_info_dialog);
-		
-		hourDetails = (TextView) findViewById(R.id.operating_hour_details);
+
+    operatingHoursTitle = (TextView) findViewById(R.id.operating_hour);
+    locationTitle = (TextView) findViewById(R.id.location);
+    operatingHoursDetails = (TextView) findViewById(R.id.operating_hour_details);
 		locationDetails = (TextView) findViewById(R.id.location_details);
-		hourDetails.setText(operatingHours.get(cafeName));
-		locationDetails.setText(locations.get(cafeName));
+
+    operatingHoursTitle.setTypeface(FontUtil.fontAPAritaDotumSemiBold);
+    locationTitle.setTypeface(FontUtil.fontAPAritaDotumSemiBold);
+    operatingHoursDetails.setTypeface(FontUtil.fontAPAritaDotumMedium);
+    locationDetails.setTypeface(FontUtil.fontAPAritaDotumMedium);
+
+    operatingHours = RestaurantInfoUtil.operatingHours;
+    locations = RestaurantInfoUtil.locations;
+    matchings = RestaurantInfoUtil.matchings;
+
+    operatingHoursDetails.setText(operatingHours.get(matchings.get(restaurantName)));
+		locationDetails.setText(locations.get(matchings.get(restaurantName)));
 	}
 }

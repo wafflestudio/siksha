@@ -8,7 +8,7 @@
         android:id="@+id/operating_hour"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
+        android:textSize="21sp"
         android:textStyle="bold"
         android:text="@string/operating_hour" />
     
@@ -16,7 +16,8 @@
         android:id="@+id/operating_hour_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
+        android:textSize="15sp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="15dp" />
     
     <TextView
@@ -24,13 +25,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:textSize="22sp"
+        android:textSize="21sp"
         android:text="@string/location" />
     
     <TextView
         android:id="@+id/location_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp" />
+        android:layout_marginTop="5dp"
+        android:textSize="15sp" />
         
  </LinearLayout>

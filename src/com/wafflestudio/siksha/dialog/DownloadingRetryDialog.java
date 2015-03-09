@@ -52,7 +52,7 @@ public class DownloadingRetryDialog extends Dialog {
     positiveButton = (Button) findViewById(R.id.downloading_dialog_positive_button);
     negativeButton = (Button) findViewById(R.id.downloading_dialog_negative_button);
 
-    title.setTypeface(FontUtil.fontAPAritaDotumMedium);
+    title.setTypeface(FontUtil.fontAPAritaDotumSemiBold);
     message.setTypeface(FontUtil.fontAPAritaDotumMedium);
     positiveButton.setTypeface(FontUtil.fontAPAritaDotumMedium);
     negativeButton.setTypeface(FontUtil.fontAPAritaDotumMedium);
