@@ -1,13 +1,15 @@
 package com.wafflestudio.siksha.util;
 
 import android.app.IntentService;
-import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.wafflestudio.siksha.MainActivity;
+import com.wafflestudio.siksha.R;
+import com.wafflestudio.siksha.dialog.ProgressDialog;
 import com.wafflestudio.siksha.widget.BabWidgetProvider;
 
 import java.io.BufferedReader;
@@ -21,24 +23,9 @@ public class DownloadingJson extends IntentService {
   public static final String SERVER_URL = "http://kanggyu94.fun25.co.kr:13203/restaurants";
   private final String DATE = CalendarUtil.getCurrentDate();
 
-  private static final int DOWNLOAD_START = 0;
-  private static final int DOWNLOAD_END = 1;
-
   public DownloadingJson() {
     super("com.wafflestudio.siksha.DownloadingJson");
   }
-
-  private Handler uiHandler = new Handler() {
-    @Override
-    public void handleMessage(Message msg) {
-      switch (msg.what) {
-        case DOWNLOAD_START :
-          break;
-        case DOWNLOAD_END :
-          break;
-      }
-    }
-  };
 
   public String fetchJsonFromServer() {
     StringBuilder stringBuilder = new StringBuilder();
@@ -75,20 +62,28 @@ public class DownloadingJson extends IntentService {
     return stringBuilder.toString();
   }
 
-  public void writeJsonOnInternalStorage(String data) {
+  public boolean writeJsonOnInternalStorage(String data) {
     Context context = getApplicationContext();
+
+    if (data == null)
+      return false;
 
     try {
       FileOutputStream fos = context.openFileOutput("restaurants.json", Context.MODE_PRIVATE);
       fos.write(data.getBytes("euc-kr"));
       fos.close();
-
-      SharedPreferenceUtil.save(context, SharedPreferenceUtil.PREF_NAME, "json_date", DATE);
-      Log.d("saveDate", DATE);
     }
     catch (Exception e) {
       e.printStackTrace();
+      return false;
     }
+
+    return true;
+  }
+
+  private void onPostDownloading() {
+    SharedPreferenceUtil.save(getApplicationContext(), SharedPreferenceUtil.PREF_NAME, "json_date", DATE);
+    Log.d("saveDate", DATE);
   }
 
   public void sendSignalToWidget() {
@@ -99,21 +94,21 @@ public class DownloadingJson extends IntentService {
   public void sendSignalToApp() {
     Intent intent = new Intent(LoadingMenuFromJson.DownloadingJsonReceiver.ACTION_DOWNLOADING_JSON);
     intent.addCategory(Intent.CATEGORY_DEFAULT);
-    intent.putExtra("is_need_set_ui", true);
+    intent.putExtra("is_need_set_expandable_list_view", true);
     sendBroadcast(intent);
   }
 
   @Override
   protected void onHandleIntent(Intent intent) {
-    boolean isNeedSetUIComponent = intent.getBooleanExtra("is_need_set_ui", false);
+    boolean isNeedSetUIComponent = intent.getBooleanExtra("is_need_set_expandable_list_view", false);
 
-    String data = fetchJsonFromServer();
-    writeJsonOnInternalStorage(data);
-    sendSignalToWidget();
+    boolean isSuccess = writeJsonOnInternalStorage(fetchJsonFromServer());
+    if (isSuccess) {
+      onPostDownloading();
 
-    if (isNeedSetUIComponent) {
-      Log.d("isNeedSetUIComponent", isNeedSetUIComponent + "");
-      sendSignalToApp();
+      if (isNeedSetUIComponent)
+        sendSignalToApp();
+      sendSignalToWidget();
     }
   }
 }

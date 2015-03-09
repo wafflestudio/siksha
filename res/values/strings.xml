@@ -7,8 +7,13 @@
    	<string name="operating_hour">운영 시간</string>
    	<string name="location">식당 위치</string>
 
-    <!-- App Message -->
-	<string name="no_menu">메뉴가 없습니다.</string>
+    <string name="downloading_error">식단 다운로드 실패!</string>
+    <string name="downloading_network_state">데이터 네트워크 또는 Wi-Fi를 연결하고, 다시 시도해주세요.</string>
+    <string name="downloading_retry">다시 하기</string>
+    <string name="downloading_cancel">취소</string>
+
+	<string name="restaurant_no_menu">메뉴가 없습니다.</string>
+    <string name="downloading_message">식단을 다운로드하고 있습니다...</string>
 
     <!-- Widget -->
     <string name="widget_activity_main">식당이름+날짜</string>

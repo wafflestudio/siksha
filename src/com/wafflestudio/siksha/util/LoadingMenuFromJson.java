@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.wafflestudio.siksha.R;
+import com.wafflestudio.siksha.dialog.DownloadingRetryDialog;
+import com.wafflestudio.siksha.dialog.ProgressDialog;
 import com.wafflestudio.siksha.dialog.RestaurantInfoDialog;
 
 import java.io.BufferedReader;
@@ -27,34 +29,46 @@ public class LoadingMenuFromJson {
   private Context context;
 
   private ExpandableListView expandableListView;
+  private static ProgressDialog progressDialog;
+
   private RestaurantCrawlingForm[] forms;
 
   public LoadingMenuFromJson(Context context, ExpandableListView expandableListView) {
     this.context = context;
     this.expandableListView = expandableListView;
-
-    initSetting();
   }
 
   public void initSetting() {
     if (isJsonUpdated()) {
-      Log.d("update", "true");
+      Log.d("is_json_updated", "true");
 
       forms = new ParsingJson(context).getParsedForms();
       expandableListView.setAdapter(new ExpandableListAdapter(context, forms, RestaurantInfoUtil.operatingHours, RestaurantInfoUtil.locations));
     }
     else {
-      Log.d("update", "false");
+      Log.d("is_json_updated", "false");
 
-      Intent intent = new Intent(context, DownloadingJson.class);
-      intent.putExtra("is_need_set_ui", true);
-      context.startService(intent);
+      progressDialog = new ProgressDialog(context, context.getString(R.string.downloading_message));
+      progressDialog.setCancelable(false);
+
+      if (!NetworkUtil.getInstance().isOnline())
+        new DownloadingRetryDialog(context).show();
+      else
+        startDownloadingService(context);
     }
+  }
+
+  public static void startDownloadingService(Context context) {
+    progressDialog.startShowing();
+
+    Intent intent = new Intent(context, DownloadingJson.class);
+    intent.putExtra("is_need_set_expandable_list_view", true);
+    context.startService(intent);
   }
 
   private boolean isJsonUpdated() {
     String recordedDate = SharedPreferenceUtil.load(context, SharedPreferenceUtil.PREF_NAME, "json_date");
-    Log.d("recordedDate", recordedDate);
+    Log.d("recorded_date", recordedDate);
     return recordedDate.equals(CalendarUtil.getCurrentDate());
   }
 
@@ -97,7 +111,10 @@ public class LoadingMenuFromJson {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-      boolean isNeedSetUIComponent = intent.getBooleanExtra("is_need_set_ui", false);
+      boolean isNeedSetUIComponent = intent.getBooleanExtra("is_need_set_expandable_list_view", true);
+
+      if (progressDialog.isShowing())
+        progressDialog.quitShowing();
 
       if (isNeedSetUIComponent) {
         RestaurantCrawlingForm[] forms = new ParsingJson(context).getParsedForms();

@@ -16,7 +16,7 @@ public class RestaurantInfoDialog extends Dialog {
 	public RestaurantInfoDialog(Context context, String cafeName, HashMap<String, String> operatingHours, HashMap<String, String> locations) {
 		super(context);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.restaurant_info);
+		setContentView(R.layout.restaurant_info_dialog);
 		
 		hourDetails = (TextView) findViewById(R.id.operating_hour_details);
 		locationDetails = (TextView) findViewById(R.id.location_details);
