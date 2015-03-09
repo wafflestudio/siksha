@@ -4,13 +4,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.view.Window;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
+import com.wafflestudio.siksha.dialog.DownloadingRetryDialog;
+import com.wafflestudio.siksha.util.AlarmUtil;
+import com.wafflestudio.siksha.util.FontUtil;
 import com.wafflestudio.siksha.util.LoadingMenuFromJson;
+import com.wafflestudio.siksha.util.NetworkUtil;
 import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 
 public class MainActivity extends Activity {
+  private TextView title;
   private ExpandableListView expandableListView;
 
   private LoadingMenuFromJson.DownloadingJsonReceiver downloadingJsonReceiver;
@@ -18,14 +23,22 @@ public class MainActivity extends Activity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    requestWindowFeature(Window.FEATURE_NO_TITLE); // remove bar at the top
     setContentView(R.layout.activity_main);
 
     AlarmUtil.registerAlarm(this);
     RestaurantInfoUtil.getInstance().loadingRestaurantInfos();
+    NetworkUtil.getInstance().setConnectivityManager(this);
+    FontUtil.getInstance().setFontAsset(getAssets());
 
+    title = (TextView) findViewById(R.id.activity_main_title);
     expandableListView = (ExpandableListView) findViewById(R.id.expandable_list_view);
-    new LoadingMenuFromJson(this, expandableListView);
+    title.setTypeface(FontUtil.fontAPAritaDotumMedium);
+
+    setExpandableListView();
+  }
+
+  public void setExpandableListView() {
+    new LoadingMenuFromJson(this, expandableListView).initSetting();
   }
 
   private void registerReceiver() {
@@ -50,10 +63,5 @@ public class MainActivity extends Activity {
   protected void onResume() {
     registerReceiver();
     super.onResume();
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
   }
 }
