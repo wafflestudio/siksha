@@ -1,15 +1,13 @@
-package com.wafflestudio.siksha.util;
+package com.wafflestudio.siksha.service;
 
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
-import com.wafflestudio.siksha.MainActivity;
-import com.wafflestudio.siksha.R;
-import com.wafflestudio.siksha.dialog.ProgressDialog;
+import com.wafflestudio.siksha.util.CalendarUtil;
+import com.wafflestudio.siksha.util.LoadingMenuFromJson;
+import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 import com.wafflestudio.siksha.widget.BabWidgetProvider;
 
 import java.io.BufferedReader;
@@ -82,7 +80,7 @@ public class DownloadingJson extends IntentService {
   }
 
   private void onPostDownloading() {
-    SharedPreferenceUtil.save(getApplicationContext(), SharedPreferenceUtil.PREF_NAME, "json_date", DATE);
+    SharedPreferenceUtil.saveValueOfString(getApplicationContext(), SharedPreferenceUtil.PREF_APP_NAME, "json_date", DATE);
     Log.d("saveDate", DATE);
   }
 

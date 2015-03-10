@@ -9,8 +9,8 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.wafflestudio.siksha.R;
+import com.wafflestudio.siksha.service.DownloadingJson;
 import com.wafflestudio.siksha.util.CalendarUtil;
-import com.wafflestudio.siksha.util.DownloadingJson;
 import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
 import java.util.Iterator;
@@ -25,12 +25,12 @@ public class BabWidgetProvider extends AppWidgetProvider {
     public static final String DATA_FETCHED = "com.wafflestudio.siksha.DATA_FETCHED";
     public static final int randomNumber = 50;
 
-
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.e("WidgetOnUpdate", "aa");
-        String recordedDate = SharedPreferenceUtil.load(context, SharedPreferenceUtil.PREF_NAME, "json_date");
+        String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, "json_date");
         Log.e("recordedDate", recordedDate);
+
         if (recordedDate.equals(CalendarUtil.getCurrentDate())) {
             final int N = appWidgetIds.length;
             for (int i = 0; i < N; i++) {
@@ -53,9 +53,9 @@ public class BabWidgetProvider extends AppWidgetProvider {
         Intent remoteIntent = new Intent(context, WidgetRemoteService.class);
         remoteIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         remoteIntent.setData(Uri.fromParts("content", String.valueOf(appWidgetId + randomNumber), null));
-        remoteViews.setRemoteAdapter(R.id.listViewWidget, remoteIntent);
+        remoteViews.setRemoteAdapter(R.id.widget_list_view, remoteIntent);
         // setting an empty view in case of no data
-        remoteViews.setEmptyView(R.id.listViewWidget, R.id.emptyViewWidget);
+        remoteViews.setEmptyView(R.id.widget_list_view, R.id.widget_empty_view);
         return remoteViews;
     }
 
@@ -66,7 +66,7 @@ public class BabWidgetProvider extends AppWidgetProvider {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             Log.e("WidgetOnReceive_Config_Finished", Integer.toString(appWidgetId));
 
-            String recordedDate = SharedPreferenceUtil.load(context, SharedPreferenceUtil.PREF_NAME, "json_date");
+            String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, "json_date");
             Log.e("recordedDate", recordedDate);
             if (recordedDate.equals(CalendarUtil.getCurrentDate())) {
                 Log.e("WidgetOnReceive_Config_Finished", "WidgetId" + Integer.toString(appWidgetId) + Boolean.toString(BabWidgetProviderConfigureActivity.isValidId(context, appWidgetId)));
@@ -107,9 +107,7 @@ public class BabWidgetProvider extends AppWidgetProvider {
     }
 
     /*
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
-
+    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         CharSequence widgetText = BabWidgetProviderConfigureActivity.loadTitlePref(context, appWidgetId);
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.bab_widget_provider);

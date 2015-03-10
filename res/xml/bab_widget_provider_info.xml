@@ -8,5 +8,5 @@
     android:configure="com.wafflestudio.siksha.widget.BabWidgetProviderConfigureActivity"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"
-    android:initialKeyguardLayout="@layout/bab_widget_provider">
+    android:initialKeyguardLayout="@layout/bab_widget_provider" >
 </appwidget-provider>

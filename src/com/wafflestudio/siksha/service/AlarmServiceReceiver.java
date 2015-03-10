@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha.util;
+package com.wafflestudio.siksha.service;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.wafflestudio.siksha.util.CalendarUtil;
-import com.wafflestudio.siksha.util.DownloadingJson;
 
 public class AlarmServiceReceiver extends BroadcastReceiver {
   @Override
