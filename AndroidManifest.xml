@@ -41,6 +41,7 @@
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.wafflestudio.siksha.CONFIGURATION_FINISHED" />
                 <action android:name="com.wafflestudio.siksha.DATA_FETCHED" />
+                <action android:name="com.wafflestudio.siksha.WIDGET_REFRESH" />
             </intent-filter>
 
             <meta-data
