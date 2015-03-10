@@ -5,7 +5,7 @@
     android:background="@android:color/black" >
 
     <TextView
-        android:id="@+id/heading"
+        android:id="@+id/restaurantViewWidget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -15,15 +15,14 @@
         android:textColor="#FF0"
         android:text="Heading"/>
 
-    <TextView
-        android:id="@+id/content"
+    <LinearLayout
+        android:id="@+id/menuListWidget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/heading"
-        android:layout_marginTop="5dip"
-        android:textSize="14sp"
-        android:textColor="#FF0"
-        android:text="Content"/>
+        android:layout_below="@id/restaurantViewWidget"
+        android:orientation="vertical"
+        android:layout_marginTop="5dip" >
+    </LinearLayout>
 
 </RelativeLayout>
