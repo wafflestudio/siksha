@@ -4,6 +4,14 @@
     android:orientation="vertical"
     android:background="#09C" >
 
+    <TextView
+        android:id="@+id/dateViewWidget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:textSize="15sp"
+        android:gravity="center" />
+
     <ListView
         android:id="@+id/widget_list_view"
         android:layout_width="match_parent"
