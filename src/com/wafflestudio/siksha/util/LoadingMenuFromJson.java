@@ -14,14 +14,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.dialog.DownloadingRetryDialog;
 import com.wafflestudio.siksha.dialog.ProgressDialog;
+import com.wafflestudio.siksha.service.DownloadingJson;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 
 public class LoadingMenuFromJson {
@@ -66,37 +63,9 @@ public class LoadingMenuFromJson {
   }
 
   private boolean isJsonUpdated() {
-    String recordedDate = SharedPreferenceUtil.load(context, SharedPreferenceUtil.PREF_NAME, "json_date");
+    String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, "json_date");
     Log.d("recorded_date", recordedDate);
     return recordedDate.equals(CalendarUtil.getCurrentDate());
-  }
-
-  public static class ParsingJson {
-    private Context context;
-
-    public ParsingJson(Context context) {
-      this.context = context;
-    }
-
-    public RestaurantCrawlingForm[] getParsedForms() {
-      StringBuilder stringBuilder = new StringBuilder();
-
-      try {
-        FileInputStream fis = context.openFileInput("restaurants.json");
-        BufferedReader br = new BufferedReader(new InputStreamReader(fis, "euc-kr"));
-
-        String line;
-        while((line = br.readLine()) != null) {
-          stringBuilder.append(line);
-        }
-
-        return new Gson().fromJson(stringBuilder.toString(), RestaurantCrawlingForm[].class);
-      }
-      catch (Exception e) {
-        e.printStackTrace();
-        return null;
-      }
-    }
   }
 
   public static class DownloadingJsonReceiver extends BroadcastReceiver {
@@ -184,7 +153,7 @@ public class LoadingMenuFromJson {
 
       if (convertView == null) {
         // when view is not made yet
-        convertView = LayoutInflater.from(context).inflate(R.layout.restaurant_list, null);
+        convertView = LayoutInflater.from(context).inflate(R.layout.restaurant_layout, null);
       }
 
       restaurantNameView = (TextView) convertView.findViewById(R.id.restaurant_name);
@@ -207,9 +176,9 @@ public class LoadingMenuFromJson {
       final RestaurantCrawlingForm.MenuInfo menu = forms[groupPosition].menus[childPosition];
 
       if (convertView == null)
-        convertView = LayoutInflater.from(context).inflate(R.layout.menu_details, null);
+        convertView = LayoutInflater.from(context).inflate(R.layout.menu_layout, null);
 
-      LinearLayout menuLayout = (LinearLayout) convertView.findViewById(R.id.menu_details);
+      LinearLayout menuLayout = (LinearLayout) convertView.findViewById(R.id.menu_layout);
       TextView price = (TextView) menuLayout.findViewById(R.id.menu_price);
       TextView name = (TextView) menuLayout.findViewById(R.id.menu_name);
 

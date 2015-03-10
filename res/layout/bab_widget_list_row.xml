@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="horizontal"
     android:background="@android:color/black" >
 
@@ -13,7 +14,7 @@
         android:textSize="14sp"
         android:textStyle="bold"
         android:textColor="#FF0"
-        android:text="Heading"/>
+        android:text="Heading" />
 
     <TextView
         android:id="@+id/content"
@@ -24,6 +25,6 @@
         android:layout_marginTop="5dip"
         android:textSize="14sp"
         android:textColor="#FF0"
-        android:text="Content"/>
+        android:text="Content" />
 
 </RelativeLayout>
