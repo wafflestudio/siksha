@@ -10,7 +10,6 @@ public class WidgetRemoteService extends RemoteViewsService {
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
         int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         Log.e("RemoteService", Integer.toString(appWidgetId));
-
-        return new WidgetListViewFactory(this.getApplicationContext(), intent);
+        return (new WidgetListViewFactory(this.getApplicationContext(), intent));
     }
 }
