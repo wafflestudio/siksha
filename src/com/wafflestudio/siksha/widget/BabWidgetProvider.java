@@ -29,14 +29,14 @@ public class BabWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        Log.e("WidgetOnUpdate", "aa");
+        Log.d("WidgetOnUpdate", "aa");
         String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, "json_date");
-        Log.e("recordedDate", recordedDate);
+        Log.d("recordedDate", recordedDate);
 
         if (recordedDate.equals(CalendarUtil.getCurrentDate())) {
             final int N = appWidgetIds.length;
             for (int i = 0; i < N; i++) {
-                Log.e("WidgetOnUpdate", "WidgetId" + Integer.toString(appWidgetIds[i]) + Boolean.toString(BabWidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])));
+                Log.d("WidgetOnUpdate", "WidgetId" + Integer.toString(appWidgetIds[i]) + Boolean.toString(BabWidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])));
                 if (BabWidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])) {
                     RemoteViews remoteViews = updateWidgetListView(context, appWidgetIds[i]);
                     appWidgetManager.updateAppWidget(appWidgetIds[i], null);
@@ -52,7 +52,7 @@ public class BabWidgetProvider extends AppWidgetProvider {
     }
 
     private RemoteViews updateWidgetListView(Context context, int appWidgetId) {
-        Log.e("UpdateWidgetListView", Integer.toString(appWidgetId));
+        Log.d("UpdateWidgetListView", Integer.toString(appWidgetId));
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.bab_widget_provider);
         Intent remoteIntent = new Intent(context, WidgetRemoteService.class);
         remoteIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
@@ -88,10 +88,10 @@ public class BabWidgetProvider extends AppWidgetProvider {
         super.onReceive(context, intent);
         if (intent.getAction().equals(CONFIGURATION_FINISHED)) {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-            Log.e("WidgetOnReceive_Config_Finished", Integer.toString(appWidgetId));
+            Log.d("WidgetOnReceive_Config_Finished", Integer.toString(appWidgetId));
 
             String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, "json_date");
-            Log.e("recordedDate", recordedDate);
+            Log.d("recordedDate", recordedDate);
             if (recordedDate.equals(CalendarUtil.getCurrentDate())) {
                 RemoteViews remoteViews = updateWidgetListView(context, appWidgetId);
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
@@ -109,13 +109,13 @@ public class BabWidgetProvider extends AppWidgetProvider {
         }
 
         if (intent.getAction().equals(DATA_FETCHED)) {
-            Log.e("WidgetOnReceive_DATA_FETCHED", "Broadcast_Received");
+            Log.d("WidgetOnReceive_DATA_FETCHED", "Broadcast_Received");
             Set<String> idSet = BabWidgetProviderConfigureActivity.getAllWidgetIds(context);
             Iterator<String> iterator = idSet.iterator();
 
             while (iterator.hasNext()) {
                 int appWidgetId = Integer.valueOf(iterator.next());
-                Log.e("WidgetOnReceive_DATA_FETCHED", Integer.toString(appWidgetId));
+                Log.d("WidgetOnReceive_DATA_FETCHED", Integer.toString(appWidgetId));
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
                 RemoteViews remoteViews = updateWidgetListView(context, appWidgetId);
@@ -127,11 +127,17 @@ public class BabWidgetProvider extends AppWidgetProvider {
 
         if (intent.getAction().equals(WIDGET_REFRESH)) {
             int appWidgetId = Integer.valueOf(intent.getData().getSchemeSpecificPart()) - BabWidgetProvider.randomNumber;
-            Log.e("WidgetOnReceive_Widget_Refresh", Integer.toString(appWidgetId));
+            Log.d("WidgetOnReceive_Widget_Refresh", Integer.toString(appWidgetId));
 
+<<<<<<< HEAD
             String recordedDate = SharedPreferenceUtil.load(context, SharedPreferenceUtil.PREF_NAME, "json_date");
             Log.e("WidgetOnReceive_Widget_Refresh", recordedDate);
             Log.e("WidgetOnReceive_Widget_Refresh", CalendarUtil.getCurrentDate());
+=======
+            String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, "json_date");
+            Log.d("WidgetOnReceive_Widget_Refresh", recordedDate);
+            Log.d("WidgetOnReceive_Widget_Refresh", CalendarUtil.getCurrentDate());
+>>>>>>> 2df9c4c... Log change
             if (recordedDate.equals(CalendarUtil.getCurrentDate())) {
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
@@ -151,7 +157,7 @@ public class BabWidgetProvider extends AppWidgetProvider {
     public void onDeleted(Context context, int[] appWidgetIds) {
         final int N = appWidgetIds.length;
         for (int i = 0; i < N; i++) {
-            Log.e("WidgetOnDeleted", Integer.toString(appWidgetIds[i]));
+            Log.d("WidgetOnDeleted", Integer.toString(appWidgetIds[i]));
             BabWidgetProviderConfigureActivity.removeWidgetId(context, appWidgetIds[i]);
             BabWidgetProviderConfigureActivity.deleteTitlePref(context, appWidgetIds[i]);
         }

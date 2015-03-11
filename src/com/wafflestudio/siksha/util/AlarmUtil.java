@@ -19,8 +19,8 @@ public class AlarmUtil {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 52);
+        calendar.set(Calendar.HOUR_OF_DAY, 00);
+        calendar.set(Calendar.MINUTE, 05);
         calendar.set(Calendar.SECOND, 00);
 
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), cycleTime, sender);
