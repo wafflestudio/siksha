@@ -67,6 +67,7 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
         RestaurantCrawlingForm item = cafeMenuList.get(position);
 
         remoteView.setTextViewText(R.id.restaurantViewWidget, item.restaurant);
+        remoteView.removeAllViews(R.id.menuListWidget);
         for (int i = 0; i < item.menus.length; i++) {
             if (hour >= 1 && hour <= 9) {
                 if (item.menus[i].time.equals("breakfast")) {
