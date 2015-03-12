@@ -14,7 +14,7 @@ public class AlarmServiceReceiver extends BroadcastReceiver {
 
     if (DownloadingJson.isJsonUpdated(context)) {
       Intent jsonDownload = new Intent(context, DownloadingJson.class);
-      intent.putExtra("is_need_set_ui", false);
+      intent.putExtra("is_need_set_expandable_list_view", false);
       context.startService(jsonDownload);
     }
   }

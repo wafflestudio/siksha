@@ -12,14 +12,16 @@ import com.wafflestudio.siksha.widget.BabWidgetProvider;
 
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public class DownloadingJson extends IntentService {
   public static final String SERVER_URL = "http://kanggyu94.fun25.co.kr:13203/restaurants";
-  private final String DATE = CalendarUtil.getCurrentDate();
+  public static final String TODAY_DATE = CalendarUtil.getCurrentDate();
 
   public DownloadingJson() {
     super("com.wafflestudio.siksha.DownloadingJson");
@@ -59,17 +61,25 @@ public class DownloadingJson extends IntentService {
         return null;
       }
     }
-    catch (Exception e) {
+    catch (MalformedURLException e) {
+      Log.d("connection", "MalformedURLException");
+      e.printStackTrace();
+      return null;
+    }
+    catch (IOException e) {
+      Log.d("connection", "IOException");
       e.printStackTrace();
       return null;
     }
 
+    // Success to fetch json from server
     return stringBuilder.toString();
   }
 
   public boolean writeJsonOnInternalStorage(String data) {
     Context context = getApplicationContext();
 
+    // Error checking about fetchJsonFromServer()
     if (data == null)
       return false;
 
@@ -78,43 +88,43 @@ public class DownloadingJson extends IntentService {
       fos.write(data.getBytes("euc-kr"));
       fos.close();
     }
-    catch (Exception e) {
+    catch (IOException e) {
       e.printStackTrace();
       return false;
     }
 
+    // Success to write json on internal storage
     return true;
   }
 
-  private void onPostDownloading() {
-    SharedPreferenceUtil.saveValueOfString(getApplicationContext(), SharedPreferenceUtil.PREF_APP_NAME, "json_date", DATE);
-    Log.d("saveDate", DATE);
+  private void saveDateOnSharedPreference() {
+    SharedPreferenceUtil.saveValueOfString(getApplicationContext(), SharedPreferenceUtil.PREF_APP_NAME, "json_date", TODAY_DATE);
+    Log.d("save_date", TODAY_DATE);
   }
 
-  public void sendSignalToWidget() {
+  public void sendSignalToWidget(boolean isSuccess) {
     Intent widgetUpdate = new Intent(BabWidgetProvider.DATA_FETCHED);
+    widgetUpdate.putExtra("is_success", isSuccess);
     sendBroadcast(widgetUpdate);
   }
 
-  public void sendSignalToApp() {
+  public void sendSignalToApp(boolean isSuccess, boolean isNeetSetExpandableListView) {
     Intent intent = new Intent(LoadingMenuFromJson.DownloadingJsonReceiver.ACTION_DOWNLOADING_JSON);
     intent.addCategory(Intent.CATEGORY_DEFAULT);
-    intent.putExtra("is_need_set_expandable_list_view", true);
+    intent.putExtra("is_success", isSuccess);
+    intent.putExtra("is_need_set_expandable_list_view", isNeetSetExpandableListView);
     sendBroadcast(intent);
   }
 
   @Override
   protected void onHandleIntent(Intent intent) {
-    boolean isNeedSetUIComponent = intent.getBooleanExtra("is_need_set_expandable_list_view", false);
+    final boolean isNeedSetExpandableListView = intent.getBooleanExtra("is_need_set_expandable_list_view", false);
+    final boolean isSuccess = writeJsonOnInternalStorage(fetchJsonFromServer());
 
-    boolean isSuccess = writeJsonOnInternalStorage(fetchJsonFromServer());
-    Log.d("isSuccess", isSuccess + "");
-    if (isSuccess) {
-      onPostDownloading();
+    if (isSuccess)
+      saveDateOnSharedPreference();
 
-      if (isNeedSetUIComponent)
-        sendSignalToApp();
-      sendSignalToWidget();
-    }
+    sendSignalToApp(isSuccess, isNeedSetExpandableListView);
+    sendSignalToWidget(isSuccess);
   }
 }

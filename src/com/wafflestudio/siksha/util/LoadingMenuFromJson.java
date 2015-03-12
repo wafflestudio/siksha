@@ -73,14 +73,19 @@ public class LoadingMenuFromJson {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-      boolean isNeedSetUIComponent = intent.getBooleanExtra("is_need_set_expandable_list_view", true);
+      boolean isSuccess = intent.getBooleanExtra("is_success", false);
+      boolean isNeedSetExpandableListView = intent.getBooleanExtra("is_need_set_expandable_list_view", true);
 
       if (progressDialog.isShowing())
         progressDialog.quitShowing();
 
-      if (isNeedSetUIComponent) {
-        RestaurantCrawlingForm[] forms = new ParsingJson(context).getParsedForms();
-        expandableListView.setAdapter(new ExpandableListAdapter(context, forms));
+      if (!isSuccess)
+        new DownloadingRetryDialog(context).show();
+      else {
+        if (isNeedSetExpandableListView) {
+          RestaurantCrawlingForm[] forms = new ParsingJson(context).getParsedForms();
+          expandableListView.setAdapter(new ExpandableListAdapter(context, forms));
+        }
       }
     }
   }
