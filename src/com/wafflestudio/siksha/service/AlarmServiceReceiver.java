@@ -12,8 +12,10 @@ public class AlarmServiceReceiver extends BroadcastReceiver {
   public void onReceive(Context context, Intent intent) {
     Log.e("alarm_time", CalendarUtil.getCurrentAll());
 
-    Intent jsonDownload = new Intent(context, DownloadingJson.class);
-    intent.putExtra("is_need_set_ui", false);
-    context.startService(jsonDownload);
+    if (DownloadingJson.isJsonUpdated(context)) {
+      Intent jsonDownload = new Intent(context, DownloadingJson.class);
+      intent.putExtra("is_need_set_ui", false);
+      context.startService(jsonDownload);
+    }
   }
 }

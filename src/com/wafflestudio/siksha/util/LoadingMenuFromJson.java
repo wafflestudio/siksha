@@ -35,7 +35,7 @@ public class LoadingMenuFromJson {
   }
 
   public void initSetting() {
-    if (isJsonUpdated()) {
+    if (DownloadingJson.isJsonUpdated(context)) {
       Log.d("is_json_updated", "true");
 
       forms = new ParsingJson(context).getParsedForms();
@@ -60,12 +60,6 @@ public class LoadingMenuFromJson {
     Intent intent = new Intent(context, DownloadingJson.class);
     intent.putExtra("is_need_set_expandable_list_view", true);
     context.startService(intent);
-  }
-
-  private boolean isJsonUpdated() {
-    String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, "json_date");
-    Log.d("recorded_date", recordedDate);
-    return recordedDate.equals(CalendarUtil.getCurrentDate());
   }
 
   public static class DownloadingJsonReceiver extends BroadcastReceiver {

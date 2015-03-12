@@ -25,6 +25,13 @@ public class DownloadingJson extends IntentService {
     super("com.wafflestudio.siksha.DownloadingJson");
   }
 
+  public static boolean isJsonUpdated(Context context) {
+    String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, "json_date");
+    Log.d("recorded_date", recordedDate);
+
+    return recordedDate.equals(CalendarUtil.getCurrentDate());
+  }
+
   public String fetchJsonFromServer() {
     StringBuilder stringBuilder = new StringBuilder();
 
@@ -101,6 +108,7 @@ public class DownloadingJson extends IntentService {
     boolean isNeedSetUIComponent = intent.getBooleanExtra("is_need_set_expandable_list_view", false);
 
     boolean isSuccess = writeJsonOnInternalStorage(fetchJsonFromServer());
+    Log.d("isSuccess", isSuccess + "");
     if (isSuccess) {
       onPostDownloading();
 
