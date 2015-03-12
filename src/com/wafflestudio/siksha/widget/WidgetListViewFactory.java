@@ -26,8 +26,10 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
         appWidgetId = Integer.valueOf(intent.getData().getSchemeSpecificPart()) - BabWidgetProvider.randomNumber;
 
         int input = Integer.valueOf(BabWidgetProviderConfigureActivity.loadTitlePref(context, appWidgetId));
-        Log.e("WidgetListViewFactory", Integer.toString(input));
+
+        Log.d("WidgetListViewFactory", Integer.toString(input));
         cafeList = new ArrayList<String>();
+
         if (input % 2 == 1) {
             cafeList.add(jikYoungCafes[0]);
         }
@@ -117,7 +119,7 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
 
     @Override
     public void onDataSetChanged() {
-        Log.e("WidgetListViewFactory", "onDataSetChanged");
+        Log.d("WidgetListViewFactory", "onDataSetChanged");
         hour = CalendarUtil.getCurrentHour();
         RestaurantCrawlingForm[] forms = new ParsingJson(context).getParsedForms();
         if (forms != null) {
