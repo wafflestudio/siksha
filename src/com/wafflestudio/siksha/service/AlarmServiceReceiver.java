@@ -6,15 +6,16 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.wafflestudio.siksha.util.CalendarUtil;
+import com.wafflestudio.siksha.util.LoadingMenuFromJson;
 
 public class AlarmServiceReceiver extends BroadcastReceiver {
   @Override
   public void onReceive(Context context, Intent intent) {
-    Log.e("alarm_time", CalendarUtil.getCurrentAll());
+    Log.d("alarm_time", CalendarUtil.getCurrentAll());
 
-    if (DownloadingJson.isJsonUpdated(context)) {
+    if (!DownloadingJson.isJsonUpdated(context)) {
       Intent jsonDownload = new Intent(context, DownloadingJson.class);
-      intent.putExtra("is_need_set_expandable_list_view", false);
+      jsonDownload.setAction(LoadingMenuFromJson.DownloadingJsonReceiver.ACTION_PRE_DOWNLOAD);
       context.startService(jsonDownload);
     }
   }

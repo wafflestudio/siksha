@@ -135,6 +135,5 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
     }
 
     @Override
-    public void onDestroy() {
-    }
+    public void onDestroy() { }
 }
