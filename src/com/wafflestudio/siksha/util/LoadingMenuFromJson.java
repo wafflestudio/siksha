@@ -44,9 +44,6 @@ public class LoadingMenuFromJson {
     else {
       Log.d("is_json_updated", "false");
 
-      progressDialog = new ProgressDialog(context, context.getString(R.string.downloading_message));
-      progressDialog.setCancelable(false);
-
       if (!NetworkUtil.getInstance().isOnline())
         new DownloadingRetryDialog(context).show();
       else
@@ -55,15 +52,18 @@ public class LoadingMenuFromJson {
   }
 
   public static void startDownloadingService(Context context) {
+    progressDialog = new ProgressDialog(context, context.getString(R.string.downloading_message));
+    progressDialog.setCancelable(false);
     progressDialog.startShowing();
 
     Intent intent = new Intent(context, DownloadingJson.class);
-    intent.putExtra("is_need_set_expandable_list_view", true);
+    intent.setAction(DownloadingJsonReceiver.ACTION_CURRENT_DOWNLOAD);
     context.startService(intent);
   }
 
   public static class DownloadingJsonReceiver extends BroadcastReceiver {
-    public static final String ACTION_DOWNLOADING_JSON = "com.wafflestudio.siksha.DownloadingJson.FINISHED";
+    public static final String ACTION_PRE_DOWNLOAD = "com.wafflestudio.siksha.DownloadingJson.PRE_DOWNLOAD";
+    public static final String ACTION_CURRENT_DOWNLOAD = "com.wafflestudio.siksha.DownloadingJson.CURRENT_DOWNLOAD";
 
     private ExpandableListView expandableListView;
 
@@ -74,15 +74,15 @@ public class LoadingMenuFromJson {
     @Override
     public void onReceive(Context context, Intent intent) {
       boolean isSuccess = intent.getBooleanExtra("is_success", false);
-      boolean isNeedSetExpandableListView = intent.getBooleanExtra("is_need_set_expandable_list_view", true);
+      String action = intent.getAction();
 
-      if (progressDialog.isShowing())
-        progressDialog.quitShowing();
+      if (action.equals(ACTION_CURRENT_DOWNLOAD)) {
+        if (progressDialog != null && progressDialog.isShowing())
+           progressDialog.quitShowing();
 
-      if (!isSuccess)
-        new DownloadingRetryDialog(context).show();
-      else {
-        if (isNeedSetExpandableListView) {
+        if (!isSuccess)
+          new DownloadingRetryDialog(context).show();
+        else {
           RestaurantCrawlingForm[] forms = new ParsingJson(context).getParsedForms();
           expandableListView.setAdapter(new ExpandableListAdapter(context, forms));
         }

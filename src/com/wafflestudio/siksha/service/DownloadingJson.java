@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.wafflestudio.siksha.util.CalendarUtil;
-import com.wafflestudio.siksha.util.LoadingMenuFromJson;
 import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 import com.wafflestudio.siksha.widget.BabWidgetProvider;
 
@@ -28,7 +27,7 @@ public class DownloadingJson extends IntentService {
   }
 
   public static boolean isJsonUpdated(Context context) {
-    String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, "json_date");
+    String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON);
     Log.d("recorded_date", recordedDate);
 
     return recordedDate.equals(CalendarUtil.getCurrentDate());
@@ -98,7 +97,7 @@ public class DownloadingJson extends IntentService {
   }
 
   private void saveDateOnSharedPreference() {
-    SharedPreferenceUtil.saveValueOfString(getApplicationContext(), SharedPreferenceUtil.PREF_APP_NAME, "json_date", TODAY_DATE);
+    SharedPreferenceUtil.save(getApplicationContext(), SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON, TODAY_DATE);
     Log.d("save_date", TODAY_DATE);
   }
 
@@ -108,23 +107,24 @@ public class DownloadingJson extends IntentService {
     sendBroadcast(widgetUpdate);
   }
 
-  public void sendSignalToApp(boolean isSuccess, boolean isNeetSetExpandableListView) {
-    Intent intent = new Intent(LoadingMenuFromJson.DownloadingJsonReceiver.ACTION_DOWNLOADING_JSON);
+  public void sendSignalToApp(String action, boolean isSuccess) {
+    Intent intent = new Intent();
     intent.addCategory(Intent.CATEGORY_DEFAULT);
+    intent.setAction(action);
     intent.putExtra("is_success", isSuccess);
-    intent.putExtra("is_need_set_expandable_list_view", isNeetSetExpandableListView);
     sendBroadcast(intent);
   }
 
   @Override
   protected void onHandleIntent(Intent intent) {
-    final boolean isNeedSetExpandableListView = intent.getBooleanExtra("is_need_set_expandable_list_view", false);
     final boolean isSuccess = writeJsonOnInternalStorage(fetchJsonFromServer());
+    final String action = intent.getAction();
+    Log.d("onHandleIntent", "isSuccess : " + isSuccess + " / " + "action : " + action);
 
     if (isSuccess)
       saveDateOnSharedPreference();
 
-    sendSignalToApp(isSuccess, isNeedSetExpandableListView);
+    sendSignalToApp(action, isSuccess);
     sendSignalToWidget(isSuccess);
   }
 }

@@ -77,7 +77,7 @@ public class BabWidgetProviderConfigureActivity extends Activity {
         }
 
         idSet.add(Integer.toString(appWidgetId));
-        SharedPreferenceUtil.saveValueOfStringSet(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_WIDGET_ID, idSet);
+        SharedPreferenceUtil.save(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_WIDGET_ID, idSet);
     }
 
     static boolean isValidId(Context context, int appWidgetId) {
@@ -108,11 +108,11 @@ public class BabWidgetProviderConfigureActivity extends Activity {
         }
 
         idSet.remove(Integer.toString(appWidgetId));
-        SharedPreferenceUtil.saveValueOfStringSet(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_WIDGET_ID, idSet);
+        SharedPreferenceUtil.save(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_WIDGET_ID, idSet);
     }
 
     static void saveTitlePref(Context context, int appWidgetId, String text) {
-        SharedPreferenceUtil.saveValueOfString(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_PREFIX_KEY + appWidgetId, text);
+        SharedPreferenceUtil.save(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_PREFIX_KEY + appWidgetId, text);
     }
 
     static String loadTitlePref(Context context, int appWidgetId) {

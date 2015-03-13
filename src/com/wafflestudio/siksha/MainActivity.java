@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
@@ -85,15 +86,22 @@ public class MainActivity extends Activity {
   }
 
   private void registerReceiver() {
+    Log.d("register_receiver", "DownloadingJsonReceiver");
     downloadingJsonReceiver = new LoadingMenuFromJson.DownloadingJsonReceiver(expandableListView);
-    IntentFilter intentFilter = new IntentFilter(LoadingMenuFromJson.DownloadingJsonReceiver.ACTION_DOWNLOADING_JSON);
+
+    IntentFilter intentFilter = new IntentFilter();
+    intentFilter.addAction(LoadingMenuFromJson.DownloadingJsonReceiver.ACTION_PRE_DOWNLOAD);
+    intentFilter.addAction(LoadingMenuFromJson.DownloadingJsonReceiver.ACTION_CURRENT_DOWNLOAD);
     intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
+
     registerReceiver(downloadingJsonReceiver, intentFilter);
   }
 
   private void unregisterReceiver() {
-    if (downloadingJsonReceiver != null)
+    if (downloadingJsonReceiver != null) {
+      Log.d("unregister_receiver", "DownloadingJsonReceiver");
       unregisterReceiver(downloadingJsonReceiver);
+    }
   }
 
   @Override

@@ -30,7 +30,7 @@ public class BabWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.d("WidgetOnUpdate", "aa");
-        String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, "json_date");
+        String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON);
         Log.d("recordedDate", recordedDate);
 
         if (recordedDate.equals(CalendarUtil.getCurrentDate())) {
@@ -73,7 +73,7 @@ public class BabWidgetProvider extends AppWidgetProvider {
         else {
             time = "저녁";
         }
-        remoteViews.setTextViewText(R.id.dateViewWidget, SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, "json_date") + time);
+        remoteViews.setTextViewText(R.id.dateViewWidget, SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON) + time);
 
         Intent refreshIntent = new Intent(context, BabWidgetProvider.class);
         refreshIntent.setAction(WIDGET_REFRESH);
@@ -86,19 +86,20 @@ public class BabWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
+
         if (intent.getAction().equals(CONFIGURATION_FINISHED)) {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             Log.d("WidgetOnReceive_Config_Finished", Integer.toString(appWidgetId));
 
-            String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, "json_date");
+            String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON);
             Log.d("recordedDate", recordedDate);
+
             if (recordedDate.equals(CalendarUtil.getCurrentDate())) {
                 RemoteViews remoteViews = updateWidgetListView(context, appWidgetId);
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
                 appWidgetManager.updateAppWidget(appWidgetId, null);
                 appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
             }
-
             else {
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
                 RemoteViews remoteViews = updateWidgetListView(context, appWidgetId);
@@ -129,7 +130,7 @@ public class BabWidgetProvider extends AppWidgetProvider {
             int appWidgetId = Integer.valueOf(intent.getData().getSchemeSpecificPart()) - BabWidgetProvider.randomNumber;
             Log.d("WidgetOnReceive_Widget_Refresh", Integer.toString(appWidgetId));
 
-            String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, "json_date");
+            String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON);
             Log.d("WidgetOnReceive_Widget_Refresh", recordedDate);
             Log.d("WidgetOnReceive_Widget_Refresh", CalendarUtil.getCurrentDate());
 
@@ -141,7 +142,6 @@ public class BabWidgetProvider extends AppWidgetProvider {
                 appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list_view);
             }
-
             else {
                 context.startService(new Intent(context, DownloadingJson.class));
             }
@@ -158,5 +158,3 @@ public class BabWidgetProvider extends AppWidgetProvider {
         }
     }
 }
-
-
