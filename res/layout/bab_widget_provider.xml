@@ -26,5 +26,14 @@
         android:textSize="20sp"
         android:gravity="center"
         android:visibility="gone" />
+    <TextView
+        android:id="@+id/widget_download_fail_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/widget_download_fail_string"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:visibility="gone" />
 
 </LinearLayout>

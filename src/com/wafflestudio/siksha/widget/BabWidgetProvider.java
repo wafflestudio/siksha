@@ -32,13 +32,14 @@ public class BabWidgetProvider extends AppWidgetProvider {
         Log.d("WidgetOnUpdate", "aa");
         String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON);
         Log.d("recordedDate", recordedDate);
+        Log.d("WidgetOnUpdate", Integer.toString(appWidgetIds.length));
 
         if (recordedDate.equals(CalendarUtil.getCurrentDate())) {
             final int N = appWidgetIds.length;
             for (int i = 0; i < N; i++) {
                 Log.d("WidgetOnUpdate", "WidgetId" + Integer.toString(appWidgetIds[i]) + Boolean.toString(BabWidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])));
                 if (BabWidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])) {
-                    RemoteViews remoteViews = updateWidgetListView(context, appWidgetIds[i]);
+                    RemoteViews remoteViews = updateWidgetListView(context, appWidgetIds[i], true);
                     appWidgetManager.updateAppWidget(appWidgetIds[i], null);
                     appWidgetManager.updateAppWidget(appWidgetIds[i], remoteViews);
                     appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds[i], R.id.widget_list_view);
@@ -46,21 +47,23 @@ public class BabWidgetProvider extends AppWidgetProvider {
             }
         }
         else {
-            context.startService(new Intent(context, DownloadingJson.class));
+            final int N = appWidgetIds.length;
+            for (int i = 0; i < N; i++) {
+                if (BabWidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])) {
+                    context.startService(new Intent(context, DownloadingJson.class).putExtra("from_widget_user", false));
+                    break;
+                }
+            }
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
-    private RemoteViews updateWidgetListView(Context context, int appWidgetId) {
+    private RemoteViews updateWidgetListView(Context context, int appWidgetId, boolean isSuccess) {
         Log.d("UpdateWidgetListView", Integer.toString(appWidgetId));
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.bab_widget_provider);
         Intent remoteIntent = new Intent(context, WidgetRemoteService.class);
         remoteIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         remoteIntent.setData(Uri.fromParts("content", String.valueOf(appWidgetId + randomNumber), null));
-        remoteViews.setRemoteAdapter(R.id.widget_list_view, remoteIntent);
-        // setting an empty view in case of no data
-
-        remoteViews.setEmptyView(R.id.widget_list_view, R.id.widget_empty_view);
 
         int hour = CalendarUtil.getCurrentHour();
         String time;
@@ -73,7 +76,16 @@ public class BabWidgetProvider extends AppWidgetProvider {
         else {
             time = "저녁";
         }
-        remoteViews.setTextViewText(R.id.dateViewWidget, SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON) + time);
+
+        if (isSuccess) {
+            remoteViews.setRemoteAdapter(R.id.widget_list_view, remoteIntent);
+            remoteViews.setEmptyView(R.id.widget_list_view, R.id.widget_empty_view);
+            remoteViews.setTextViewText(R.id.dateViewWidget, SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON) + time);
+        }
+        else {
+            remoteViews.setEmptyView(R.id.widget_list_view, R.id.widget_download_fail_view);
+            remoteViews.setTextViewText(R.id.dateViewWidget, CalendarUtil.getCurrentDate() + time);
+        }
 
         Intent refreshIntent = new Intent(context, BabWidgetProvider.class);
         refreshIntent.setAction(WIDGET_REFRESH);
@@ -95,35 +107,54 @@ public class BabWidgetProvider extends AppWidgetProvider {
             Log.d("recordedDate", recordedDate);
 
             if (recordedDate.equals(CalendarUtil.getCurrentDate())) {
-                RemoteViews remoteViews = updateWidgetListView(context, appWidgetId);
+                RemoteViews remoteViews = updateWidgetListView(context, appWidgetId, true);
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
                 appWidgetManager.updateAppWidget(appWidgetId, null);
                 appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
             }
             else {
-                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-                RemoteViews remoteViews = updateWidgetListView(context, appWidgetId);
-                appWidgetManager.updateAppWidget(appWidgetId, null);
-                appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-                context.startService(new Intent(context, DownloadingJson.class));
+                context.startService(new Intent(context, DownloadingJson.class).putExtra("from_widget_user", true));
             }
         }
 
         if (intent.getAction().equals(DATA_FETCHED)) {
             Log.d("WidgetOnReceive_DATA_FETCHED", "Broadcast_Received");
-            Set<String> idSet = BabWidgetProviderConfigureActivity.getAllWidgetIds(context);
-            Iterator<String> iterator = idSet.iterator();
+            boolean isSuccess = intent.getBooleanExtra("is_success", false);
+            boolean fromWidgetUser = intent.getBooleanExtra("from_widget_user", false);
 
-            while (iterator.hasNext()) {
-                int appWidgetId = Integer.valueOf(iterator.next());
-                Log.d("WidgetOnReceive_DATA_FETCHED", Integer.toString(appWidgetId));
-                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+            if (isSuccess) {
+                Set<String> idSet = BabWidgetProviderConfigureActivity.getAllWidgetIds(context);
+                Iterator<String> iterator = idSet.iterator();
 
-                RemoteViews remoteViews = updateWidgetListView(context, appWidgetId);
-                appWidgetManager.updateAppWidget(appWidgetId, null);
-                appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list_view);
+                while (iterator.hasNext()) {
+                    int appWidgetId = Integer.valueOf(iterator.next());
+                    Log.d("WidgetOnReceive_DATA_FETCHED", Integer.toString(appWidgetId));
+                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+
+                    RemoteViews remoteViews = updateWidgetListView(context, appWidgetId, isSuccess);
+                    appWidgetManager.updateAppWidget(appWidgetId, null);
+                    appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list_view);
+                }
             }
+            else {
+                if (fromWidgetUser) {
+                    Set<String> idSet = BabWidgetProviderConfigureActivity.getAllWidgetIds(context);
+                    Iterator<String> iterator = idSet.iterator();
+
+                    while (iterator.hasNext()) {
+                        int appWidgetId = Integer.valueOf(iterator.next());
+                        Log.d("WidgetOnReceive_DATA_FETCHED", Integer.toString(appWidgetId));
+                        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+
+                        RemoteViews remoteViews = updateWidgetListView(context, appWidgetId, isSuccess);
+                        appWidgetManager.updateAppWidget(appWidgetId, null);
+                        appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+                        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list_view);
+                    }
+                }
+            }
+
         }
 
         if (intent.getAction().equals(WIDGET_REFRESH)) {
@@ -137,13 +168,13 @@ public class BabWidgetProvider extends AppWidgetProvider {
             if (recordedDate.equals(CalendarUtil.getCurrentDate())) {
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
-                RemoteViews remoteViews = updateWidgetListView(context, appWidgetId);
+                RemoteViews remoteViews = updateWidgetListView(context, appWidgetId, true);
                 appWidgetManager.updateAppWidget(appWidgetId, null);
                 appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list_view);
             }
             else {
-                context.startService(new Intent(context, DownloadingJson.class));
+                context.startService(new Intent(context, DownloadingJson.class).putExtra("from_widget_user", true));
             }
         }
     }

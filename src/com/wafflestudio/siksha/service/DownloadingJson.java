@@ -101,9 +101,10 @@ public class DownloadingJson extends IntentService {
     Log.d("save_date", TODAY_DATE);
   }
 
-  public void sendSignalToWidget(boolean isSuccess) {
+  public void sendSignalToWidget(boolean fromWidgetUser, boolean isSuccess) {
     Intent widgetUpdate = new Intent(BabWidgetProvider.DATA_FETCHED);
     widgetUpdate.putExtra("is_success", isSuccess);
+    widgetUpdate.putExtra("from_widget_user", fromWidgetUser);
     sendBroadcast(widgetUpdate);
   }
 
@@ -119,12 +120,13 @@ public class DownloadingJson extends IntentService {
   protected void onHandleIntent(Intent intent) {
     final boolean isSuccess = writeJsonOnInternalStorage(fetchJsonFromServer());
     final String action = intent.getAction();
+    final boolean fromWidget = intent.getBooleanExtra("from_widget_user", false);
     Log.d("onHandleIntent", "isSuccess : " + isSuccess + " / " + "action : " + action);
 
     if (isSuccess)
       saveDateOnSharedPreference();
 
     sendSignalToApp(action, isSuccess);
-    sendSignalToWidget(isSuccess);
+    sendSignalToWidget(fromWidget, isSuccess);
   }
 }
