@@ -7,8 +7,9 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme" ></style>
 
-    <style name="progress_dialog" parent="@android:style/Theme.Dialog" >
-        <item name="android:windowBackground" >@android:color/transparent</item>
+    <style name="progress_dialog" parent="@android:style/Theme.Holo.Light" >
+        <item name="android:windowNoTitle" >true</item>
+        <item name="android:windowBackground" >@drawable/splash_lunch</item>
     </style>
 
 </resources>

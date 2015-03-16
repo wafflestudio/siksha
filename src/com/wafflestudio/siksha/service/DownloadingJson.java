@@ -20,7 +20,6 @@ import java.net.URL;
 
 public class DownloadingJson extends IntentService {
   public static final String SERVER_URL = "http://kanggyu94.fun25.co.kr:13203/restaurants";
-  public static final String TODAY_DATE = CalendarUtil.getCurrentDate();
 
   public DownloadingJson() {
     super("com.wafflestudio.siksha.DownloadingJson");
@@ -97,8 +96,9 @@ public class DownloadingJson extends IntentService {
   }
 
   private void saveDateOnSharedPreference() {
-    SharedPreferenceUtil.save(getApplicationContext(), SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON, TODAY_DATE);
-    Log.d("save_date", TODAY_DATE);
+    String currentDate = CalendarUtil.getCurrentDate();
+    SharedPreferenceUtil.save(getApplicationContext(), SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON, currentDate);
+    Log.d("save_date", currentDate);
   }
 
   public void sendSignalToWidget(boolean fromWidgetUser, boolean isSuccess) {
@@ -119,8 +119,8 @@ public class DownloadingJson extends IntentService {
   @Override
   protected void onHandleIntent(Intent intent) {
     final boolean isSuccess = writeJsonOnInternalStorage(fetchJsonFromServer());
-    final String action = intent.getAction();
     final boolean fromWidget = intent.getBooleanExtra("from_widget_user", false);
+    final String action = intent.getAction();
     Log.d("onHandleIntent", "isSuccess : " + isSuccess + " / " + "action : " + action);
 
     if (isSuccess)
