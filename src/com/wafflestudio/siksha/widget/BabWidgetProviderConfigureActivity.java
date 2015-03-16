@@ -5,60 +5,147 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.CheckBox;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.wafflestudio.siksha.R;
+import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class BabWidgetProviderConfigureActivity extends Activity {
-    private EditText mAppWidgetText;
-    private Button mAddButton;
-
     private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+    private ListView listView;
+    private ListAdapter listAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Set the result to CANCELED.  This will cause the widget host to cancel
-        // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED);
         setContentView(R.layout.bab_widget_provider_configure);
+        listView = (ListView) findViewById(R.id.widget_configure_listview);
+        Button addButton = (Button) findViewById(R.id.widget_configure_add_button);
+        Button cancleButton = (Button) findViewById(R.id.widget_configure_cancle_button);
+        listAdapter = new ListAdapter(this);
+        listView.setAdapter(listAdapter);
 
-        mAppWidgetText = (EditText) findViewById(R.id.appwidget_text);
-        mAddButton = (Button) findViewById(R.id.add_button);
+        listView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        listAdapter.setChecked(position);
+                        listAdapter.notifyDataSetChanged();
+                    }
+                }
+        );
 
-        mAddButton.setOnClickListener(new View.OnClickListener() {
-                                          @Override
-                                          public void onClick(View v) {
-                                              String widgetText = mAppWidgetText.getText().toString();
-                                              addWidgetId(BabWidgetProviderConfigureActivity.this, appWidgetId);
-                                              saveTitlePref(BabWidgetProviderConfigureActivity.this, appWidgetId, widgetText);
-                                              startWidget(widgetText);
-                                          }
-                                      }
+        addButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        addWidgetId(BabWidgetProviderConfigureActivity.this, appWidgetId);
+                        saveTitlePref(BabWidgetProviderConfigureActivity.this, appWidgetId, listAdapter.getChecked());
+                        startWidget();
+                    }
+                }
+        );
+
+        cancleButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                }
         );
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
-
         if (extras != null) {
             appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         }
-
-        // If this activity was started with an intent without an app widget ID, finish with an error.
         if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish();
             return;
         }
     }
 
-    private void startWidget(String widgetText) {
+    class ListAdapter extends BaseAdapter {
+        private ViewHolder viewHolder;
+        private LayoutInflater inflater;
+        private boolean[] isChecked;
+
+        public ListAdapter(Context context) {
+            inflater = LayoutInflater.from(context);
+            this.isChecked = new boolean[RestaurantInfoUtil.restaurants.length];
+        }
+
+        public String getChecked() {
+            String result = "";
+            for (int i = 0; i < isChecked.length; i++) {
+                if (isChecked[i])
+                    result += "1";
+                else
+                    result += "0";
+            }
+            return result;
+        }
+
+        @Override
+        public int getCount() {
+            return isChecked.length;
+        }
+
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public String getItem(int position) {
+            return RestaurantInfoUtil.matchings.get(RestaurantInfoUtil.restaurants[position]);
+        }
+
+        private class ViewHolder {
+            CheckBox box;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if(convertView == null ) {
+                final String restaurantName = RestaurantInfoUtil.matchings.get(RestaurantInfoUtil.restaurants[position]);
+                convertView = inflater.inflate(R.layout.bab_widget_configure_list_row, null);
+
+                viewHolder = new ViewHolder();
+                viewHolder.box = (CheckBox) convertView.findViewById(R.id.widget_configure_checkbox);
+                convertView.setTag(viewHolder);
+                TextView textView = (TextView) convertView.findViewById(R.id.widget_configure_row_restaurant);
+                textView.setText(restaurantName);
+            }
+            else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+            viewHolder.box.setClickable(false);
+            viewHolder.box.setFocusable(false);
+            viewHolder.box.setChecked(isChecked[position]);
+            return convertView;
+        }
+
+        public void setChecked(int position) {
+            isChecked[position] = !isChecked[position];
+        }
+    }
+
+    private void startWidget() {
         Intent intent = new Intent();
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         setResult(RESULT_OK, intent);
