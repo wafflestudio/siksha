@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="main_color_breakfast">#5abec6</color>
+    <color name="main_color_lunch">#f48a5b</color>
+    <color name="main_color_dinner">#7171c9</color>
+    <color name="app_sub_color">#f3f3f3</color>
+    <color name="widget_sub_color">#eaeaea</color>
+
+    <color name="white">#ffffff</color>
+    <color name="light_gray">#10000000</color>
+    <color name="transparent">#00ffffff</color>
+</resources>

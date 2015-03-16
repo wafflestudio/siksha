@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">식샤</string>
-    <string name="title_activity_main">식샤</string>
+    <string name="title_activity_main">서울대학교 식단 어플</string>
         
    	<string name="operating_hour">운영 시간</string>
    	<string name="location">식당 위치</string>
