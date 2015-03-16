@@ -27,7 +27,7 @@ public class LoadingMenuFromJson {
   private ExpandableListView expandableListView;
   private static ProgressDialog progressDialog;
 
-  private RestaurantCrawlingForm[] forms;
+  private static RestaurantCrawlingForm[] forms;
 
   public LoadingMenuFromJson(Context context, ExpandableListView expandableListView) {
     this.context = context;
@@ -65,11 +65,7 @@ public class LoadingMenuFromJson {
     public static final String ACTION_PRE_DOWNLOAD = "com.wafflestudio.siksha.DownloadingJson.PRE_DOWNLOAD";
     public static final String ACTION_CURRENT_DOWNLOAD = "com.wafflestudio.siksha.DownloadingJson.CURRENT_DOWNLOAD";
 
-    private ExpandableListView expandableListView;
-
-    public DownloadingJsonReceiver(ExpandableListView expandableListView) {
-      this.expandableListView = expandableListView;
-    }
+    public DownloadingJsonReceiver() { }
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -83,8 +79,7 @@ public class LoadingMenuFromJson {
         if (!isSuccess)
           new DownloadingRetryDialog(context).show();
         else {
-          RestaurantCrawlingForm[] forms = new ParsingJson(context).getParsedForms();
-          expandableListView.setAdapter(new ExpandableListAdapter(context, forms));
+          forms = new ParsingJson(context).getParsedForms();
         }
       }
     }

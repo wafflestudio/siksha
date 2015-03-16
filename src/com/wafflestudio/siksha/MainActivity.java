@@ -1,17 +1,17 @@
 package com.wafflestudio.siksha;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ExpandableListView;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.wafflestudio.siksha.dialog.RestaurantInfoDialog;
 import com.wafflestudio.siksha.util.AlarmUtil;
 import com.wafflestudio.siksha.util.FontUtil;
 import com.wafflestudio.siksha.util.LoadingMenuFromJson;
@@ -20,7 +20,7 @@ import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 
 public class MainActivity extends Activity {
   private TextView title;
-  private ExpandableListView expandableListView;
+  private ViewPager mPager;
 
   private LoadingMenuFromJson.DownloadingJsonReceiver downloadingJsonReceiver;
 
@@ -34,60 +34,68 @@ public class MainActivity extends Activity {
     NetworkUtil.getInstance().setConnectivityManager(this);
     FontUtil.getInstance().setFontAsset(getAssets());
 
+    setLayout();
+  }
+
+  private void setLayout() {
     title = (TextView) findViewById(R.id.activity_main_title);
-    expandableListView = (ExpandableListView) findViewById(R.id.expandable_list_view);
     title.setTypeface(FontUtil.fontAPAritaDotumSemiBold);
 
-    setExpandableListView();
+    mPager = (ViewPager)findViewById(R.id.view_pager);
+    mPager.setAdapter(new PagerAdapterClass(this));
   }
 
-  public void setExpandableListView() {
-    expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-      @Override
-      public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
-          RestaurantInfoDialog dialog = new RestaurantInfoDialog(MainActivity.this, RestaurantInfoUtil.restaurants[position]);
-          dialog.setCanceledOnTouchOutside(true);
-          dialog.show();
+  ////////////////////viewPager////////////////////
 
-          return true;
-        }
+  private class PagerAdapterClass extends PagerAdapter {
+    private Context context;
 
-        return false;
+    public PagerAdapterClass(Context context) {
+      super();
+      this.context = context;
+    }
+
+    @Override
+    public int getCount() {
+      return 3;
+    }
+
+    ////////////// make view //////////////
+    @Override
+    public Object instantiateItem(ViewGroup pager, int position) {
+      View view = null;
+
+      if (position == 0) {
+        view = new BreakfastPage(context);
       }
-    });
-    expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-      @Override
-      public void onGroupExpand(int groupPosition) {
-        int groupSize = RestaurantInfoUtil.restaurants.length;
-
-        for(int i = 0; i < groupSize; i++) {
-          if (i != groupPosition)
-            expandableListView.collapseGroup(i);
-        }
+      else if (position == 1) {
+        view = new LunchPage(context);
       }
-    });
-    setGroupIndicatorPosition();
+      else {
+        view = new DinnerPage(context);
+      }
 
-    new LoadingMenuFromJson(this, expandableListView).initSetting();
+      pager.addView(view, 0);
+
+      return view;
+    }
+
+    @Override
+    public void destroyItem(ViewGroup pager, int position, Object view) {
+      pager.removeView((View) view);
+    }
+
+    @Override
+    public boolean isViewFromObject(View pager, Object obj) {
+      return pager == obj;
+    }
   }
 
-  private void setGroupIndicatorPosition() {
-    DisplayMetrics displayMetrics = new DisplayMetrics();
-    getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-    int width = displayMetrics.widthPixels;
-    expandableListView.setIndicatorBounds(width - getDpFromPixel(25), width - getDpFromPixel(10));
-  }
-
-  public int getDpFromPixel(float pixels) {
-    final float scale = getResources().getDisplayMetrics().density;
-    return (int) (pixels * scale + 0.5f);
-  }
+  ////////////////////viewPager////////////////////
 
   private void registerReceiver() {
     Log.d("register_receiver", "DownloadingJsonReceiver");
-    downloadingJsonReceiver = new LoadingMenuFromJson.DownloadingJsonReceiver(expandableListView);
+    downloadingJsonReceiver = new LoadingMenuFromJson.DownloadingJsonReceiver();
 
     IntentFilter intentFilter = new IntentFilter();
     intentFilter.addAction(LoadingMenuFromJson.DownloadingJsonReceiver.ACTION_PRE_DOWNLOAD);
