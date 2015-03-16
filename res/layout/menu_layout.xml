@@ -17,7 +17,6 @@
         	android:textSize="20sp"
             android:gravity="center"
             android:layout_gravity="center_vertical"
-        	android:background="@drawable/price_style"
         	android:typeface="serif" />
         
     	<TextView

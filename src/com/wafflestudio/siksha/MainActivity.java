@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.wafflestudio.siksha.page.BreakfastPage;
+import com.wafflestudio.siksha.page.DinnerPage;
+import com.wafflestudio.siksha.page.LunchPage;
 import com.wafflestudio.siksha.util.AlarmUtil;
 import com.wafflestudio.siksha.util.FontUtil;
 import com.wafflestudio.siksha.util.LoadingMenuFromJson;
