@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.wafflestudio.siksha.util.CalendarUtil;
-import com.wafflestudio.siksha.util.LoadingMenuFromJson;
 
 public class AlarmServiceReceiver extends BroadcastReceiver {
   @Override
@@ -15,7 +14,7 @@ public class AlarmServiceReceiver extends BroadcastReceiver {
 
     if (!DownloadingJson.isJsonUpdated(context)) {
       Intent jsonDownload = new Intent(context, DownloadingJson.class);
-      jsonDownload.setAction(LoadingMenuFromJson.DownloadingJsonReceiver.ACTION_PRE_DOWNLOAD);
+      jsonDownload.setAction(DownloadingJsonReceiver.ACTION_PRE_DOWNLOAD);
       context.startService(jsonDownload);
     }
   }

@@ -16,7 +16,6 @@
     <string name="downloading_message">식단을 다운로드하고 있습니다...</string>
 
     <!-- Widget -->
-    <string name="widget_activity_main">식당이름+날짜</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>

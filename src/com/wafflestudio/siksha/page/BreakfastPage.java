@@ -1,31 +1,28 @@
 package com.wafflestudio.siksha.page;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.dialog.RestaurantInfoDialog;
-import com.wafflestudio.siksha.util.LoadingMenuFromJson;
+import com.wafflestudio.siksha.util.AdapterUtil;
 import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 
-/**
- * Created by hwangseongman on 2015. 3. 16..
- */
 public class BreakfastPage extends LinearLayout {
   private Context context;
   private ExpandableListView expandableListView;
+  private AdapterUtil.ExpandableListAdapter expandableListAdapter;
 
-  public BreakfastPage(Context context) {
+  public BreakfastPage(Context context, AdapterUtil.ExpandableListAdapter expandableListAdapter) {
     super(context);
+
     this.context = context;
+    this.expandableListAdapter = expandableListAdapter;
 
     initSetting();
   }
@@ -38,6 +35,9 @@ public class BreakfastPage extends LinearLayout {
   }
 
   public void setExpandableListView() {
+    setGroupIndicatorPosition();
+
+    expandableListView.setAdapter(expandableListAdapter);
     expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
       @Override
       public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -63,9 +63,6 @@ public class BreakfastPage extends LinearLayout {
         }
       }
     });
-    setGroupIndicatorPosition();
-
-    new LoadingMenuFromJson(context, expandableListView).initSetting();
   }
 
   private void setGroupIndicatorPosition() {

@@ -1,5 +1,6 @@
 package com.wafflestudio.siksha.dialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
@@ -8,7 +9,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.wafflestudio.siksha.MainActivity;
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.FontUtil;
 import com.wafflestudio.siksha.util.LoadingMenuFromJson;
@@ -20,7 +20,7 @@ public class DownloadingRetryDialog extends Dialog {
   private Button positiveButton;
   private Button negativeButton;
 
-  public DownloadingRetryDialog(final Context context) {
+  public DownloadingRetryDialog(final Context context, final LoadingMenuFromJson loadingMenuFromJson) {
     super(context);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.downloading_retry_dialog);
@@ -31,7 +31,7 @@ public class DownloadingRetryDialog extends Dialog {
       public void onClick(View v) {
         if (NetworkUtil.getInstance().isOnline()) {
           dismiss();
-          LoadingMenuFromJson.startDownloadingService(context);
+          loadingMenuFromJson.startDownloadingService(context);
         }
         else
           Toast.makeText(context, R.string.downloading_network_state, Toast.LENGTH_SHORT).show();
@@ -41,7 +41,7 @@ public class DownloadingRetryDialog extends Dialog {
       @Override
       public void onClick(View v) {
         dismiss();
-        ((MainActivity) context).finish();
+        ((Activity) context).finish();
       }
     });
   }
