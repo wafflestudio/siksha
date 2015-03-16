@@ -154,15 +154,6 @@ public class LoadingMenuFromJson {
       restaurantNameView.setTypeface(FontUtil.fontAPAritaDotumMedium);
       restaurantNameView.setText(restaurantName);
 
-      if (isExpanded) {
-        convertView.setBackgroundColor(Color.parseColor("#99ff9426"));
-        restaurantNameView.setTextColor(Color.parseColor("#ffffff"));
-      }
-      else {
-        convertView.setBackgroundColor(Color.parseColor("#00ffffff"));
-        restaurantNameView.setTextColor(Color.parseColor("#000000"));
-      }
-
       return convertView;
     }
 

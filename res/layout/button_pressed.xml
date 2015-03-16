@@ -4,13 +4,13 @@
 
     <item android:state_pressed="true" >
         <shape>
-            <solid android:color="#ffff9426" />
+            <solid android:color="@color/app_sub_color" />
         </shape>
     </item>
 
     <item android:state_pressed="false" >
         <shape>
-            <solid android:color="#00ffffff" />
+            <solid android:color="@color/transparent" />
         </shape>
     </item>
 

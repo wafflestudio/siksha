@@ -23,6 +23,7 @@ import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 
 public class MainActivity extends Activity {
   private TextView title;
+  private TextView appName;
   private ViewPager mPager;
 
   private LoadingMenuFromJson.DownloadingJsonReceiver downloadingJsonReceiver;
@@ -42,7 +43,9 @@ public class MainActivity extends Activity {
 
   private void setLayout() {
     title = (TextView) findViewById(R.id.activity_main_title);
-    title.setTypeface(FontUtil.fontAPAritaDotumSemiBold);
+    title.setTypeface(FontUtil.fontAPAritaDotumMedium);
+    appName = (TextView) findViewById(R.id.activity_main_app_name);
+    appName.setTypeface(FontUtil.fontBMHanna);
 
     mPager = (ViewPager)findViewById(R.id.view_pager);
     mPager.setAdapter(new PagerAdapterClass(this));
@@ -68,15 +71,12 @@ public class MainActivity extends Activity {
     public Object instantiateItem(ViewGroup pager, int position) {
       View view = null;
 
-      if (position == 0) {
+      if (position == 0)
         view = new BreakfastPage(context);
-      }
-      else if (position == 1) {
+      else if (position == 1)
         view = new LunchPage(context);
-      }
-      else {
+      else
         view = new DinnerPage(context);
-      }
 
       pager.addView(view, 0);
 
