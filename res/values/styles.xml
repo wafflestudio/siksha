@@ -9,7 +9,7 @@
 
     <style name="progress_dialog" parent="@android:style/Theme.Holo.Light" >
         <item name="android:windowNoTitle" >true</item>
-        <item name="android:windowBackground" >@drawable/splash_lunch</item>
+        <item name="android:windowBackground" >@drawable/splash</item>
     </style>
 
 </resources>

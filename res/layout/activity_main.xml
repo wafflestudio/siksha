@@ -20,7 +20,6 @@
             android:gravity="center"
             android:paddingLeft="5dp"
             android:textColor="@color/white"
-            android:textStyle="bold"
             android:textSize="17sp" />
 
         <TextView
@@ -33,7 +32,6 @@
             android:layout_marginTop="1dp"
             android:textColor="@color/white"
             android:layout_marginLeft="7dp"
-            android:textStyle="bold"
             android:textSize="27sp" />
         
     </LinearLayout>
