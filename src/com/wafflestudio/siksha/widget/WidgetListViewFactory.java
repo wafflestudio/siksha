@@ -10,6 +10,7 @@ import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.CalendarUtil;
 import com.wafflestudio.siksha.util.ParsingJson;
 import com.wafflestudio.siksha.util.RestaurantCrawlingForm;
+import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 
 import java.util.ArrayList;
 
@@ -19,24 +20,19 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
     private Context context = null;
     private int appWidgetId;
     private int hour;
-    public final static String[] jikYoungCafes = {"학생회관식당", "3식당", "기숙사식당", "자하연식당", "302동식당", "동원관식당", "감골식당"};
 
     public WidgetListViewFactory(Context context, Intent intent) {
         this.context = context;
         appWidgetId = Integer.valueOf(intent.getData().getSchemeSpecificPart()) - BabWidgetProvider.randomNumber;
+        String input = BabWidgetProviderConfigureActivity.loadTitlePref(context, appWidgetId);
 
-        int input = Integer.valueOf(BabWidgetProviderConfigureActivity.loadTitlePref(context, appWidgetId));
+        Log.d("WidgetListViewFactory", input);
 
-        Log.d("WidgetListViewFactory", Integer.toString(input));
         cafeList = new ArrayList<String>();
-
-        if (input % 2 == 1) {
-            cafeList.add(jikYoungCafes[0]);
-        }
-        for (int j = 1; j < 7; j++) {
-            input = input / 2;
-            if (input % 2 == 1)
-                cafeList.add(jikYoungCafes[j]);
+        for (int i = 0; input.length() != 0; i++) {
+            if (input.substring(0, 1).equals("1"))
+                cafeList.add(RestaurantInfoUtil.restaurants[i]);
+            input = input.substring(1);
         }
 
         cafeMenuList = new ArrayList<RestaurantCrawlingForm>();
@@ -71,7 +67,7 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
         remoteView.setTextViewText(R.id.restaurantViewWidget, item.restaurant);
         remoteView.removeAllViews(R.id.menuListWidget);
         for (int i = 0; i < item.menus.length; i++) {
-            if (hour >= 1 && hour <= 9) {
+            if (hour >= 0 && hour <= 9) {
                 if (item.menus[i].time.equals("breakfast")) {
                     RemoteViews child = new RemoteViews(context.getPackageName(), R.layout.bab_widget_menu_list_row);
                     child.setTextViewText(R.id.menuPriceWidget, Integer.toString(item.menus[i].price));
