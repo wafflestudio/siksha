@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha;
+package com.wafflestudio.siksha.page;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
@@ -10,6 +10,7 @@ import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.dialog.RestaurantInfoDialog;
 import com.wafflestudio.siksha.util.LoadingMenuFromJson;
 import com.wafflestudio.siksha.util.RestaurantInfoUtil;
