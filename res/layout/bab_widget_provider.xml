@@ -12,7 +12,7 @@
         android:layout_marginLeft="2dp"
         android:layout_marginRight="2dp"
         android:background="#F48A5B"
-        android:textSize="15sp"
+        android:textSize="18sp"
         android:textColor="#FFF"
         android:gravity="center" />
 

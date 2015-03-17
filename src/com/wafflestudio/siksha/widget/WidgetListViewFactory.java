@@ -3,6 +3,7 @@ package com.wafflestudio.siksha.widget;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -71,6 +72,7 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
 
         remoteView.setTextViewText(R.id.restaurantViewWidget, item.restaurant);
         remoteView.removeAllViews(R.id.menuListWidget);
+        boolean isEmpty = true;
         for (int i = 0; i < item.menus.length; i++) {
             if (hour >= 0 && hour <= 9) {
                 if (item.menus[i].time.equals("breakfast")) {
@@ -78,6 +80,7 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
                     child.setTextViewText(R.id.menuPriceWidget, item.menus[i].price);
                     child.setTextViewText(R.id.menuNameWidget, item.menus[i].name);
                     remoteView.addView(R.id.menuListWidget, child);
+                    isEmpty = false;
                 }
             }
             else if (hour >= 10 && hour <= 15) {
@@ -86,6 +89,7 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
                     child.setTextViewText(R.id.menuPriceWidget, item.menus[i].price);
                     child.setTextViewText(R.id.menuNameWidget, item.menus[i].name);
                     remoteView.addView(R.id.menuListWidget, child);
+                    isEmpty = false;
                 }
             }
             else {
@@ -94,9 +98,12 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
                     child.setTextViewText(R.id.menuPriceWidget, item.menus[i].price);
                     child.setTextViewText(R.id.menuNameWidget, item.menus[i].name);
                     remoteView.addView(R.id.menuListWidget, child);
+                    isEmpty = false;
                 }
             }
         }
+        if (isEmpty)
+            remoteView.setViewVisibility(R.id.widget_restaurant_empty_view, View.VISIBLE);
         return remoteView;
     }
 
