@@ -24,6 +24,7 @@ import java.util.Set;
 
 public class BabWidgetProviderConfigureActivity extends Activity {
     private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+    public static String[] restaurants;
 
     private ListView listView;
     private ListAdapter listAdapter;
@@ -31,6 +32,12 @@ public class BabWidgetProviderConfigureActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (restaurants == null || restaurants.length == 0) {
+            if (RestaurantInfo.restaurants == null)
+                restaurants = this.getResources().getStringArray(R.array.restaurants);
+            else
+                restaurants = RestaurantInfo.restaurants;
+        }
 
         setResult(RESULT_CANCELED);
         setContentView(R.layout.bab_widget_provider_configure);
@@ -89,7 +96,7 @@ public class BabWidgetProviderConfigureActivity extends Activity {
 
         public ListAdapter(Context context) {
             inflater = LayoutInflater.from(context);
-            this.isChecked = new boolean[RestaurantInfo.restaurants.length];
+            this.isChecked = new boolean[restaurants.length];
         }
 
         public String getChecked() {
@@ -114,13 +121,13 @@ public class BabWidgetProviderConfigureActivity extends Activity {
 
         @Override
         public String getItem(int position) {
-            return RestaurantInfo.restaurants[position];
+            return restaurants[position];
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                final String restaurantName = RestaurantInfo.restaurants[position];
+                final String restaurantName = restaurants[position];
                 convertView = inflater.inflate(R.layout.bab_widget_configure_list_row, null);
 
                 viewHolder = new ViewHolder();

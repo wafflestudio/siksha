@@ -80,7 +80,7 @@ public class BabWidgetProvider extends AppWidgetProvider {
         if (isSuccess) {
             remoteViews.setRemoteAdapter(R.id.widget_list_view, remoteIntent);
             remoteViews.setEmptyView(R.id.widget_list_view, R.id.widget_empty_view);
-            remoteViews.setTextViewText(R.id.dateViewWidget, SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON) + time);
+            remoteViews.setTextViewText(R.id.dateViewWidget, SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON).substring(5) + " " + time);
         }
         else {
             remoteViews.setEmptyView(R.id.widget_list_view, R.id.widget_download_fail_view);
