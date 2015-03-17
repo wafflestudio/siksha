@@ -23,12 +23,14 @@ public class AdapterUtil {
     private Context context;
 
     private List<RestaurantClassifiedForm> forms;
+    private int pageIndex;
 
     private TextView restaurantNameView;
 
-    public ExpandableListAdapter(Context context, List<RestaurantClassifiedForm> forms) {
+    public ExpandableListAdapter(Context context, List<RestaurantClassifiedForm> forms, int pageIndex) {
       this.context = context;
       this.forms = forms;
+      this.pageIndex = pageIndex;
     }
 
     public int getGroupCount() {
@@ -52,7 +54,6 @@ public class AdapterUtil {
 
       if (size == 0)
         Toast.makeText(context, R.string.restaurant_no_menu, Toast.LENGTH_SHORT).show();
-
 
       return size;
     }
@@ -99,6 +100,18 @@ public class AdapterUtil {
       LinearLayout menuLayout = (LinearLayout) convertView.findViewById(R.id.menu_layout);
       TextView price = (TextView) menuLayout.findViewById(R.id.menu_price);
       TextView name = (TextView) menuLayout.findViewById(R.id.menu_name);
+
+      switch (pageIndex) {
+        case 0:
+          price.setBackgroundResource(R.drawable.breakfast_price_style);
+          break;
+        case 1:
+          price.setBackgroundResource(R.drawable.lunch_price_style);
+          break;
+        case 2:
+          price.setBackgroundResource(R.drawable.dinner_price_style);
+          break;
+      }
 
       price.setText(menu.price);
       name.setText(menu.name);

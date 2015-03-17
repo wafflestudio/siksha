@@ -113,9 +113,9 @@ public class LoadingMenuFromJson {
     }
 
     List<AdapterUtil.ExpandableListAdapter> adapters = new ArrayList<AdapterUtil.ExpandableListAdapter>();
-    adapters.add(new AdapterUtil.ExpandableListAdapter(context, breakfastForms));
-    adapters.add(new AdapterUtil.ExpandableListAdapter(context, lunchForms));
-    adapters.add(new AdapterUtil.ExpandableListAdapter(context, dinnerForms));
+    adapters.add(new AdapterUtil.ExpandableListAdapter(context, breakfastForms, 0));
+    adapters.add(new AdapterUtil.ExpandableListAdapter(context, lunchForms, 1));
+    adapters.add(new AdapterUtil.ExpandableListAdapter(context, dinnerForms, 2));
 
     viewPager.setAdapter(new AdapterUtil.ViewPagerAdapter(context, adapters));
   }

@@ -15,6 +15,10 @@
 	<string name="restaurant_no_menu">메뉴가 없습니다.</string>
     <string name="downloading_message">식단을 다운로드하고 있습니다...</string>
 
+    <string name="breakfast">아침</string>
+    <string name="lunch">점심</string>
+    <string name="dinner">저녁</string>
+
     <!-- Widget -->
     <string name="appwidget_text">EXAMPLE</string>
     <string name="configure">Configure</string>

@@ -4,6 +4,43 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/app_sub_color_lunch" >
+
+        <ImageButton
+            android:id="@+id/lunch_prev_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_previous_item"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            android:background="@color/transparent" />
+
+        <TextView
+            android:id="@+id/lunch_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lunch"
+            android:textSize="17sp"
+            android:layout_centerInParent="true" />
+
+        <ImageButton
+            android:id="@+id/lunch_next_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_next_item"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            android:background="@color/transparent" />
+
+    </RelativeLayout>
+
     <ExpandableListView
         android:id="@+id/lunch_expandable_list_view"
         android:layout_width="match_parent"
