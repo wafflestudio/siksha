@@ -10,33 +10,38 @@ import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.CalendarUtil;
 import com.wafflestudio.siksha.util.ParsingJson;
 import com.wafflestudio.siksha.util.RestaurantCrawlingForm;
-import com.wafflestudio.siksha.util.RestaurantInfoUtil;
+import com.wafflestudio.siksha.util.RestaurantInfo;
 
 import java.util.ArrayList;
 
 public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFactory {
+    private Context context = null;
+
     private ArrayList<String> cafeList;
     private ArrayList<RestaurantCrawlingForm> cafeMenuList;
-    private Context context = null;
+
     private int appWidgetId;
     private int hour;
 
     public WidgetListViewFactory(Context context, Intent intent) {
         this.context = context;
+
         appWidgetId = Integer.valueOf(intent.getData().getSchemeSpecificPart()) - BabWidgetProvider.randomNumber;
         String input = BabWidgetProviderConfigureActivity.loadTitlePref(context, appWidgetId);
-
         Log.d("WidgetListViewFactory", input);
+
+        RestaurantInfo.getInstance().loading(context);
 
         cafeList = new ArrayList<String>();
         for (int i = 0; input.length() != 0; i++) {
             if (input.substring(0, 1).equals("1"))
-                cafeList.add(RestaurantInfoUtil.restaurants[i]);
+                cafeList.add(RestaurantInfo.restaurants[i]);
             input = input.substring(1);
         }
 
         cafeMenuList = new ArrayList<RestaurantCrawlingForm>();
         RestaurantCrawlingForm[] forms = new ParsingJson(context).getParsedForms();
+
         if (forms != null) {
             for (int i = 0; i < cafeList.size(); i++) {
                 for (int j = 0; j < forms.length; j++) {

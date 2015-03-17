@@ -22,7 +22,6 @@ public class AdapterUtil {
   public static class ExpandableListAdapter extends BaseExpandableListAdapter {
     private Context context;
 
-    private HashMap<String, String> matchings;
     private List<RestaurantClassifiedForm> forms;
 
     private TextView restaurantNameView;
@@ -30,7 +29,6 @@ public class AdapterUtil {
     public ExpandableListAdapter(Context context, List<RestaurantClassifiedForm> forms) {
       this.context = context;
       this.forms = forms;
-      this.matchings = RestaurantInfoUtil.matchings;
     }
 
     public int getGroupCount() {
@@ -55,6 +53,7 @@ public class AdapterUtil {
       if (size == 0)
         Toast.makeText(context, R.string.restaurant_no_menu, Toast.LENGTH_SHORT).show();
 
+
       return size;
     }
 
@@ -77,7 +76,7 @@ public class AdapterUtil {
     }
 
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-      final String restaurantName = matchings.get(forms.get(groupPosition).restaurant);
+      final String restaurantName = forms.get(groupPosition).restaurant;
 
       if (convertView == null) {
         // when view is not made yet
@@ -111,6 +110,7 @@ public class AdapterUtil {
 
   public static class ViewPagerAdapter extends PagerAdapter {
     private Context context;
+
     private ExpandableListAdapter breakfastListAdapter;
     private ExpandableListAdapter lunchListAdapter;
     private ExpandableListAdapter dinnerListAdapter;
