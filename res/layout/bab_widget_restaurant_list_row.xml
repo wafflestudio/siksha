@@ -2,19 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:background="@android:color/black" >
+    android:background="#EAEAEA"
+    android:layout_marginBottom="2dp" >
 
     <TextView
         android:id="@+id/restaurantViewWidget"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:gravity="center"
         android:singleLine="true"
         android:textSize="14sp"
-        android:textStyle="bold"
-        android:textColor="#FF0"
-        android:text="Heading" />
+        android:textColor="#000"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:id="@+id/menuListWidget"
@@ -23,7 +22,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@id/restaurantViewWidget"
         android:orientation="vertical"
-        android:layout_marginTop="5dip" >
+        android:layout_marginTop="2dp" >
     </LinearLayout>
 
 </RelativeLayout>

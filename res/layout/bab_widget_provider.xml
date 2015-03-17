@@ -2,27 +2,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#09C" >
+    android:background="#FFF" >
 
     <TextView
         android:id="@+id/dateViewWidget"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#ffffff"
+        android:layout_height="40dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:background="#F48A5B"
         android:textSize="15sp"
+        android:textColor="#FFF"
         android:gravity="center" />
 
     <ListView
         android:id="@+id/widget_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp" />
 
     <TextView
         android:id="@+id/widget_empty_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/empty_string"
-        android:textColor="#ffffff"
+        android:textColor="#000"
         android:textSize="20sp"
         android:gravity="center"
         android:visibility="gone" />
@@ -31,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/widget_download_fail_string"
-        android:textColor="#ffffff"
+        android:textColor="#000"
         android:textSize="20sp"
         android:gravity="center"
         android:visibility="gone" />
