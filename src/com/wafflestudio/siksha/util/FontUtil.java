@@ -1,5 +1,6 @@
 package com.wafflestudio.siksha.util;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
 
@@ -8,7 +9,7 @@ public class FontUtil {
 
   public static Typeface fontAPAritaDotumMedium; // 아모레퍼시픽 아리따돋움체 Medium
   public static Typeface fontAPAritaDotumSemiBold; // 아모레퍼시픽 아리따돋움체 SemiBold
-  public static Typeface fontBMHanna; // 배달의민족 한나체
+  public static Typeface fontAPAritaBuriMedium; // 아모레퍼시픽 아리따부리체 Medium
 
   private FontUtil() { }
 
@@ -18,9 +19,11 @@ public class FontUtil {
     return fontUtil;
   }
 
-  public void setFontAsset(AssetManager assetManager) {
+  public void setFontAsset(Context context) {
+    AssetManager assetManager = context.getAssets();
+
     fontAPAritaDotumMedium = Typeface.createFromAsset(assetManager, "Arita-Dotum-Medium.otf");
     fontAPAritaDotumSemiBold = Typeface.createFromAsset(assetManager, "Arita-Dotum-SemiBold.otf");
-    fontBMHanna = Typeface.createFromAsset(assetManager, "BM-Hanna.ttf");
+    fontAPAritaBuriMedium = Typeface.createFromAsset(assetManager, "Arita-BuriM.otf");
   }
 }

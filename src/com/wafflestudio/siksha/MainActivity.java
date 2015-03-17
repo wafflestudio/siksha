@@ -13,7 +13,7 @@ import com.wafflestudio.siksha.util.AlarmUtil;
 import com.wafflestudio.siksha.util.FontUtil;
 import com.wafflestudio.siksha.util.LoadingMenuFromJson;
 import com.wafflestudio.siksha.util.NetworkUtil;
-import com.wafflestudio.siksha.util.RestaurantInfoUtil;
+import com.wafflestudio.siksha.util.RestaurantInfo;
 
 public class MainActivity extends Activity {
   private TextView title;
@@ -28,9 +28,9 @@ public class MainActivity extends Activity {
     setContentView(R.layout.activity_main);
 
     AlarmUtil.registerAlarm(this);
-    RestaurantInfoUtil.getInstance().loadingRestaurantInfos();
     NetworkUtil.getInstance().setConnectivityManager(this);
-    FontUtil.getInstance().setFontAsset(getAssets());
+    FontUtil.getInstance().setFontAsset(this);
+    RestaurantInfo.getInstance().loading(this);
 
     setLayout();
   }
@@ -39,7 +39,7 @@ public class MainActivity extends Activity {
     title = (TextView) findViewById(R.id.activity_main_title);
     title.setTypeface(FontUtil.fontAPAritaDotumMedium);
     appName = (TextView) findViewById(R.id.activity_main_app_name);
-    appName.setTypeface(FontUtil.fontBMHanna);
+    appName.setTypeface(FontUtil.fontAPAritaBuriMedium);
     viewPager = (ViewPager) findViewById(R.id.view_pager);
 
     downloadingJsonReceiver = new DownloadingJsonReceiver();

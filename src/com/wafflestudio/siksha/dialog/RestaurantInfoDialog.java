@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.FontUtil;
-import com.wafflestudio.siksha.util.RestaurantInfoUtil;
+import com.wafflestudio.siksha.util.RestaurantInfo;
 
 import java.util.HashMap;
 
@@ -17,10 +17,6 @@ public class RestaurantInfoDialog extends Dialog {
 	private TextView operatingHoursDetails;
 	private TextView locationDetails;
 
-  private HashMap<String, String> operatingHours;
-  private HashMap<String, String> locations;
-  private HashMap<String, String> matchings;
-	
 	public RestaurantInfoDialog(Context context, String restaurantName) {
 		super(context);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -36,11 +32,7 @@ public class RestaurantInfoDialog extends Dialog {
     operatingHoursDetails.setTypeface(FontUtil.fontAPAritaDotumMedium);
     locationDetails.setTypeface(FontUtil.fontAPAritaDotumMedium);
 
-    operatingHours = RestaurantInfoUtil.operatingHours;
-    locations = RestaurantInfoUtil.locations;
-    matchings = RestaurantInfoUtil.matchings;
-
-    operatingHoursDetails.setText(operatingHours.get(matchings.get(restaurantName)));
-		locationDetails.setText(locations.get(matchings.get(restaurantName)));
+    operatingHoursDetails.setText(RestaurantInfo.operatingHoursMap.get(restaurantName));
+		locationDetails.setText(RestaurantInfo.locationsMap.get(restaurantName));
 	}
 }

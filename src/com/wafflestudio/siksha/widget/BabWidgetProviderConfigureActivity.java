@@ -16,7 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wafflestudio.siksha.R;
-import com.wafflestudio.siksha.util.RestaurantInfoUtil;
+import com.wafflestudio.siksha.util.RestaurantInfo;
 import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
 import java.util.HashSet;
@@ -24,6 +24,7 @@ import java.util.Set;
 
 public class BabWidgetProviderConfigureActivity extends Activity {
     private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+
     private ListView listView;
     private ListAdapter listAdapter;
 
@@ -83,11 +84,12 @@ public class BabWidgetProviderConfigureActivity extends Activity {
     class ListAdapter extends BaseAdapter {
         private ViewHolder viewHolder;
         private LayoutInflater inflater;
+
         private boolean[] isChecked;
 
         public ListAdapter(Context context) {
             inflater = LayoutInflater.from(context);
-            this.isChecked = new boolean[RestaurantInfoUtil.restaurants.length];
+            this.isChecked = new boolean[RestaurantInfo.restaurants.length];
         }
 
         public String getChecked() {
@@ -112,17 +114,13 @@ public class BabWidgetProviderConfigureActivity extends Activity {
 
         @Override
         public String getItem(int position) {
-            return RestaurantInfoUtil.matchings.get(RestaurantInfoUtil.restaurants[position]);
-        }
-
-        private class ViewHolder {
-            CheckBox box;
+            return RestaurantInfo.restaurants[position];
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if(convertView == null ) {
-                final String restaurantName = RestaurantInfoUtil.matchings.get(RestaurantInfoUtil.restaurants[position]);
+            if (convertView == null) {
+                final String restaurantName = RestaurantInfo.restaurants[position];
                 convertView = inflater.inflate(R.layout.bab_widget_configure_list_row, null);
 
                 viewHolder = new ViewHolder();
@@ -134,14 +132,20 @@ public class BabWidgetProviderConfigureActivity extends Activity {
             else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
+
             viewHolder.box.setClickable(false);
             viewHolder.box.setFocusable(false);
             viewHolder.box.setChecked(isChecked[position]);
+
             return convertView;
         }
 
         public void setChecked(int position) {
             isChecked[position] = !isChecked[position];
+        }
+
+        private class ViewHolder {
+            private CheckBox box;
         }
     }
 
