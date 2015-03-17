@@ -11,8 +11,7 @@ import android.widget.LinearLayout;
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.dialog.RestaurantInfoDialog;
 import com.wafflestudio.siksha.util.AdapterUtil;
-import com.wafflestudio.siksha.util.LoadingMenuFromJson;
-import com.wafflestudio.siksha.util.RestaurantInfoUtil;
+import com.wafflestudio.siksha.util.RestaurantInfo;
 
 public class LunchPage extends LinearLayout {
   private Context context;
@@ -29,7 +28,7 @@ public class LunchPage extends LinearLayout {
   }
 
   private void initSetting() {
-    inflate(context, R.layout.inflate_lunch, this);
+    inflate(context, R.layout.lunch_page, this);
 
     expandableListView = (ExpandableListView) findViewById(R.id.lunch_expandable_list_view);
     setExpandableListView();
@@ -43,7 +42,7 @@ public class LunchPage extends LinearLayout {
       @Override
       public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
-          RestaurantInfoDialog dialog = new RestaurantInfoDialog(context, RestaurantInfoUtil.restaurants[position]);
+          RestaurantInfoDialog dialog = new RestaurantInfoDialog(context, RestaurantInfo.restaurants[position]);
           dialog.setCanceledOnTouchOutside(true);
           dialog.show();
 
@@ -56,7 +55,7 @@ public class LunchPage extends LinearLayout {
     expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
       @Override
       public void onGroupExpand(int groupPosition) {
-        int groupSize = RestaurantInfoUtil.restaurants.length;
+        int groupSize = RestaurantInfo.restaurants.length;
 
         for(int i = 0; i < groupSize; i++) {
           if (i != groupPosition)

@@ -154,7 +154,6 @@ public class BabWidgetProvider extends AppWidgetProvider {
                     }
                 }
             }
-
         }
 
         if (intent.getAction().equals(WIDGET_REFRESH)) {
