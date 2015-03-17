@@ -17,6 +17,6 @@ public class RestaurantCrawlingForm {
     public String name;
 
     @SerializedName("price")
-    public int price;
+    public String price;
   }
 }

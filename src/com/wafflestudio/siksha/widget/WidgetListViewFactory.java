@@ -70,7 +70,7 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
             if (hour >= 0 && hour <= 9) {
                 if (item.menus[i].time.equals("breakfast")) {
                     RemoteViews child = new RemoteViews(context.getPackageName(), R.layout.bab_widget_menu_list_row);
-                    child.setTextViewText(R.id.menuPriceWidget, Integer.toString(item.menus[i].price));
+                    child.setTextViewText(R.id.menuPriceWidget, item.menus[i].price);
                     child.setTextViewText(R.id.menuNameWidget, item.menus[i].name);
                     remoteView.addView(R.id.menuListWidget, child);
                 }
@@ -78,7 +78,7 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
             else if (hour >= 10 && hour <= 15) {
                 if (item.menus[i].time.equals("lunch")) {
                     RemoteViews child = new RemoteViews(context.getPackageName(), R.layout.bab_widget_menu_list_row);
-                    child.setTextViewText(R.id.menuPriceWidget, Integer.toString(item.menus[i].price));
+                    child.setTextViewText(R.id.menuPriceWidget, item.menus[i].price);
                     child.setTextViewText(R.id.menuNameWidget, item.menus[i].name);
                     remoteView.addView(R.id.menuListWidget, child);
                 }
@@ -86,7 +86,7 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
             else {
                 if (item.menus[i].time.equals("dinner")) {
                     RemoteViews child = new RemoteViews(context.getPackageName(), R.layout.bab_widget_menu_list_row);
-                    child.setTextViewText(R.id.menuPriceWidget, Integer.toString(item.menus[i].price));
+                    child.setTextViewText(R.id.menuPriceWidget, item.menus[i].price);
                     child.setTextViewText(R.id.menuNameWidget, item.menus[i].name);
                     remoteView.addView(R.id.menuListWidget, child);
                 }
