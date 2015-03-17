@@ -11,6 +11,9 @@ import com.wafflestudio.siksha.dialog.ProgressDialog;
 import com.wafflestudio.siksha.service.DownloadingJson;
 import com.wafflestudio.siksha.service.DownloadingJsonReceiver;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LoadingMenuFromJson {
   private Context context;
   private DownloadingJsonReceiver downloadingJsonReceiver;
@@ -31,8 +34,7 @@ public class LoadingMenuFromJson {
       Log.d("is_json_updated", "true");
 
       forms = new ParsingJson(context).getParsedForms();
-      AdapterUtil.ExpandableListAdapter adapter = new AdapterUtil.ExpandableListAdapter(context, forms);
-      viewPager.setAdapter(new AdapterUtil.ViewPagerAdapter(context, adapter));
+      classifyMenus();
     }
     else {
       Log.d("is_json_updated", "false");
@@ -49,8 +51,7 @@ public class LoadingMenuFromJson {
       @Override
       public void onComplete() {
         forms = new ParsingJson(context).getParsedForms();
-        AdapterUtil.ExpandableListAdapter adapter = new AdapterUtil.ExpandableListAdapter(context, forms);
-        viewPager.setAdapter(new AdapterUtil.ViewPagerAdapter(context, adapter));
+        classifyMenus();
 
         if (progressDialog != null && progressDialog.isShowing())
           progressDialog.quitShowing();
@@ -73,5 +74,49 @@ public class LoadingMenuFromJson {
     Intent intent = new Intent(context, DownloadingJson.class);
     intent.setAction(DownloadingJsonReceiver.ACTION_CURRENT_DOWNLOAD);
     context.startService(intent);
+  }
+
+  public void classifyMenus() {
+    List<RestaurantClassifiedForm> breakfastForms = new ArrayList<RestaurantClassifiedForm>();
+    List<RestaurantClassifiedForm> lunchForms = new ArrayList<RestaurantClassifiedForm>();
+    List<RestaurantClassifiedForm> dinnerForms = new ArrayList<RestaurantClassifiedForm>();
+
+    for (RestaurantCrawlingForm form : forms) {
+      RestaurantClassifiedForm breakfastMenuForm = new RestaurantClassifiedForm();
+      RestaurantClassifiedForm lunchMenuForm = new RestaurantClassifiedForm();
+      RestaurantClassifiedForm dinnerMenuForm = new RestaurantClassifiedForm();
+
+      List<RestaurantCrawlingForm.MenuInfo> breakfastMenus = new ArrayList<RestaurantCrawlingForm.MenuInfo>();
+      List<RestaurantCrawlingForm.MenuInfo> lunchMenus = new ArrayList<RestaurantCrawlingForm.MenuInfo>();
+      List<RestaurantCrawlingForm.MenuInfo> dinnerMenus = new ArrayList<RestaurantCrawlingForm.MenuInfo>();
+
+      for (RestaurantCrawlingForm.MenuInfo menu : form.menus) {
+        if (menu.time.equals("breakfast"))
+          breakfastMenus.add(menu);
+        else if (menu.time.equals("lunch"))
+          lunchMenus.add(menu);
+        else if (menu.time.equals("dinner"))
+          dinnerMenus.add(menu);
+      }
+
+      breakfastMenuForm.restaurant = form.restaurant;
+      lunchMenuForm.restaurant = form.restaurant;
+      dinnerMenuForm.restaurant = form.restaurant;
+
+      breakfastMenuForm.menus = breakfastMenus;
+      lunchMenuForm.menus = lunchMenus;
+      dinnerMenuForm.menus = dinnerMenus;
+
+      breakfastForms.add(breakfastMenuForm);
+      lunchForms.add(lunchMenuForm);
+      dinnerForms.add(dinnerMenuForm);
+    }
+
+    List<AdapterUtil.ExpandableListAdapter> adapters = new ArrayList<AdapterUtil.ExpandableListAdapter>();
+    adapters.add(new AdapterUtil.ExpandableListAdapter(context, breakfastForms));
+    adapters.add(new AdapterUtil.ExpandableListAdapter(context, lunchForms));
+    adapters.add(new AdapterUtil.ExpandableListAdapter(context, dinnerForms));
+
+    viewPager.setAdapter(new AdapterUtil.ViewPagerAdapter(context, adapters));
   }
 }

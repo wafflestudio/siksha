@@ -16,17 +16,18 @@ import com.wafflestudio.siksha.page.DinnerPage;
 import com.wafflestudio.siksha.page.LunchPage;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class AdapterUtil {
   public static class ExpandableListAdapter extends BaseExpandableListAdapter {
     private Context context;
 
     private HashMap<String, String> matchings;
-    private RestaurantCrawlingForm[] forms;
+    private List<RestaurantClassifiedForm> forms;
 
     private TextView restaurantNameView;
 
-    public ExpandableListAdapter(Context context, RestaurantCrawlingForm[] forms) {
+    public ExpandableListAdapter(Context context, List<RestaurantClassifiedForm> forms) {
       this.context = context;
       this.forms = forms;
       this.matchings = RestaurantInfoUtil.matchings;
@@ -34,7 +35,7 @@ public class AdapterUtil {
 
     public int getGroupCount() {
       // returns the number of restaurants
-      return forms.length;
+      return forms.size();
     }
 
     public long getGroupId(int groupPosition) {
@@ -42,14 +43,14 @@ public class AdapterUtil {
       return groupPosition;
     }
 
-    public RestaurantCrawlingForm getGroup(int groupPosition) {
+    public RestaurantClassifiedForm getGroup(int groupPosition) {
       // returns name of restaurants
-      return forms[groupPosition];
+      return forms.get(groupPosition);
     }
 
     public int getChildrenCount(int groupPosition) {
       // the number of menus
-      int size = forms[groupPosition].menus.length;
+      int size = forms.get(groupPosition).menus.size();
 
       if (size == 0)
         Toast.makeText(context, R.string.restaurant_no_menu, Toast.LENGTH_SHORT).show();
@@ -64,7 +65,7 @@ public class AdapterUtil {
 
     public RestaurantCrawlingForm.MenuInfo getChild(int groupPosition, int childPosition) {
       // name of menu
-      return forms[groupPosition].menus[childPosition];
+      return forms.get(groupPosition).menus.get(childPosition);
     }
 
     public boolean hasStableIds() {
@@ -76,7 +77,7 @@ public class AdapterUtil {
     }
 
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-      final String restaurantName = matchings.get(forms[groupPosition].restaurant);
+      final String restaurantName = matchings.get(forms.get(groupPosition).restaurant);
 
       if (convertView == null) {
         // when view is not made yet
@@ -91,7 +92,7 @@ public class AdapterUtil {
     }
 
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-      final RestaurantCrawlingForm.MenuInfo menu = forms[groupPosition].menus[childPosition];
+      final RestaurantCrawlingForm.MenuInfo menu = forms.get(groupPosition).menus.get(childPosition);
 
       if (convertView == null)
         convertView = LayoutInflater.from(context).inflate(R.layout.menu_layout, null);
@@ -100,7 +101,7 @@ public class AdapterUtil {
       TextView price = (TextView) menuLayout.findViewById(R.id.menu_price);
       TextView name = (TextView) menuLayout.findViewById(R.id.menu_name);
 
-      price.setText(String.valueOf(menu.price));
+      price.setText(menu.price);
       name.setText(menu.name);
       name.setTypeface(FontUtil.fontAPAritaDotumMedium);
 
@@ -110,11 +111,15 @@ public class AdapterUtil {
 
   public static class ViewPagerAdapter extends PagerAdapter {
     private Context context;
-    private ExpandableListAdapter expandableListAdapter;
+    private ExpandableListAdapter breakfastListAdapter;
+    private ExpandableListAdapter lunchListAdapter;
+    private ExpandableListAdapter dinnerListAdapter;
 
-    public ViewPagerAdapter(Context context, ExpandableListAdapter expandableListAdapter) {
+    public ViewPagerAdapter(Context context, List<ExpandableListAdapter> adapters) {
       this.context = context;
-      this.expandableListAdapter = expandableListAdapter;
+      this.breakfastListAdapter = adapters.get(0);
+      this.lunchListAdapter = adapters.get(1);
+      this.dinnerListAdapter = adapters.get(2);
     }
 
     @Override
@@ -127,11 +132,11 @@ public class AdapterUtil {
       View view = null;
 
       if (position == 0)
-        view = new BreakfastPage(context, expandableListAdapter);
+        view = new BreakfastPage(context, breakfastListAdapter);
       else if (position == 1)
-        view = new LunchPage(context, expandableListAdapter);
+        view = new LunchPage(context, lunchListAdapter);
       else
-        view = new DinnerPage(context, expandableListAdapter);
+        view = new DinnerPage(context, dinnerListAdapter);
 
       pager.addView(view, position);
 
