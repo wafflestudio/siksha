@@ -2,35 +2,45 @@ package com.wafflestudio.siksha.page;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.dialog.RestaurantInfoDialog;
 import com.wafflestudio.siksha.util.AdapterUtil;
+import com.wafflestudio.siksha.util.FontUtil;
 import com.wafflestudio.siksha.util.RestaurantInfo;
 
 public class LunchPage extends LinearLayout {
   private Context context;
+  private LayoutInflater inflater;
+
   private ExpandableListView expandableListView;
   private AdapterUtil.ExpandableListAdapter expandableListAdapter;
+  private TextView indicator;
 
   public LunchPage(Context context, AdapterUtil.ExpandableListAdapter expandableListAdapter) {
     super(context);
 
     this.context = context;
     this.expandableListAdapter = expandableListAdapter;
+    this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     initSetting();
   }
 
   private void initSetting() {
-    inflate(context, R.layout.lunch_page, this);
+    View view = inflater.inflate(R.layout.lunch_page, this);
 
-    expandableListView = (ExpandableListView) findViewById(R.id.lunch_expandable_list_view);
+    indicator = (TextView) view.findViewById(R.id.lunch_indicator);
+    indicator.setTypeface(FontUtil.fontAPAritaDotumMedium);
+
+    expandableListView = (ExpandableListView) view.findViewById(R.id.lunch_expandable_list_view);
     setExpandableListView();
   }
 
@@ -70,7 +80,10 @@ public class LunchPage extends LinearLayout {
     ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(displayMetrics);
     
     int width = displayMetrics.widthPixels;
-    expandableListView.setIndicatorBounds(width - getDpFromPixel(25), width - getDpFromPixel(10));
+    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN_MR2)
+      expandableListView.setIndicatorBounds(width - getDpFromPixel(25), width - getDpFromPixel(10));
+    else
+      expandableListView.setIndicatorBoundsRelative(width - getDpFromPixel(25), width - getDpFromPixel(10));
   }
 
   public int getDpFromPixel(float pixels) {

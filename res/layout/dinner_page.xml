@@ -4,6 +4,32 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/app_sub_color_dinner" >
+
+        <ImageButton
+            android:id="@+id/breakfast_prev_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_previous_item"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            android:background="@color/transparent" />
+
+        <TextView
+            android:id="@+id/dinner_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dinner"
+            android:textSize="17sp"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
     <ExpandableListView
         android:id="@+id/dinner_expandable_list_view"
         android:layout_width="match_parent"

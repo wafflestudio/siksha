@@ -1,8 +1,9 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="15dp"
-    android:background="@color/app_sub_color" >
+    android:orientation="horizontal"
+    android:background="@color/app_sub_color_2" >
     
     <TextView
         android:id="@+id/restaurant_name"
@@ -10,4 +11,4 @@
         android:layout_height="wrap_content"
         android:textSize="17sp" />
        
-</RelativeLayout>
+</LinearLayout>
