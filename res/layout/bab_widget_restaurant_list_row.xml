@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EAEAEA"
-    android:layout_marginBottom="2dp" >
+    android:layout_marginBottom="2dp"
+    android:background="@color/widget_sub_color" >
 
     <TextView
         android:id="@+id/restaurantViewWidget"
@@ -11,8 +11,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:singleLine="true"
-        android:textSize="15sp"
-        android:textColor="#000" />
+        android:textColor="@color/black"
+        android:textSize="15sp" />
 
     <LinearLayout
         android:id="@+id/menuListWidget"
@@ -30,10 +30,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/restaurantViewWidget"
         android:text="@string/restaurant_no_menu"
-        android:textColor="#000"
         android:textSize="12sp"
         android:gravity="center"
         android:layout_marginTop="2dp"
+        android:textColor="@color/black"
         android:visibility="gone" />
 
 </RelativeLayout>
