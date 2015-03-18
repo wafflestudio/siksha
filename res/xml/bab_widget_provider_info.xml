@@ -3,10 +3,10 @@
     android:minWidth="110dp"
     android:minHeight="110dp"
     android:updatePeriodMillis="1800000"
-    android:previewImage="@drawable/example_appwidget_preview"
+    android:previewImage="@drawable/dialog_roof"
     android:initialLayout="@layout/bab_widget_provider"
     android:configure="com.wafflestudio.siksha.widget.BabWidgetProviderConfigureActivity"
-    android:resizeMode="horizontal|vertical"
+    android:resizeMode="vertical"
     android:widgetCategory="home_screen"
     android:initialKeyguardLayout="@layout/bab_widget_provider" >
 </appwidget-provider>

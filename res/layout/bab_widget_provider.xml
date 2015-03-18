@@ -1,46 +1,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#FFF" >
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/dateViewWidget"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
-        android:background="#F48A5B"
         android:textSize="18sp"
-        android:textColor="#FFF"
+        android:textColor="@color/white"
+        android:background="@drawable/rounded_widget_roof"
         android:gravity="center" />
 
     <ListView
         android:id="@+id/widget_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_widget"
+        android:paddingLeft="4.5dp"
+        android:paddingRight="4.5dp"
+        android:paddingBottom="4.5dp"/>
 
     <TextView
         android:id="@+id/widget_empty_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/empty_string"
-        android:textColor="#000"
         android:textSize="20sp"
         android:gravity="center"
+        android:background="@drawable/rounded_widget"
+        android:textColor="@color/black"
         android:visibility="gone" />
     <TextView
         android:id="@+id/widget_download_fail_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/widget_download_fail_string"
-        android:textColor="#000"
         android:textSize="20sp"
         android:gravity="center"
+        android:background="@drawable/rounded_widget"
+        android:textColor="@color/black"
         android:visibility="gone" />
 
 </LinearLayout>
