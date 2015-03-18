@@ -35,6 +35,7 @@ public class LoadingMenuFromJson {
 
       forms = new ParsingJson(context).getParsedForms();
       classifyMenus();
+      setInitialPage();
     }
     else {
       Log.d("is_json_updated", "false");
@@ -52,6 +53,7 @@ public class LoadingMenuFromJson {
       public void onComplete() {
         forms = new ParsingJson(context).getParsedForms();
         classifyMenus();
+        setInitialPage();
 
         if (progressDialog != null && progressDialog.isShowing())
           progressDialog.quitShowing();
@@ -76,7 +78,7 @@ public class LoadingMenuFromJson {
     context.startService(intent);
   }
 
-  public void classifyMenus() {
+  private void classifyMenus() {
     List<RestaurantClassifiedForm> breakfastForms = new ArrayList<RestaurantClassifiedForm>();
     List<RestaurantClassifiedForm> lunchForms = new ArrayList<RestaurantClassifiedForm>();
     List<RestaurantClassifiedForm> dinnerForms = new ArrayList<RestaurantClassifiedForm>();
@@ -118,5 +120,16 @@ public class LoadingMenuFromJson {
     adapters.add(new AdapterUtil.ExpandableListAdapter(context, dinnerForms, 2));
 
     viewPager.setAdapter(new AdapterUtil.ViewPagerAdapter(context, adapters));
+  }
+
+  private void setInitialPage() {
+    int time = CalendarUtil.getCurrentHour();
+
+    if (time >= 0 && time <= 9)
+      viewPager.setCurrentItem(0);
+    else if (time >= 10 && time <= 15)
+      viewPager.setCurrentItem(1);
+    else
+      viewPager.setCurrentItem(2);
   }
 }
