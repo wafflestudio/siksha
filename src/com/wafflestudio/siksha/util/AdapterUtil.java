@@ -34,22 +34,18 @@ public class AdapterUtil {
     }
 
     public int getGroupCount() {
-      // returns the number of restaurants
       return forms.size();
     }
 
     public long getGroupId(int groupPosition) {
-      // returns index of restaurants
       return groupPosition;
     }
 
     public RestaurantClassifiedForm getGroup(int groupPosition) {
-      // returns name of restaurants
       return forms.get(groupPosition);
     }
 
     public int getChildrenCount(int groupPosition) {
-      // the number of menus
       int size = forms.get(groupPosition).menus.size();
 
       if (size == 0)
@@ -59,12 +55,10 @@ public class AdapterUtil {
     }
 
     public long getChildId(int groupPosition, int childPosition) {
-      // index of menu
       return childPosition;
     }
 
     public RestaurantCrawlingForm.MenuInfo getChild(int groupPosition, int childPosition) {
-      // name of menu
       return forms.get(groupPosition).menus.get(childPosition);
     }
 
@@ -79,10 +73,8 @@ public class AdapterUtil {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
       final String restaurantName = forms.get(groupPosition).restaurant;
 
-      if (convertView == null) {
-        // when view is not made yet
+      if (convertView == null)
         convertView = LayoutInflater.from(context).inflate(R.layout.restaurant_layout, null);
-      }
 
       restaurantNameView = (TextView) convertView.findViewById(R.id.restaurant_name);
       restaurantNameView.setTypeface(FontUtil.fontAPAritaDotumMedium);
@@ -101,6 +93,8 @@ public class AdapterUtil {
       TextView price = (TextView) menuLayout.findViewById(R.id.menu_price);
       TextView name = (TextView) menuLayout.findViewById(R.id.menu_name);
 
+      name.setTypeface(FontUtil.fontAPAritaDotumMedium);
+
       switch (pageIndex) {
         case 0:
           price.setBackgroundResource(R.drawable.breakfast_price_style);
@@ -115,7 +109,6 @@ public class AdapterUtil {
 
       price.setText(menu.price);
       name.setText(menu.name);
-      name.setTypeface(FontUtil.fontAPAritaDotumMedium);
 
       return convertView;
     }
