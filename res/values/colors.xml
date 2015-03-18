@@ -8,6 +8,7 @@
     <color name="app_sub_color_dinner">#c7d0f3</color>
     <color name="app_sub_color_2">#f3f3f3</color>
     <color name="widget_sub_color">#eaeaea</color>
+    <color name="dialog_content_color">#f0edec</color>
 
     <color name="white">#ffffff</color>
     <color name="light_gray">#10000000</color>
