@@ -151,7 +151,7 @@ public class AdapterUtil {
       else
         view = new DinnerPage(context, dinnerListAdapter);
 
-      pager.addView(view, position);
+      pager.addView(view, 0);
 
       return view;
     }
