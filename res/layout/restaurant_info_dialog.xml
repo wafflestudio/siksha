@@ -1,22 +1,37 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
 
-    <ImageView
+    <LinearLayout
         android:id="@+id/restaurant_info_dialog_roof"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/dialog_roof"
-        android:layout_alignParentTop="true" />
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_margin="4dp"
+            android:background="@drawable/rounded_dialog_roof" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_launcher"
+            android:layout_marginTop="-50dp" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/rounded_dialog"
-        android:layout_below="@id/restaurant_info_dialog_roof"
-        android:layout_alignLeft="@id/restaurant_info_dialog_roof"
-        android:layout_alignRight="@id/restaurant_info_dialog_roof" >
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="19dp" >
 
         <TextView
             android:id="@+id/restaurant_info_dialog_title"
@@ -25,8 +40,7 @@
             android:textSize="19sp"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:textColor="@color/main_color_lunch"
-            android:layout_marginTop="15dp" />
+            android:textColor="@color/main_color_lunch" />
 
         <TextView
             android:id="@+id/operating_hour"
@@ -66,9 +80,8 @@
             android:textSize="15sp"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="15dp" />
+            android:layout_marginTop="10dp" />
 
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>
