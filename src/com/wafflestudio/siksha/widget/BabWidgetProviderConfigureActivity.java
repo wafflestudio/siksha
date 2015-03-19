@@ -41,7 +41,7 @@ public class BabWidgetProviderConfigureActivity extends Activity {
         TextView appName = (TextView) findViewById(R.id.configactivity_main_app_name);
         appName.setTypeface(FontUtil.fontAPAritaBuriMedium);
         */
-        
+
         restaurants = this.getResources().getStringArray(R.array.restaurants);
 
         setResult(RESULT_CANCELED);
