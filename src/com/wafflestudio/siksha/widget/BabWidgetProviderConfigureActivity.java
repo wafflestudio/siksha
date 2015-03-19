@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wafflestudio.siksha.R;
+import com.wafflestudio.siksha.util.FontUtil;
 import com.wafflestudio.siksha.util.RestaurantInfo;
 import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
@@ -24,7 +25,7 @@ import java.util.Set;
 
 public class BabWidgetProviderConfigureActivity extends Activity {
     private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    public static String[] restaurants;
+    String[] restaurants;
 
     private ListView listView;
     private ListAdapter listAdapter;
@@ -32,12 +33,16 @@ public class BabWidgetProviderConfigureActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (restaurants == null || restaurants.length == 0) {
-            if (RestaurantInfo.restaurants == null)
-                restaurants = this.getResources().getStringArray(R.array.restaurants);
-            else
-                restaurants = RestaurantInfo.restaurants;
-        }
+
+        /*
+        FontUtil.getInstance().setFontAsset(this);
+        TextView title = (TextView) findViewById(R.id.configactivity_main_title);
+        title.setTypeface(FontUtil.fontAPAritaDotumMedium);
+        TextView appName = (TextView) findViewById(R.id.configactivity_main_app_name);
+        appName.setTypeface(FontUtil.fontAPAritaBuriMedium);
+        */
+        
+        restaurants = this.getResources().getStringArray(R.array.restaurants);
 
         setResult(RESULT_CANCELED);
         setContentView(R.layout.bab_widget_provider_configure);
@@ -135,6 +140,7 @@ public class BabWidgetProviderConfigureActivity extends Activity {
                 convertView.setTag(viewHolder);
                 TextView textView = (TextView) convertView.findViewById(R.id.widget_configure_row_restaurant);
                 textView.setText(restaurantName);
+                textView.setTypeface(FontUtil.fontAPAritaDotumMedium);
             }
             else {
                 viewHolder = (ViewHolder) convertView.getTag();
