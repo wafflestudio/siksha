@@ -70,9 +70,12 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
         final RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.bab_widget_restaurant_list_row);
         RestaurantCrawlingForm item = cafeMenuList.get(position);
 
+        Log.d("getViewAt", Integer.toString(position));
+
         remoteView.setTextViewText(R.id.restaurantViewWidget, item.restaurant);
         remoteView.removeAllViews(R.id.menuListWidget);
         boolean isEmpty = true;
+        remoteView.setViewVisibility(R.id.widget_restaurant_empty_view, View.GONE);
         for (int i = 0; i < item.menus.length; i++) {
             if (hour >= 0 && hour <= 9) {
                 if (item.menus[i].time.equals("breakfast")) {
