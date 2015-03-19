@@ -24,6 +24,7 @@ public class DownloadingRetryDialog extends Dialog {
     super(context);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.downloading_retry_dialog);
+    setCanceledOnTouchOutside(false);
 
     setUIComponents();
     positiveButton.setOnClickListener(new View.OnClickListener() {
