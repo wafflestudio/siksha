@@ -42,12 +42,15 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
   private void setLayout() {
     topBar = (LinearLayout) findViewById(R.id.activity_main_top_bar);
     title = (TextView) findViewById(R.id.activity_main_title);
-    title.setTypeface(FontUtil.fontAPAritaDotumMedium);
     appName = (TextView) findViewById(R.id.activity_main_app_name);
-    appName.setTypeface(FontUtil.fontAPAritaBuriMedium);
 
     viewPager = (ViewPager) findViewById(R.id.view_pager);
     viewPager.setOnPageChangeListener(this);
+
+    title.setTypeface(FontUtil.fontAPAritaDotumMedium);
+    appName.setTypeface(FontUtil.fontAPAritaBuriMedium);
+
+    setTopBarBackgroundColor(getPageIndexOnHour());
 
     downloadingJsonReceiver = new DownloadingJsonReceiver();
     new LoadingMenuFromJson(this, downloadingJsonReceiver, viewPager).initSetting();
@@ -76,6 +79,24 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
 
   @Override
   public void onPageSelected(int position) {
+    setTopBarBackgroundColor(position);
+  }
+
+  @Override
+  public void onPageScrollStateChanged(int state) { }
+
+  private int getPageIndexOnHour() {
+    int time = CalendarUtil.getCurrentHour();
+
+    if (time >= 0 && time <= 9)
+      return 0;
+    else if (time >= 10 && time <= 15)
+      return 1;
+    else
+      return 2;
+  }
+
+  private void setTopBarBackgroundColor(int position) {
     switch (position) {
       case 0:
         topBar.setBackgroundResource(R.color.main_color_breakfast);
@@ -88,9 +109,6 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
         break;
     }
   }
-
-  @Override
-  public void onPageScrollStateChanged(int state) { }
 
   @Override
   protected void onPause() {
