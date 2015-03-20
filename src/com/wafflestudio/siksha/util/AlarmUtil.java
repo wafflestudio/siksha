@@ -27,9 +27,9 @@ public class AlarmUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 5);
+        calendar.set(Calendar.MINUTE, 10);
 
-        alarmManager.setInexactRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), cycleTime, sender);
+        alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), cycleTime, sender);
         SharedPreferenceUtil.save(context, SharedPreferenceUtil.PREF_ALARM_NAME, SharedPreferenceUtil.PREF_KEY_JSON, true);
     }
 }

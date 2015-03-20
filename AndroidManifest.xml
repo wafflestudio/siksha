@@ -51,8 +51,7 @@
         </receiver>
 
         <receiver
-            android:name=".service.AlarmServiceReceiver"
-            android:process=":alarm" >
+            android:name=".service.AlarmServiceReceiver" >
         </receiver>
 
         <receiver

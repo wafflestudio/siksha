@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.wafflestudio.siksha.service.DownloadingJsonReceiver;
 import com.wafflestudio.siksha.util.AlarmUtil;
+import com.wafflestudio.siksha.util.BookmarkUtil;
 import com.wafflestudio.siksha.util.CalendarUtil;
 import com.wafflestudio.siksha.util.FontUtil;
 import com.wafflestudio.siksha.util.LoadingMenuFromJson;
@@ -34,6 +35,7 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     AlarmUtil.registerAlarm(this);
     NetworkUtil.getInstance().setConnectivityManager(this);
     FontUtil.getInstance().setFontAsset(this);
+    BookmarkUtil.getInstance().initialize();
     RestaurantInfo.getInstance().loading(this);
 
     setLayout();
@@ -45,10 +47,11 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     appName = (TextView) findViewById(R.id.activity_main_app_name);
 
     viewPager = (ViewPager) findViewById(R.id.view_pager);
+    viewPager.setOffscreenPageLimit(2);
     viewPager.setOnPageChangeListener(this);
 
     title.setTypeface(FontUtil.fontAPAritaDotumMedium);
-    appName.setTypeface(FontUtil.fontAPAritaBuriMedium);
+    appName.setTypeface(FontUtil.fontAPAritaDotumMedium);
 
     setTopBarBackgroundColor(getPageIndexOnHour());
 

@@ -1,11 +1,7 @@
 package com.wafflestudio.siksha.page;
 
 import android.content.Context;
-import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
@@ -14,15 +10,16 @@ import android.widget.TextView;
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.dialog.RestaurantInfoDialog;
 import com.wafflestudio.siksha.util.AdapterUtil;
+import com.wafflestudio.siksha.util.BookmarkUtil;
 import com.wafflestudio.siksha.util.FontUtil;
 import com.wafflestudio.siksha.util.RestaurantInfo;
 
 public class DinnerPage extends LinearLayout {
   private Context context;
-  private LayoutInflater inflater;
 
   private ExpandableListView expandableListView;
   private AdapterUtil.ExpandableListAdapter expandableListAdapter;
+
   private TextView indicator;
 
   public DinnerPage(Context context, AdapterUtil.ExpandableListAdapter expandableListAdapter) {
@@ -30,30 +27,32 @@ public class DinnerPage extends LinearLayout {
 
     this.context = context;
     this.expandableListAdapter = expandableListAdapter;
-    this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     initSetting();
   }
 
   private void initSetting() {
-    View view = inflater.inflate(R.layout.dinner_page, this);
+    inflate(context, R.layout.dinner_page, this);
 
-    indicator = (TextView) view.findViewById(R.id.dinner_indicator);
+    indicator = (TextView) findViewById(R.id.dinner_indicator);
     indicator.setTypeface(FontUtil.fontAPAritaDotumMedium);
 
-    expandableListView = (ExpandableListView) view.findViewById(R.id.dinner_expandable_list_view);
+    expandableListView = (ExpandableListView) findViewById(R.id.dinner_expandable_list_view);
     setExpandableListView();
   }
 
   public void setExpandableListView() {
-    setGroupIndicatorPosition();
-
     expandableListView.setAdapter(expandableListAdapter);
     expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
       @Override
       public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
-          RestaurantInfoDialog dialog = new RestaurantInfoDialog(context, RestaurantInfo.restaurants[position]);
+        long pos = ((ExpandableListView) parent).getExpandableListPosition(position);
+
+        int itemType = ExpandableListView.getPackedPositionType(pos);
+        int groupPosition = ExpandableListView.getPackedPositionGroup(pos);
+
+        if (itemType == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
+          RestaurantInfoDialog dialog = new RestaurantInfoDialog(context, RestaurantInfo.restaurants[groupPosition]);
           dialog.setCanceledOnTouchOutside(true);
           dialog.show();
 
@@ -74,22 +73,5 @@ public class DinnerPage extends LinearLayout {
         }
       }
     });
-  }
-
-  private void setGroupIndicatorPosition() {
-    DisplayMetrics displayMetrics = new DisplayMetrics();
-    ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(displayMetrics);
-
-    int width = displayMetrics.widthPixels;
-    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN_MR2)
-      expandableListView.setIndicatorBounds(width - getDpFromPixel(25), width - getDpFromPixel(10));
-    else
-      expandableListView.setIndicatorBoundsRelative(width - getDpFromPixel(25), width - getDpFromPixel(10));
-  }
-
-  public int getDpFromPixel(float pixels) {
-    final float scale = getResources().getDisplayMetrics().density;
-
-    return (int) (pixels * scale + 0.5f);
   }
 }

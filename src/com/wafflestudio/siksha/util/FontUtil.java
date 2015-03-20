@@ -9,7 +9,6 @@ public class FontUtil {
 
   public static Typeface fontAPAritaDotumMedium; // 아모레퍼시픽 아리따돋움체 Medium
   public static Typeface fontAPAritaDotumSemiBold; // 아모레퍼시픽 아리따돋움체 SemiBold
-  public static Typeface fontAPAritaBuriMedium; // 아모레퍼시픽 아리따부리체 Medium
 
   private FontUtil() { }
 
@@ -24,6 +23,5 @@ public class FontUtil {
 
     fontAPAritaDotumMedium = Typeface.createFromAsset(assetManager, "Arita-Dotum-Medium.otf");
     fontAPAritaDotumSemiBold = Typeface.createFromAsset(assetManager, "Arita-Dotum-SemiBold.otf");
-    fontAPAritaBuriMedium = Typeface.createFromAsset(assetManager, "Arita-BuriM.otf");
   }
 }
