@@ -3,7 +3,9 @@
     android:id="@+id/widget_configure_list_row"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="wrap_content"
+    android:padding="2dp"
+    android:background="@color/app_sub_color_2" >
 
     <CheckBox
         android:id="@+id/widget_configure_checkbox"
@@ -12,10 +14,11 @@
 
     <TextView
         android:id="@+id/widget_configure_row_restaurant"
+        android:layout_marginLeft="7dp"
         android:gravity="center"
         android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25sp" />
+        android:textSize="15sp" />
 
 </LinearLayout>
