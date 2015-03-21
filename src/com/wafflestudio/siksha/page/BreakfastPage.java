@@ -17,8 +17,8 @@ import com.wafflestudio.siksha.util.RestaurantInfo;
 public class BreakfastPage extends LinearLayout {
   private Context context;
 
-  private ExpandableListView expandableListView;
-  private AdapterUtil.ExpandableListAdapter expandableListAdapter;
+  public ExpandableListView expandableListView;
+  public AdapterUtil.ExpandableListAdapter expandableListAdapter;
 
   private TextView indicator;
 

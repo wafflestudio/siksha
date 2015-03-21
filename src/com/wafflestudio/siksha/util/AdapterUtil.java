@@ -2,7 +2,6 @@ package com.wafflestudio.siksha.util;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,27 +75,15 @@ public class AdapterUtil {
         convertView = LayoutInflater.from(context).inflate(R.layout.group_layout, null);
 
       TextView restaurantNameView = (TextView) convertView.findViewById(R.id.restaurant_name);
-      final ImageButton bookmark = (ImageButton) convertView.findViewById(R.id.add_bookmark);
+      ImageButton groupBtn = (ImageButton) convertView.findViewById(R.id.group_button);
 
       restaurantNameView.setTypeface(FontUtil.fontAPAritaDotumSemiBold);
       restaurantNameView.setText(restaurantName);
 
-      bookmark.setFocusable(false);
-      bookmark.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          BookmarkUtil bookmarkUtil = BookmarkUtil.getInstance();
-
-          if (!bookmarkUtil.isBookMarked(restaurantName)) {
-            bookmark.setImageResource(R.drawable.ic_action_star_brighted);
-            bookmarkUtil.setBookmark(restaurantName, true);
-          }
-          else {
-            bookmark.setImageResource(R.drawable.ic_action_star);
-            bookmarkUtil.setBookmark(restaurantName, false);
-          }
-        }
-      });
+      if (!BookmarkUtil.getInstance().isBookmarkMode())
+        groupBtn.setImageResource(R.drawable.ic_action_star);
+      else
+        setGroupButtonImage(groupBtn);
 
       return convertView;
     }
@@ -130,6 +117,24 @@ public class AdapterUtil {
 
       return convertView;
     }
+
+    private void setGroupButtonImage(ImageButton groupBtn) {
+      if (!BookmarkUtil.getInstance().isBookmarkMode())
+        groupBtn.setImageResource(R.drawable.ic_action_star);
+      else {
+        switch (pageIndex) {
+        case 0:
+          groupBtn.setImageResource(R.drawable.ic_action_info_breakfast);
+          break;
+        case 1:
+          groupBtn.setImageResource(R.drawable.ic_action_info_lunch);
+          break;
+        case 2:
+          groupBtn.setImageResource(R.drawable.ic_action_info_dinner);
+          break;
+        }
+      }
+    }
   }
 
   public static class ViewPagerAdapter extends PagerAdapter {
@@ -162,14 +167,10 @@ public class AdapterUtil {
       else
         view = new DinnerPage(context, dinnerListAdapter);
 
+      view.setTag("page" + position);
       pager.addView(view, 0);
 
       return view;
-    }
-
-    @Override
-    public void setPrimaryItem(ViewGroup container, int position, Object object) {
-      Log.d("position", position + "");
     }
 
     @Override

@@ -6,9 +6,15 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.wafflestudio.siksha.page.BreakfastPage;
+import com.wafflestudio.siksha.page.DinnerPage;
+import com.wafflestudio.siksha.page.LunchPage;
 import com.wafflestudio.siksha.service.DownloadingJsonReceiver;
 import com.wafflestudio.siksha.util.AlarmUtil;
 import com.wafflestudio.siksha.util.BookmarkUtil;
@@ -19,9 +25,10 @@ import com.wafflestudio.siksha.util.NetworkUtil;
 import com.wafflestudio.siksha.util.RestaurantInfo;
 
 public class MainActivity extends Activity implements ViewPager.OnPageChangeListener {
-  private LinearLayout topBar;
+  private RelativeLayout topBar;
   private TextView title;
   private TextView appName;
+  private ImageButton bookmarkButton;
 
   private ViewPager viewPager;
 
@@ -42,9 +49,52 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
   }
 
   private void setLayout() {
-    topBar = (LinearLayout) findViewById(R.id.activity_main_top_bar);
+    topBar = (RelativeLayout) findViewById(R.id.activity_main_top_bar);
     title = (TextView) findViewById(R.id.activity_main_title);
     appName = (TextView) findViewById(R.id.activity_main_app_name);
+    bookmarkButton = (ImageButton) findViewById(R.id.bookmark_button);
+    bookmarkButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        BookmarkUtil bookmarkUtil = BookmarkUtil.getInstance();
+        int pageIndex = viewPager.getCurrentItem();
+
+        if (!bookmarkUtil.isBookmarkMode()) {
+          bookmarkButton.setImageResource(R.drawable.ic_action_star_brighted);
+          bookmarkUtil.setBookmarkMode(true);
+
+          if (pageIndex == 0) {
+            BreakfastPage page = (BreakfastPage) viewPager.findViewWithTag("page" + pageIndex);
+            page.expandableListAdapter.notifyDataSetChanged();
+          }
+          else if (pageIndex == 1) {
+            LunchPage page = (LunchPage) viewPager.findViewWithTag("page" + pageIndex);
+            page.expandableListAdapter.notifyDataSetChanged();
+          }
+          else {
+            DinnerPage page = (DinnerPage) viewPager.findViewWithTag("page" + pageIndex);
+            page.expandableListAdapter.notifyDataSetChanged();
+          }
+        }
+        else {
+          bookmarkButton.setImageResource(R.drawable.ic_action_star);
+          bookmarkUtil.setBookmarkMode(false);
+
+          if (pageIndex == 0) {
+            BreakfastPage page = (BreakfastPage) viewPager.findViewWithTag("page" + pageIndex);
+            page.expandableListAdapter.notifyDataSetChanged();
+          }
+          else if (pageIndex == 1) {
+            LunchPage page = (LunchPage) viewPager.findViewWithTag("page" + pageIndex);
+            page.expandableListAdapter.notifyDataSetChanged();
+          }
+          else {
+            DinnerPage page = (DinnerPage) viewPager.findViewWithTag("page" + pageIndex);
+            page.expandableListAdapter.notifyDataSetChanged();
+          }
+        }
+      }
+    });
 
     viewPager = (ViewPager) findViewById(R.id.view_pager);
     viewPager.setOffscreenPageLimit(2);
