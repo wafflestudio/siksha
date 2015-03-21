@@ -15,6 +15,8 @@ public class SharedPreferenceUtil {
   public static final String PREF_PREFIX_KEY = "bab_widget_";
   public static final String PREF_WIDGET_ID = "bab_widget_ids";
 
+  public static final String PREF_KEY_TUTORIAL = "key_tutorial";
+
   public static void save(Context context, String prefName, String key, String value) {
     SharedPreferences.Editor editor = context.getSharedPreferences(prefName, Context.MODE_PRIVATE).edit();
     editor.putString(key, value);

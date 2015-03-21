@@ -6,15 +6,12 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.wafflestudio.siksha.page.BreakfastPage;
-import com.wafflestudio.siksha.page.DinnerPage;
-import com.wafflestudio.siksha.page.LunchPage;
+import com.wafflestudio.siksha.dialog.ProgressDialog;
+import com.wafflestudio.siksha.dialog.TutorialDialog;
 import com.wafflestudio.siksha.service.DownloadingJsonReceiver;
 import com.wafflestudio.siksha.util.AlarmUtil;
 import com.wafflestudio.siksha.util.BookmarkUtil;
@@ -23,16 +20,17 @@ import com.wafflestudio.siksha.util.FontUtil;
 import com.wafflestudio.siksha.util.LoadingMenuFromJson;
 import com.wafflestudio.siksha.util.NetworkUtil;
 import com.wafflestudio.siksha.util.RestaurantInfo;
+import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
 public class MainActivity extends Activity implements ViewPager.OnPageChangeListener {
-  private RelativeLayout topBar;
+  private LinearLayout topBar;
   private TextView title;
   private TextView appName;
-  private ImageButton bookmarkButton;
 
   private ViewPager viewPager;
 
   private DownloadingJsonReceiver downloadingJsonReceiver;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -42,59 +40,31 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     AlarmUtil.registerAlarm(this);
     NetworkUtil.getInstance().setConnectivityManager(this);
     FontUtil.getInstance().setFontAsset(this);
+
+
     BookmarkUtil.getInstance().initialize();
     RestaurantInfo.getInstance().loading(this);
+
+    checkTutorial();
 
     setLayout();
   }
 
+  private void checkTutorial() {
+    boolean isTutorialDone =
+             SharedPreferenceUtil.loadValueOfBoolean(this, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_TUTORIAL);
+    if (!isTutorialDone) {
+      TutorialDialog tutorialDialog = new TutorialDialog(this, "yee");
+      tutorialDialog.setCancelable(false);
+      tutorialDialog.startShowing();
+      SharedPreferenceUtil.save(this, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_TUTORIAL, true);
+    }
+  }
+
   private void setLayout() {
-    topBar = (RelativeLayout) findViewById(R.id.activity_main_top_bar);
+    topBar = (LinearLayout) findViewById(R.id.activity_main_top_bar);
     title = (TextView) findViewById(R.id.activity_main_title);
     appName = (TextView) findViewById(R.id.activity_main_app_name);
-    bookmarkButton = (ImageButton) findViewById(R.id.bookmark_button);
-    bookmarkButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        BookmarkUtil bookmarkUtil = BookmarkUtil.getInstance();
-        int pageIndex = viewPager.getCurrentItem();
-
-        if (!bookmarkUtil.isBookmarkMode()) {
-          bookmarkButton.setImageResource(R.drawable.ic_action_star_brighted);
-          bookmarkUtil.setBookmarkMode(true);
-
-          if (pageIndex == 0) {
-            BreakfastPage page = (BreakfastPage) viewPager.findViewWithTag("page" + pageIndex);
-            page.expandableListAdapter.notifyDataSetChanged();
-          }
-          else if (pageIndex == 1) {
-            LunchPage page = (LunchPage) viewPager.findViewWithTag("page" + pageIndex);
-            page.expandableListAdapter.notifyDataSetChanged();
-          }
-          else {
-            DinnerPage page = (DinnerPage) viewPager.findViewWithTag("page" + pageIndex);
-            page.expandableListAdapter.notifyDataSetChanged();
-          }
-        }
-        else {
-          bookmarkButton.setImageResource(R.drawable.ic_action_star);
-          bookmarkUtil.setBookmarkMode(false);
-
-          if (pageIndex == 0) {
-            BreakfastPage page = (BreakfastPage) viewPager.findViewWithTag("page" + pageIndex);
-            page.expandableListAdapter.notifyDataSetChanged();
-          }
-          else if (pageIndex == 1) {
-            LunchPage page = (LunchPage) viewPager.findViewWithTag("page" + pageIndex);
-            page.expandableListAdapter.notifyDataSetChanged();
-          }
-          else {
-            DinnerPage page = (DinnerPage) viewPager.findViewWithTag("page" + pageIndex);
-            page.expandableListAdapter.notifyDataSetChanged();
-          }
-        }
-      }
-    });
 
     viewPager = (ViewPager) findViewById(R.id.view_pager);
     viewPager.setOffscreenPageLimit(2);
