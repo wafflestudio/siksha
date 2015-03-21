@@ -2,10 +2,12 @@ package com.wafflestudio.siksha.util;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,7 +17,6 @@ import com.wafflestudio.siksha.page.BreakfastPage;
 import com.wafflestudio.siksha.page.DinnerPage;
 import com.wafflestudio.siksha.page.LunchPage;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class AdapterUtil {
@@ -24,8 +25,6 @@ public class AdapterUtil {
 
     private List<RestaurantClassifiedForm> forms;
     private int pageIndex;
-
-    private TextView restaurantNameView;
 
     public ExpandableListAdapter(Context context, List<RestaurantClassifiedForm> forms, int pageIndex) {
       this.context = context;
@@ -74,11 +73,30 @@ public class AdapterUtil {
       final String restaurantName = forms.get(groupPosition).restaurant;
 
       if (convertView == null)
-        convertView = LayoutInflater.from(context).inflate(R.layout.restaurant_layout, null);
+        convertView = LayoutInflater.from(context).inflate(R.layout.group_layout, null);
 
-      restaurantNameView = (TextView) convertView.findViewById(R.id.restaurant_name);
-      restaurantNameView.setTypeface(FontUtil.fontAPAritaDotumMedium);
+      TextView restaurantNameView = (TextView) convertView.findViewById(R.id.restaurant_name);
+      final ImageButton bookmark = (ImageButton) convertView.findViewById(R.id.add_bookmark);
+
+      restaurantNameView.setTypeface(FontUtil.fontAPAritaDotumSemiBold);
       restaurantNameView.setText(restaurantName);
+
+      bookmark.setFocusable(false);
+      bookmark.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          BookmarkUtil bookmarkUtil = BookmarkUtil.getInstance();
+
+          if (!bookmarkUtil.isBookMarked(restaurantName)) {
+            bookmark.setImageResource(R.drawable.ic_action_star_brighted);
+            bookmarkUtil.setBookmark(restaurantName, true);
+          }
+          else {
+            bookmark.setImageResource(R.drawable.ic_action_star);
+            bookmarkUtil.setBookmark(restaurantName, false);
+          }
+        }
+      });
 
       return convertView;
     }
@@ -87,7 +105,7 @@ public class AdapterUtil {
       final RestaurantCrawlingForm.MenuInfo menu = forms.get(groupPosition).menus.get(childPosition);
 
       if (convertView == null)
-        convertView = LayoutInflater.from(context).inflate(R.layout.menu_layout, null);
+        convertView = LayoutInflater.from(context).inflate(R.layout.child_layout, null);
 
       LinearLayout menuLayout = (LinearLayout) convertView.findViewById(R.id.menu_layout);
       TextView price = (TextView) menuLayout.findViewById(R.id.menu_price);
@@ -147,6 +165,11 @@ public class AdapterUtil {
       pager.addView(view, 0);
 
       return view;
+    }
+
+    @Override
+    public void setPrimaryItem(ViewGroup container, int position, Object object) {
+      Log.d("position", position + "");
     }
 
     @Override

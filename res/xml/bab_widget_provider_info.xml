@@ -3,7 +3,7 @@
     android:minWidth="110dp"
     android:minHeight="110dp"
     android:updatePeriodMillis="1800000"
-    android:previewImage="@drawable/dialog_roof"
+    android:previewImage="@drawable/widget_launcher"
     android:initialLayout="@layout/bab_widget_provider"
     android:configure="com.wafflestudio.siksha.widget.BabWidgetProviderConfigureActivity"
     android:resizeMode="vertical"

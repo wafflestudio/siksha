@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:id="@+id/restaurant_info_dialog_roof"
-        android:layout_width="200dp"
+        android:layout_width="225dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:orientation="vertical" >

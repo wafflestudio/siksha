@@ -4,7 +4,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="2dp"
+    android:padding="6dp"
     android:background="@color/app_sub_color_2" >
 
     <CheckBox
@@ -19,6 +19,6 @@
         android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp" />
+        android:textSize="17sp" />
 
 </LinearLayout>

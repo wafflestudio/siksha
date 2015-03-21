@@ -20,7 +20,7 @@
             android:gravity="center"
             android:paddingLeft="5dp"
             android:textColor="@color/white"
-            android:textSize="17sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/activity_main_app_name"
@@ -32,7 +32,7 @@
             android:layout_marginTop="1dp"
             android:textColor="@color/white"
             android:layout_marginLeft="7dp"
-            android:textSize="27sp" />
+            android:textSize="25sp" />
         
     </LinearLayout>
 

@@ -16,6 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:scaleX="0.75"
+            android:scaleY="0.75"
             android:src="@drawable/spinner_76_inner_holo" />
 
         <TextView
@@ -23,7 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="17sp"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 
