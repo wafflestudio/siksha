@@ -8,10 +8,10 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.wafflestudio.siksha.dialog.TutorialDialog;
 import com.wafflestudio.siksha.page.BreakfastPage;
 import com.wafflestudio.siksha.page.DinnerPage;
 import com.wafflestudio.siksha.page.LunchPage;
@@ -23,6 +23,7 @@ import com.wafflestudio.siksha.util.FontUtil;
 import com.wafflestudio.siksha.util.LoadingMenuFromJson;
 import com.wafflestudio.siksha.util.NetworkUtil;
 import com.wafflestudio.siksha.util.RestaurantInfo;
+import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
 public class MainActivity extends Activity implements ViewPager.OnPageChangeListener {
   private RelativeLayout topBar;
@@ -42,10 +43,23 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     AlarmUtil.registerAlarm(this);
     NetworkUtil.getInstance().setConnectivityManager(this);
     FontUtil.getInstance().setFontAsset(this);
+
     BookmarkUtil.getInstance().initialize();
     RestaurantInfo.getInstance().loading(this);
 
+    checkTutorial();
     setLayout();
+  }
+
+  private void checkTutorial() {
+    boolean isTutorialDone = SharedPreferenceUtil.loadValueOfBoolean(this, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_TUTORIAL);
+
+    if (!isTutorialDone) {
+      TutorialDialog tutorialDialog = new TutorialDialog(this, "yes");
+      tutorialDialog.setCancelable(false);
+      tutorialDialog.startShowing();
+      SharedPreferenceUtil.save(this, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_TUTORIAL, true);
+    }
   }
 
   private void setLayout() {

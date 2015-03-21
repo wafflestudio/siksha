@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -44,18 +45,17 @@ public class BabWidgetProviderConfigureActivity extends Activity {
         restaurants = this.getResources().getStringArray(R.array.restaurants);
 
         listView = (ListView) findViewById(R.id.widget_configure_listview);
-        Button addButton = (Button) findViewById(R.id.widget_configure_add_button);
-        Button cancleButton = (Button) findViewById(R.id.widget_configure_cancle_button);
+        ImageButton addButton = (ImageButton) findViewById(R.id.widget_config_accept_button);
         listAdapter = new ListAdapter(this);
         listView.setAdapter(listAdapter);
 
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        listAdapter.setChecked(position);
-                        listAdapter.notifyDataSetChanged();
-                    }
+                  @Override
+                  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    listAdapter.setChecked(position);
+                    listAdapter.notifyDataSetChanged();
+                  }
                 }
         );
 
@@ -66,15 +66,6 @@ public class BabWidgetProviderConfigureActivity extends Activity {
                         addWidgetId(BabWidgetProviderConfigureActivity.this, appWidgetId);
                         saveTitlePref(BabWidgetProviderConfigureActivity.this, appWidgetId, listAdapter.getChecked());
                         startWidget();
-                    }
-                }
-        );
-
-        cancleButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
                     }
                 }
         );
