@@ -12,6 +12,7 @@ public class BookmarkUtil {
   public static BookmarkUtil bookmarkUtil;
 
   private Map<String, Boolean> bookmarkFlagMap;
+  private boolean bookmarkMode;
 
   private BookmarkUtil() { }
 
@@ -24,6 +25,14 @@ public class BookmarkUtil {
 
   public void initialize() {
     bookmarkFlagMap = new HashMap<String, Boolean>();
+  }
+
+  public boolean isBookmarkMode() {
+    return bookmarkMode;
+  }
+
+  public void setBookmarkMode(boolean flag) {
+    bookmarkMode = flag;
   }
 
   public void setBookmark(String key, boolean value) {
