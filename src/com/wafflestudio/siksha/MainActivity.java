@@ -6,9 +6,12 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.wafflestudio.siksha.dialog.ProgressDialog;
+import com.wafflestudio.siksha.dialog.TutorialDialog;
 import com.wafflestudio.siksha.service.DownloadingJsonReceiver;
 import com.wafflestudio.siksha.util.AlarmUtil;
 import com.wafflestudio.siksha.util.BookmarkUtil;
@@ -17,6 +20,7 @@ import com.wafflestudio.siksha.util.FontUtil;
 import com.wafflestudio.siksha.util.LoadingMenuFromJson;
 import com.wafflestudio.siksha.util.NetworkUtil;
 import com.wafflestudio.siksha.util.RestaurantInfo;
+import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
 public class MainActivity extends Activity implements ViewPager.OnPageChangeListener {
   private LinearLayout topBar;
@@ -25,7 +29,9 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
 
   private ViewPager viewPager;
 
+
   private DownloadingJsonReceiver downloadingJsonReceiver;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +41,25 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     AlarmUtil.registerAlarm(this);
     NetworkUtil.getInstance().setConnectivityManager(this);
     FontUtil.getInstance().setFontAsset(this);
+
+
     BookmarkUtil.getInstance().initialize();
     RestaurantInfo.getInstance().loading(this);
 
+    checkTutorial();
+
     setLayout();
+  }
+
+  private void checkTutorial() {
+    boolean isTutorialDone =
+             SharedPreferenceUtil.loadValueOfBoolean(this, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_TUTORIAL);
+    if (!isTutorialDone) {
+      TutorialDialog tutorialDialog = new TutorialDialog(this, "yee");
+      tutorialDialog.setCancelable(false);
+      tutorialDialog.startShowing();
+      SharedPreferenceUtil.save(this, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_TUTORIAL, true);
+    }
   }
 
   private void setLayout() {
