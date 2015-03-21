@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/configactivity_main_top_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,8 +16,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/title_activity_main"
-            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
             android:gravity="center"
+            android:layout_alignParentLeft="true"
             android:paddingLeft="5dp"
             android:textColor="@color/white"
             android:textSize="15sp" />
@@ -27,41 +28,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
-            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
             android:gravity="center"
             android:layout_marginTop="1dp"
             android:textColor="@color/white"
             android:layout_marginLeft="7dp"
+            android:layout_toRightOf="@id/configactivity_main_title"
             android:textSize="25sp" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="3dp" >
-
-        <Button
-            android:id="@+id/widget_configure_cancle_button"
-            android:layout_width="0dp"
+        <ImageButton
+            android:id="@+id/widget_config_accept_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="15sp"
-            android:text="@string/cancle_widget" />
+            android:src="@drawable/ic_action_accept"
+            android:background="@drawable/widget_accept_button_pressed"
+            android:padding="4dp"
+            android:layout_alignParentRight="true" />
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent" />
-
-        <Button
-            android:id="@+id/widget_configure_add_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="15sp"
-            android:text="@string/add_widget" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/widget_configure_listview"
