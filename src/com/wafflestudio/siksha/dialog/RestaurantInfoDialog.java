@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.FontUtil;
-import com.wafflestudio.siksha.util.RestaurantInfo;
+import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 
 public class RestaurantInfoDialog extends Dialog {
   private TextView restaurantView;
@@ -33,7 +33,7 @@ public class RestaurantInfoDialog extends Dialog {
     locationDetails.setTypeface(FontUtil.fontAPAritaDotumMedium);
 
     restaurantView.setText(restaurantName);
-    operatingHoursDetails.setText(RestaurantInfo.operatingHoursMap.get(restaurantName));
-		locationDetails.setText(RestaurantInfo.locationsMap.get(restaurantName));
+    operatingHoursDetails.setText(RestaurantInfoUtil.getInstance().operatingHoursMap.get(restaurantName));
+		locationDetails.setText(RestaurantInfoUtil.getInstance().locationsMap.get(restaurantName));
 	}
 }
