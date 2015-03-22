@@ -1,18 +1,20 @@
 package com.wafflestudio.siksha.page;
 
 import android.content.Context;
-import android.view.View;
-import android.widget.AdapterView;
+import android.util.Log;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wafflestudio.siksha.R;
-import com.wafflestudio.siksha.dialog.RestaurantInfoDialog;
 import com.wafflestudio.siksha.util.AdapterUtil;
-import com.wafflestudio.siksha.util.BookmarkUtil;
 import com.wafflestudio.siksha.util.FontUtil;
-import com.wafflestudio.siksha.util.RestaurantInfo;
+import com.wafflestudio.siksha.util.RestaurantInfoUtil;
+import com.wafflestudio.siksha.util.RestaurantSequencer;
+import com.wafflestudio.siksha.util.SharedPreferenceUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DinnerPage extends LinearLayout {
   private Context context;
@@ -38,40 +40,46 @@ public class DinnerPage extends LinearLayout {
     indicator.setTypeface(FontUtil.fontAPAritaDotumMedium);
 
     expandableListView = (ExpandableListView) findViewById(R.id.dinner_expandable_list_view);
-    setExpandableListView();
-  }
-
-  public void setExpandableListView() {
     expandableListView.setAdapter(expandableListAdapter);
-    expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-      @Override
-      public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        long pos = ((ExpandableListView) parent).getExpandableListPosition(position);
-
-        int itemType = ExpandableListView.getPackedPositionType(pos);
-        int groupPosition = ExpandableListView.getPackedPositionGroup(pos);
-
-        if (itemType == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
-          RestaurantInfoDialog dialog = new RestaurantInfoDialog(context, RestaurantInfo.restaurants[groupPosition]);
-          dialog.setCanceledOnTouchOutside(true);
-          dialog.show();
-
-          return true;
-        }
-
-        return false;
-      }
-    });
     expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
       @Override
       public void onGroupExpand(int groupPosition) {
-        int groupSize = RestaurantInfo.restaurants.length;
-
-        for(int i = 0; i < groupSize; i++) {
-          if (i != groupPosition)
-            expandableListView.collapseGroup(i);
-        }
+        collapseItems(groupPosition);
       }
     });
+
+    expandBookmarks();
+  }
+
+  public void expandBookmarks() {
+    String recordedBookmark = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_BOOKMARK);
+
+    if (recordedBookmark.equals(""))
+      return;
+
+    for (String name : recordedBookmark.split("/"))
+      expandableListView.expandGroup(RestaurantSequencer.getInstance().currentSequence.indexOf(name));
+  }
+
+  public void collapseItems(int groupPosition) {
+    RestaurantSequencer restaurantSequencer = RestaurantSequencer.getInstance();
+    String recordedBookmark = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_BOOKMARK);
+
+    if (recordedBookmark.equals("")) {
+      for(int i = 0; i < restaurantSequencer.currentSequence.size(); i++) {
+        if (i != groupPosition)
+          expandableListView.collapseGroup(i);
+      }
+    }
+    else {
+      List<String> bookmarkList = new ArrayList<String>();
+      for(String bookmark : recordedBookmark.split("/"))
+        bookmarkList.add(bookmark);
+
+      for (int i = 0; i < restaurantSequencer.currentSequence.size(); i++) {
+        if (!bookmarkList.contains(restaurantSequencer.currentSequence.get(i)) && i != groupPosition)
+          expandableListView.collapseGroup(i);
+      }
+    }
   }
 }

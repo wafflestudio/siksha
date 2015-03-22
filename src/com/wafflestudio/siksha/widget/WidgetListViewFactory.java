@@ -11,7 +11,7 @@ import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.CalendarUtil;
 import com.wafflestudio.siksha.util.ParsingJson;
 import com.wafflestudio.siksha.util.RestaurantCrawlingForm;
-import com.wafflestudio.siksha.util.RestaurantInfo;
+import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 
 import java.util.ArrayList;
 
@@ -31,12 +31,12 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
         String input = BabWidgetProviderConfigureActivity.loadTitlePref(context, appWidgetId);
         Log.d("WidgetListViewFactory", input);
 
-        RestaurantInfo.getInstance().loading(context);
+        RestaurantInfoUtil.getInstance().initialize(context);
 
         cafeList = new ArrayList<String>();
         for (int i = 0; input.length() != 0; i++) {
             if (input.substring(0, 1).equals("1"))
-                cafeList.add(RestaurantInfo.restaurants[i]);
+                cafeList.add(RestaurantInfoUtil.getInstance().restaurants[i]);
             input = input.substring(1);
         }
 

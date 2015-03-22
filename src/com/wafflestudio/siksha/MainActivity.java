@@ -17,15 +17,15 @@ import com.wafflestudio.siksha.page.DinnerPage;
 import com.wafflestudio.siksha.page.LunchPage;
 import com.wafflestudio.siksha.service.DownloadingJsonReceiver;
 import com.wafflestudio.siksha.util.AlarmUtil;
-import com.wafflestudio.siksha.util.BookmarkUtil;
 import com.wafflestudio.siksha.util.CalendarUtil;
 import com.wafflestudio.siksha.util.FontUtil;
 import com.wafflestudio.siksha.util.LoadingMenuFromJson;
 import com.wafflestudio.siksha.util.NetworkUtil;
-import com.wafflestudio.siksha.util.RestaurantInfo;
+import com.wafflestudio.siksha.util.RestaurantInfoUtil;
+import com.wafflestudio.siksha.util.RestaurantSequencer;
 import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
-public class MainActivity extends Activity implements ViewPager.OnPageChangeListener {
+public class MainActivity extends Activity implements ViewPager.OnPageChangeListener, View.OnClickListener {
   private RelativeLayout topBar;
   private TextView title;
   private TextView appName;
@@ -43,9 +43,8 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     AlarmUtil.registerAlarm(this);
     NetworkUtil.getInstance().setConnectivityManager(this);
     FontUtil.getInstance().setFontAsset(this);
-
-    BookmarkUtil.getInstance().initialize();
-    RestaurantInfo.getInstance().loading(this);
+    RestaurantInfoUtil.getInstance().initialize(this);
+    RestaurantSequencer.getInstance().initialize(this);
 
     checkTutorial();
     setLayout();
@@ -58,6 +57,7 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
       TutorialDialog tutorialDialog = new TutorialDialog(this, "yes");
       tutorialDialog.setCancelable(false);
       tutorialDialog.startShowing();
+
       SharedPreferenceUtil.save(this, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_TUTORIAL, true);
     }
   }
@@ -67,48 +67,14 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     title = (TextView) findViewById(R.id.activity_main_title);
     appName = (TextView) findViewById(R.id.activity_main_app_name);
     bookmarkButton = (ImageButton) findViewById(R.id.bookmark_button);
-    bookmarkButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        BookmarkUtil bookmarkUtil = BookmarkUtil.getInstance();
-        int pageIndex = viewPager.getCurrentItem();
+    bookmarkButton.setOnClickListener(this);
 
-        if (!bookmarkUtil.isBookmarkMode()) {
-          bookmarkButton.setImageResource(R.drawable.ic_action_star_brighted);
-          bookmarkUtil.setBookmarkMode(true);
-
-          if (pageIndex == 0) {
-            BreakfastPage page = (BreakfastPage) viewPager.findViewWithTag("page" + pageIndex);
-            page.expandableListAdapter.notifyDataSetChanged();
-          }
-          else if (pageIndex == 1) {
-            LunchPage page = (LunchPage) viewPager.findViewWithTag("page" + pageIndex);
-            page.expandableListAdapter.notifyDataSetChanged();
-          }
-          else {
-            DinnerPage page = (DinnerPage) viewPager.findViewWithTag("page" + pageIndex);
-            page.expandableListAdapter.notifyDataSetChanged();
-          }
-        }
-        else {
-          bookmarkButton.setImageResource(R.drawable.ic_action_star);
-          bookmarkUtil.setBookmarkMode(false);
-
-          if (pageIndex == 0) {
-            BreakfastPage page = (BreakfastPage) viewPager.findViewWithTag("page" + pageIndex);
-            page.expandableListAdapter.notifyDataSetChanged();
-          }
-          else if (pageIndex == 1) {
-            LunchPage page = (LunchPage) viewPager.findViewWithTag("page" + pageIndex);
-            page.expandableListAdapter.notifyDataSetChanged();
-          }
-          else {
-            DinnerPage page = (DinnerPage) viewPager.findViewWithTag("page" + pageIndex);
-            page.expandableListAdapter.notifyDataSetChanged();
-          }
-        }
-      }
-    });
+    if (RestaurantSequencer.getInstance().isBookmarkMode()) {
+      bookmarkButton.setImageResource(R.drawable.ic_action_accept);
+    }
+    else {
+      bookmarkButton.setImageResource(R.drawable.ic_action_star);
+    }
 
     viewPager = (ViewPager) findViewById(R.id.view_pager);
     viewPager.setOffscreenPageLimit(2);
@@ -151,6 +117,57 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
 
   @Override
   public void onPageScrollStateChanged(int state) { }
+
+  @Override
+  public void onClick(View v) {
+    int id = v.getId();
+
+    switch (id) {
+      case R.id.bookmark_button:
+        RestaurantSequencer restaurantSequencer = RestaurantSequencer.getInstance();
+
+        if (!restaurantSequencer.isBookmarkMode()) {
+          bookmarkButton.setImageResource(R.drawable.ic_action_accept);
+          restaurantSequencer.setBookmarkMode(true);
+
+          notifyImageChangeToPages();
+        }
+        else {
+          bookmarkButton.setImageResource(R.drawable.ic_action_star);
+          restaurantSequencer.setBookmarkMode(false);
+          restaurantSequencer.recordRestaurantSequence(MainActivity.this);
+          restaurantSequencer.recordBookmarkList(MainActivity.this);
+
+          notifyDataChangeToPages();
+        }
+
+        break;
+    }
+  }
+
+  private void notifyImageChangeToPages() {
+    BreakfastPage breakfastPage = (BreakfastPage) viewPager.findViewWithTag("page" + 0);
+    LunchPage lunchPage = (LunchPage) viewPager.findViewWithTag("page" + 1);
+    DinnerPage dinnerPage = (DinnerPage) viewPager.findViewWithTag("page" + 2);
+
+    breakfastPage.expandableListAdapter.notifyDataSetChanged();
+    lunchPage.expandableListAdapter.notifyDataSetChanged();
+    dinnerPage.expandableListAdapter.notifyDataSetChanged();
+  }
+
+  private void notifyDataChangeToPages() {
+    BreakfastPage breakfastPage = (BreakfastPage) viewPager.findViewWithTag("page" + 0);
+    LunchPage lunchPage = (LunchPage) viewPager.findViewWithTag("page" + 1);
+    DinnerPage dinnerPage = (DinnerPage) viewPager.findViewWithTag("page" + 2);
+
+    breakfastPage.expandableListAdapter.forms = RestaurantSequencer.getInstance().breakfastMenuList;
+    lunchPage.expandableListAdapter.forms = RestaurantSequencer.getInstance().lunchMenuList;
+    dinnerPage.expandableListAdapter.forms = RestaurantSequencer.getInstance().dinnerMenuList;
+
+    breakfastPage.expandableListAdapter.notifyDataSetChanged();
+    lunchPage.expandableListAdapter.notifyDataSetChanged();
+    dinnerPage.expandableListAdapter.notifyDataSetChanged();
+  }
 
   private int getPageIndexOnHour() {
     int time = CalendarUtil.getCurrentHour();

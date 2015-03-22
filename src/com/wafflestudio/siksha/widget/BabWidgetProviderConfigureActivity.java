@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -18,7 +17,6 @@ import android.widget.TextView;
 
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.FontUtil;
-import com.wafflestudio.siksha.util.RestaurantInfo;
 import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
 import java.util.HashSet;

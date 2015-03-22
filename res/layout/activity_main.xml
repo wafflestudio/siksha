@@ -8,8 +8,7 @@
         android:id="@+id/activity_main_top_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-     	android:background="@color/main_color_lunch"
-        android:padding="10dp" >
+     	android:background="@color/main_color_lunch" >
      	
         <TextView
             android:id="@+id/activity_main_title"
@@ -18,9 +17,9 @@
             android:text="@string/title_activity_main"
             android:textColor="@color/white"
             android:textSize="15sp"
+            android:layout_marginLeft="15dp"
             android:layout_centerVertical="true"
-            android:gravity="center"
-            android:layout_marginLeft="5dp" />
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/activity_main_app_name"
@@ -41,6 +40,7 @@
             android:layout_height="wrap_content"
             android:scaleX="0.75"
             android:scaleY="0.75"
+            android:padding="10dp"
             android:background="@color/transparent"
             android:layout_alignParentRight="true"
             android:src="@drawable/ic_action_star"
