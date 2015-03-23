@@ -84,7 +84,7 @@ public class BabWidgetProvider extends AppWidgetProvider {
         }
         else {
             remoteViews.setEmptyView(R.id.widget_list_view, R.id.widget_download_fail_view);
-            remoteViews.setTextViewText(R.id.dateViewWidget, CalendarUtil.getCurrentDate() + time);
+            remoteViews.setTextViewText(R.id.dateViewWidget, CalendarUtil.getCurrentDate().substring(5) + " " + time);
         }
 
         Intent refreshIntent = new Intent(context, BabWidgetProvider.class);
