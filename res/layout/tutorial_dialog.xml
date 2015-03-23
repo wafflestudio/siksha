@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/tutorial_dialog"
-    >
+                android:id="@+id/tutorial_dialog" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +19,6 @@
             android:textSize="17sp"
             android:gravity="center"
             android:textColor="@color/white" />
-
 
         <Button
             android:layout_width="wrap_content"

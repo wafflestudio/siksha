@@ -6,6 +6,8 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -48,6 +50,24 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
 
     checkTutorial();
     setLayout();
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    MenuItem item = menu.add("만든 사람들");
+    item.setIcon(R.drawable.ic_action_person);
+
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case 0:
+        Intent intent = new Intent(this, MakerActivity.class);
+        startActivity(intent);
+        return true;
+    }
+    return false;
   }
 
   private void checkTutorial() {

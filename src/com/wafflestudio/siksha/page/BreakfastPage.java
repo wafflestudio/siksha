@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.AdapterUtil;
+import com.wafflestudio.siksha.util.CalendarUtil;
 import com.wafflestudio.siksha.util.FontUtil;
 import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 import com.wafflestudio.siksha.util.RestaurantSequencer;
@@ -38,6 +39,7 @@ public class BreakfastPage extends LinearLayout {
 
     indicator = (TextView) findViewById(R.id.breakfast_indicator);
     indicator.setTypeface(FontUtil.fontAPAritaDotumMedium);
+    indicator.setText(CalendarUtil.getCurrentDate() + " " + context.getString(R.string.breakfast));
 
     expandableListView = (ExpandableListView) findViewById(R.id.breakfast_expandable_list_view);
     expandableListView.setAdapter(expandableListAdapter);

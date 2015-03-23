@@ -19,6 +19,10 @@
     <string name="lunch">점심</string>
     <string name="dinner">저녁</string>
 
+    <string name="maker">만든 사람들</string>
+    <string name="wafflestudio">와플스튜디오</string>
+    <string name="shaidea">샤이디어</string>
+
     <!-- Widget -->
     <string name="appwidget_text">EXAMPLE</string>
     <string name="configure">Configure</string>
