@@ -1,9 +1,15 @@
 package com.wafflestudio.siksha.util;
 
 import android.content.Context;
+import android.support.v4.view.ViewPager;
+
+import com.wafflestudio.siksha.page.BreakfastPage;
+import com.wafflestudio.siksha.page.DinnerPage;
+import com.wafflestudio.siksha.page.LunchPage;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,12 +17,14 @@ import java.util.Map;
 public class RestaurantSequencer {
   public static RestaurantSequencer restaurantSequencer;
 
-  public ArrayList<String> originalSequence;
-  public ArrayList<String> currentSequence;
+  public List<String> originalSequence;
+  public List<String> currentSequence;
 
   public List<RestaurantClassifiedForm> breakfastMenuList;
   public List<RestaurantClassifiedForm> lunchMenuList;
   public List<RestaurantClassifiedForm> dinnerMenuList;
+
+  private ViewPager viewPager;
 
   private Map<String, Boolean> bookmarkFlagMap;
   private boolean bookmarkMode;
@@ -35,23 +43,52 @@ public class RestaurantSequencer {
     currentSequence = new ArrayList<String>();
     bookmarkFlagMap = new HashMap<String, Boolean>();
 
-    RestaurantInfoUtil restaurantInfoUtil = RestaurantInfoUtil.getInstance();
-    Collections.addAll(originalSequence, restaurantInfoUtil.restaurants);
-
     String recordedSequence = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_SEQUENCE);
+    String recordedBookmark = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_BOOKMARK);
+    RestaurantInfoUtil restaurantInfoUtil = RestaurantInfoUtil.getInstance();
+
+    Collections.addAll(originalSequence, restaurantInfoUtil.restaurants);
 
     if (!recordedSequence.equals(""))
       Collections.addAll(currentSequence, recordedSequence.split("/"));
     else
       Collections.addAll(currentSequence, restaurantInfoUtil.restaurants);
-}
+
+    if (!recordedBookmark.equals("")) {
+      for(String bookmark : recordedBookmark.split("/"))
+        bookmarkFlagMap.put(bookmark, true);
+    }
+  }
+
+  public void setViewPager(ViewPager viewPager) {
+    this.viewPager = viewPager;
+  }
 
   public void modifySequence(String name) {
-    int originalIndex = originalSequence.indexOf(name);
-
     if (!isBookMarked(name)) {
-      currentSequence.remove(name);
-      currentSequence.add(originalIndex, name);
+      List<String> arrangedList = new ArrayList<String>();
+
+      for(int i = 0; i < currentSequence.size(); i++) {
+        if (!isBookMarked(currentSequence.get(i)))
+          arrangedList.add(currentSequence.get(i));
+      }
+
+      Collections.sort(arrangedList, new Comparator<String>() {
+        @Override
+        public int compare(String lhs, String rhs) {
+          int originalIndexOfLhs = originalSequence.indexOf(lhs);
+          int originalIndexOfRhs = originalSequence.indexOf(rhs);
+
+          return (originalIndexOfLhs > originalIndexOfRhs) ? 1 : -1;
+        }
+      });
+
+      for(int i = 0; i < currentSequence.size(); i++) {
+        if (isBookMarked(currentSequence.get(i)))
+          arrangedList.add(0, currentSequence.get(i));
+      }
+
+      currentSequence = arrangedList;
     }
     else {
       currentSequence.remove(name);
@@ -59,16 +96,56 @@ public class RestaurantSequencer {
     }
   }
 
-  public void setMenuList(Map<String, RestaurantClassifiedForm> breakfast, Map<String, RestaurantClassifiedForm> lunch, Map<String, RestaurantClassifiedForm> dinner) {
+  public void setMenuListOnSequence() {
+    RestaurantInfoUtil restaurantInfoUtil = RestaurantInfoUtil.getInstance();
+
     breakfastMenuList = new ArrayList<RestaurantClassifiedForm>();
     lunchMenuList = new ArrayList<RestaurantClassifiedForm>();
     dinnerMenuList = new ArrayList<RestaurantClassifiedForm>();
 
     for(String name : currentSequence) {
-      breakfastMenuList.add(breakfast.get(name));
-      lunchMenuList.add(lunch.get(name));
-      dinnerMenuList.add(dinner.get(name));
+      breakfastMenuList.add(restaurantInfoUtil.breakfastMenuMap.get(name));
+      lunchMenuList.add(restaurantInfoUtil.lunchMenuMap.get(name));
+      dinnerMenuList.add(restaurantInfoUtil.dinnerMenuMap.get(name));
     }
+  }
+
+  public void notifyChangeToAdapters(boolean isInitialization) {
+    BreakfastPage breakfastPage = (BreakfastPage) viewPager.findViewWithTag("page" + 0);
+    LunchPage lunchPage = (LunchPage) viewPager.findViewWithTag("page" + 1);
+    DinnerPage dinnerPage = (DinnerPage) viewPager.findViewWithTag("page" + 2);
+
+    breakfastPage.expandableListAdapter.forms = breakfastMenuList;
+    lunchPage.expandableListAdapter.forms = lunchMenuList;
+    dinnerPage.expandableListAdapter.forms = dinnerMenuList;
+
+    breakfastPage.expandableListAdapter.isInitialization = isInitialization;
+    lunchPage.expandableListAdapter.isInitialization = isInitialization;
+    dinnerPage.expandableListAdapter.isInitialization = isInitialization;
+
+    breakfastPage.expandableListAdapter.notifyDataSetChanged();
+    lunchPage.expandableListAdapter.notifyDataSetChanged();
+    dinnerPage.expandableListAdapter.notifyDataSetChanged();
+  }
+
+  public void expandBookmarkAll() {
+    BreakfastPage breakfastPage = (BreakfastPage) viewPager.findViewWithTag("page" + 0);
+    LunchPage lunchPage = (LunchPage) viewPager.findViewWithTag("page" + 1);
+    DinnerPage dinnerPage = (DinnerPage) viewPager.findViewWithTag("page" + 2);
+
+    breakfastPage.expandBookmarks();
+    lunchPage.expandBookmarks();
+    dinnerPage.expandBookmarks();
+  }
+
+  public void collapseAll() {
+    BreakfastPage breakfastPage = (BreakfastPage) viewPager.findViewWithTag("page" + 0);
+    LunchPage lunchPage = (LunchPage) viewPager.findViewWithTag("page" + 1);
+    DinnerPage dinnerPage = (DinnerPage) viewPager.findViewWithTag("page" + 2);
+
+    breakfastPage.collapseAllGroup();
+    lunchPage.collapseAllGroup();
+    dinnerPage.collapseAllGroup();
   }
 
   public boolean isBookmarkMode() {
@@ -80,6 +157,9 @@ public class RestaurantSequencer {
   }
 
   public void setBookmark(String key, boolean value) {
+    if (bookmarkFlagMap.get(key) != null)
+      bookmarkFlagMap.remove(key);
+
     bookmarkFlagMap.put(key, value);
   }
 

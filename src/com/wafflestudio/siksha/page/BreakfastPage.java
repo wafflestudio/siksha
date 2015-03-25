@@ -1,7 +1,6 @@
 package com.wafflestudio.siksha.page;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -10,7 +9,6 @@ import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.AdapterUtil;
 import com.wafflestudio.siksha.util.CalendarUtil;
 import com.wafflestudio.siksha.util.FontUtil;
-import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 import com.wafflestudio.siksha.util.RestaurantSequencer;
 import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
@@ -61,6 +59,11 @@ public class BreakfastPage extends LinearLayout {
 
     for (String name : recordedBookmark.split("/"))
       expandableListView.expandGroup(RestaurantSequencer.getInstance().currentSequence.indexOf(name));
+  }
+
+  public void collapseAllGroup() {
+    for(int i = 0; i < RestaurantSequencer.getInstance().currentSequence.size(); i++)
+      expandableListView.collapseGroup(i);
   }
 
   public void collapseItems(int groupPosition) {

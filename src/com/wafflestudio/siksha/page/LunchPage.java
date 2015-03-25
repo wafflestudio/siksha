@@ -63,6 +63,11 @@ public class LunchPage extends LinearLayout {
       expandableListView.expandGroup(RestaurantSequencer.getInstance().currentSequence.indexOf(name));
   }
 
+  public void collapseAllGroup() {
+    for(int i = 0; i < RestaurantSequencer.getInstance().currentSequence.size(); i++)
+      expandableListView.collapseGroup(i);
+  }
+
   public void collapseItems(int groupPosition) {
     RestaurantSequencer restaurantSequencer = RestaurantSequencer.getInstance();
     String recordedBookmark = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_BOOKMARK);

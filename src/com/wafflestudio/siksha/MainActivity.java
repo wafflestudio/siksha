@@ -13,10 +13,6 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.wafflestudio.siksha.dialog.TutorialDialog;
-import com.wafflestudio.siksha.page.BreakfastPage;
-import com.wafflestudio.siksha.page.DinnerPage;
-import com.wafflestudio.siksha.page.LunchPage;
 import com.wafflestudio.siksha.service.DownloadingJsonReceiver;
 import com.wafflestudio.siksha.util.AlarmUtil;
 import com.wafflestudio.siksha.util.CalendarUtil;
@@ -25,7 +21,6 @@ import com.wafflestudio.siksha.util.LoadingMenuFromJson;
 import com.wafflestudio.siksha.util.NetworkUtil;
 import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 import com.wafflestudio.siksha.util.RestaurantSequencer;
-import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
 public class MainActivity extends Activity implements ViewPager.OnPageChangeListener, View.OnClickListener {
   private RelativeLayout topBar;
@@ -48,38 +43,27 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     RestaurantInfoUtil.getInstance().initialize(this);
     RestaurantSequencer.getInstance().initialize(this);
 
-    checkTutorial();
     setLayout();
+
+    Log.d("onCreate", "onCreate");
   }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    MenuItem item = menu.add("만든 사람들");
-    item.setIcon(R.drawable.ic_action_person);
+    getMenuInflater().inflate(R.menu.hide_menu, menu);
 
     return super.onCreateOptionsMenu(menu);
   }
 
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
-      case 0:
+      case R.id.maker_menu:
         Intent intent = new Intent(this, MakerActivity.class);
         startActivity(intent);
-        return true;
+        break;
     }
-    return false;
-  }
 
-  private void checkTutorial() {
-    boolean isTutorialDone = SharedPreferenceUtil.loadValueOfBoolean(this, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_TUTORIAL);
-
-    if (!isTutorialDone) {
-      TutorialDialog tutorialDialog = new TutorialDialog(this, "yes");
-      tutorialDialog.setCancelable(false);
-      tutorialDialog.startShowing();
-
-      SharedPreferenceUtil.save(this, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_TUTORIAL, true);
-    }
+    return true;
   }
 
   private void setLayout() {
@@ -89,13 +73,6 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     bookmarkButton = (ImageButton) findViewById(R.id.bookmark_button);
     bookmarkButton.setOnClickListener(this);
 
-    if (RestaurantSequencer.getInstance().isBookmarkMode()) {
-      bookmarkButton.setImageResource(R.drawable.ic_action_accept);
-    }
-    else {
-      bookmarkButton.setImageResource(R.drawable.ic_action_star);
-    }
-
     viewPager = (ViewPager) findViewById(R.id.view_pager);
     viewPager.setOffscreenPageLimit(2);
     viewPager.setOnPageChangeListener(this);
@@ -103,7 +80,9 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     title.setTypeface(FontUtil.fontAPAritaDotumMedium);
     appName.setTypeface(FontUtil.fontAPAritaDotumMedium);
 
+    RestaurantSequencer.getInstance().setViewPager(viewPager);
     setTopBarBackgroundColor(getPageIndexOnHour());
+    setBookmarkButtonImage();
 
     downloadingJsonReceiver = new DownloadingJsonReceiver();
     new LoadingMenuFromJson(this, downloadingJsonReceiver, viewPager).initSetting();
@@ -128,17 +107,6 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
   }
 
   @Override
-  public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
-
-  @Override
-  public void onPageSelected(int position) {
-    setTopBarBackgroundColor(position);
-  }
-
-  @Override
-  public void onPageScrollStateChanged(int state) { }
-
-  @Override
   public void onClick(View v) {
     int id = v.getId();
 
@@ -147,54 +115,33 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
         RestaurantSequencer restaurantSequencer = RestaurantSequencer.getInstance();
 
         if (!restaurantSequencer.isBookmarkMode()) {
-          bookmarkButton.setImageResource(R.drawable.ic_action_accept);
           restaurantSequencer.setBookmarkMode(true);
+          bookmarkButton.setImageResource(R.drawable.ic_action_accept);
 
-          notifyImageChangeToPages();
+          restaurantSequencer.notifyChangeToAdapters(true);
+          restaurantSequencer.collapseAll();
         }
         else {
-          bookmarkButton.setImageResource(R.drawable.ic_action_star);
           restaurantSequencer.setBookmarkMode(false);
+          bookmarkButton.setImageResource(R.drawable.ic_action_star);
+
+          restaurantSequencer.setMenuListOnSequence();
           restaurantSequencer.recordRestaurantSequence(MainActivity.this);
           restaurantSequencer.recordBookmarkList(MainActivity.this);
-
-          notifyDataChangeToPages();
+          restaurantSequencer.notifyChangeToAdapters(true);
+          restaurantSequencer.expandBookmarkAll();
         }
 
         break;
     }
   }
 
-  private void notifyImageChangeToPages() {
-    BreakfastPage breakfastPage = (BreakfastPage) viewPager.findViewWithTag("page" + 0);
-    LunchPage lunchPage = (LunchPage) viewPager.findViewWithTag("page" + 1);
-    DinnerPage dinnerPage = (DinnerPage) viewPager.findViewWithTag("page" + 2);
-
-    breakfastPage.expandableListAdapter.notifyDataSetChanged();
-    lunchPage.expandableListAdapter.notifyDataSetChanged();
-    dinnerPage.expandableListAdapter.notifyDataSetChanged();
-  }
-
-  private void notifyDataChangeToPages() {
-    BreakfastPage breakfastPage = (BreakfastPage) viewPager.findViewWithTag("page" + 0);
-    LunchPage lunchPage = (LunchPage) viewPager.findViewWithTag("page" + 1);
-    DinnerPage dinnerPage = (DinnerPage) viewPager.findViewWithTag("page" + 2);
-
-    breakfastPage.expandableListAdapter.forms = RestaurantSequencer.getInstance().breakfastMenuList;
-    lunchPage.expandableListAdapter.forms = RestaurantSequencer.getInstance().lunchMenuList;
-    dinnerPage.expandableListAdapter.forms = RestaurantSequencer.getInstance().dinnerMenuList;
-
-    breakfastPage.expandableListAdapter.notifyDataSetChanged();
-    lunchPage.expandableListAdapter.notifyDataSetChanged();
-    dinnerPage.expandableListAdapter.notifyDataSetChanged();
-  }
-
   private int getPageIndexOnHour() {
-    int time = CalendarUtil.getCurrentHour();
+    int hour = CalendarUtil.getCurrentHour();
 
-    if (time >= 0 && time <= 9)
+    if (hour >= 0 && hour <= 9)
       return 0;
-    else if (time >= 10 && time <= 15)
+    else if (hour >= 10 && hour <= 15)
       return 1;
     else
       return 2;
@@ -214,6 +161,13 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     }
   }
 
+  private void setBookmarkButtonImage() {
+    if (RestaurantSequencer.getInstance().isBookmarkMode())
+      bookmarkButton.setImageResource(R.drawable.ic_action_accept);
+    else
+      bookmarkButton.setImageResource(R.drawable.ic_action_star);
+  }
+
   @Override
   protected void onPause() {
     unregisterReceiver();
@@ -225,4 +179,15 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     registerReceiver();
     super.onResume();
   }
+
+  @Override
+  public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
+
+  @Override
+  public void onPageSelected(int position) {
+    setTopBarBackgroundColor(position);
+  }
+
+  @Override
+  public void onPageScrollStateChanged(int state) { }
 }
