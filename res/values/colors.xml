@@ -11,8 +11,8 @@
     <color name="dialog_content_color">#f0edec</color>
 
     <color name="white">#ffffff</color>
-    <color name="white_trans">#88ffffff</color>
     <color name="black">#000000</color>
     <color name="light_gray">#10000000</color>
     <color name="transparent">#00ffffff</color>
+    <color name="translucent">#50ffffff</color>
 </resources>

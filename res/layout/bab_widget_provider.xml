@@ -4,12 +4,13 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/dateViewWidget"
+        android:id="@+id/date_view_widget"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textColor="@color/white"
         android:background="@drawable/rounded_widget_roof"
+        android:padding="10dp"
         android:gravity="center" />
 
     <ListView
@@ -19,24 +20,25 @@
         android:background="@drawable/rounded_widget"
         android:paddingLeft="4.5dp"
         android:paddingRight="4.5dp"
-        android:paddingBottom="4.5dp"/>
+        android:paddingBottom="4.5dp" />
 
     <TextView
         android:id="@+id/widget_empty_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/empty_string"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:gravity="center"
         android:background="@drawable/rounded_widget"
         android:textColor="@color/black"
         android:visibility="gone" />
+
     <TextView
         android:id="@+id/widget_download_fail_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/widget_download_fail_string"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:gravity="center"
         android:background="@drawable/rounded_widget"
         android:textColor="@color/black"

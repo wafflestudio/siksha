@@ -44,8 +44,6 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     RestaurantSequencer.getInstance().initialize(this);
 
     setLayout();
-
-    Log.d("onCreate", "onCreate");
   }
 
   @Override
