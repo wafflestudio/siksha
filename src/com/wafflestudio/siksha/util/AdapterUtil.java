@@ -10,7 +10,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.dialog.RestaurantInfoDialog;
@@ -29,10 +28,17 @@ public class AdapterUtil {
     private int pageIndex;
     public List<RestaurantClassifiedForm> forms;
 
+    private TextView restaurantNameView;
+    private ImageButton groupButton;
+
+    public boolean isInitialization;
+
     public ExpandableListAdapter(Context context, List<RestaurantClassifiedForm> forms, int pageIndex) {
       this.context = context;
       this.forms = forms;
       this.pageIndex = pageIndex;
+
+      this.isInitialization = true;
     }
 
     public int getGroupCount() {
@@ -68,24 +74,26 @@ public class AdapterUtil {
     }
 
     public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-      final String restaurantName = forms.get(groupPosition).restaurant;
+      final String name = forms.get(groupPosition).restaurant;
 
       if (convertView == null)
         convertView = LayoutInflater.from(context).inflate(R.layout.group_layout, parent, false);
 
-      TextView restaurantNameView = (TextView) convertView.findViewById(R.id.restaurant_name);
-      final ImageButton groupBtn = (ImageButton) convertView.findViewById(R.id.group_button);
+      restaurantNameView = (TextView) convertView.findViewById(R.id.restaurant_name);
+      groupButton = (ImageButton) convertView.findViewById(R.id.group_button);
 
       restaurantNameView.setTypeface(FontUtil.fontAPAritaDotumSemiBold);
-      restaurantNameView.setText(restaurantName);
+      restaurantNameView.setText(name);
 
-      setGroupButtonImage(groupBtn, restaurantName);
+      if (isInitialization)
+        setGroupButtonImage(name);
+      else
+        modifyGroupButtonImage(name);
 
-      groupBtn.setFocusable(false);
-      groupBtn.setOnClickListener(new View.OnClickListener() {
+      groupButton.setFocusable(false);
+      groupButton.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-          RestaurantInfoUtil restaurantInfoUtil = RestaurantInfoUtil.getInstance();
           RestaurantSequencer restaurantSequencer = RestaurantSequencer.getInstance();
 
           if (!restaurantSequencer.isBookmarkMode()) {
@@ -94,16 +102,15 @@ public class AdapterUtil {
             dialog.show();
           }
           else {
-            if (!restaurantSequencer.isBookMarked(restaurantName))
-              restaurantSequencer.setBookmark(restaurantName, true);
+            if (!restaurantSequencer.isBookMarked(name))
+              restaurantSequencer.setBookmark(name, true);
             else
-              restaurantSequencer.setBookmark(restaurantName, false);
+              restaurantSequencer.setBookmark(name, false);
 
-            restaurantSequencer.modifySequence(restaurantName);
-            restaurantSequencer.setMenuList(restaurantInfoUtil.breakfastMenuMap, restaurantInfoUtil.lunchMenuMap, restaurantInfoUtil.dinnerMenuMap);
-
-            updateForms();
-            notifyDataSetChanged();
+            restaurantSequencer.collapseAll();
+            restaurantSequencer.modifySequence(name);
+            restaurantSequencer.setMenuListOnSequence();
+            restaurantSequencer.notifyChangeToAdapters(false);
           }
         }
       });
@@ -123,87 +130,50 @@ public class AdapterUtil {
 
       name.setTypeface(FontUtil.fontAPAritaDotumMedium);
 
-      switch (pageIndex) {
-        case 0:
-          price.setBackgroundResource(R.drawable.breakfast_price_style);
-          break;
-        case 1:
-          price.setBackgroundResource(R.drawable.lunch_price_style);
-          break;
-        case 2:
-          price.setBackgroundResource(R.drawable.dinner_price_style);
-          break;
-      }
-
       price.setText(menu.price);
       name.setText(menu.name);
+
+      if (pageIndex == 0)
+        price.setBackgroundResource(R.drawable.breakfast_price_style);
+      else if (pageIndex == 1)
+        price.setBackgroundResource(R.drawable.lunch_price_style);
+      else
+        price.setBackgroundResource(R.drawable.dinner_price_style);
 
       return convertView;
     }
 
-    private void updateForms() {
-      switch (pageIndex) {
-        case 0 :
-          forms = RestaurantSequencer.getInstance().breakfastMenuList;
-          break;
-        case 1 :
-          forms = RestaurantSequencer.getInstance().lunchMenuList;
-          break;
-        case 2 :
-          forms = RestaurantSequencer.getInstance().dinnerMenuList;
-          break;
+    private void setGroupButtonImage(String name) {
+      if (!RestaurantSequencer.getInstance().isBookmarkMode()) {
+        if (pageIndex == 0)
+          groupButton.setImageResource(R.drawable.ic_action_info_breakfast);
+        else if (pageIndex == 1)
+          groupButton.setImageResource(R.drawable.ic_action_info_lunch);
+        else
+          groupButton.setImageResource(R.drawable.ic_action_info_dinner);
       }
-    }
-
-    private void setGroupButtonImage(ImageButton groupBtn, String name) {
-      RestaurantSequencer restaurantSequencer = RestaurantSequencer.getInstance();
-
-      if (restaurantSequencer.isBookmarkMode()) {
+      else {
         String recordedBookmark = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_BOOKMARK);
 
-        if (recordedBookmark.equals("")) {
-          if (restaurantSequencer.isBookMarked(name)) {
-            groupBtn.setImageResource(R.drawable.ic_action_star_brighted);
-            return;
-          }
-          groupBtn.setImageResource(R.drawable.ic_action_star);
-        }
+        if (recordedBookmark.equals(""))
+          groupButton.setImageResource(R.drawable.ic_action_star);
         else {
           List<String> bookmarkList = new ArrayList<String>();
           Collections.addAll(bookmarkList, recordedBookmark.split("/"));
 
-          for(int i = 0; i < bookmarkList.size(); i++)
-            restaurantSequencer.setBookmark(bookmarkList.get(i), true);
+          if (bookmarkList.contains(name))
+            groupButton.setImageResource(R.drawable.ic_action_star_brighted);
+          else
+            modifyGroupButtonImage(name);
+        }
+      }
+    }
 
-          if (bookmarkList.contains(name)) {
-            if (!restaurantSequencer.isBookMarked(name)) {
-              groupBtn.setImageResource(R.drawable.ic_action_star);
-              return;
-            }
-            groupBtn.setImageResource(R.drawable.ic_action_star_brighted);
-          }
-          else {
-            if (restaurantSequencer.isBookMarked(name)) {
-              groupBtn.setImageResource(R.drawable.ic_action_star_brighted);
-              return;
-            }
-            groupBtn.setImageResource(R.drawable.ic_action_star);
-          }
-        }
-      }
-      else {
-        switch (pageIndex) {
-          case 0 :
-            groupBtn.setImageResource(R.drawable.ic_action_info_breakfast);
-            break;
-          case 1 :
-            groupBtn.setImageResource(R.drawable.ic_action_info_lunch);
-            break;
-          case 2 :
-            groupBtn.setImageResource(R.drawable.ic_action_info_dinner);
-            break;
-        }
-      }
+    private void modifyGroupButtonImage(String name) {
+      if (RestaurantSequencer.getInstance().isBookMarked(name))
+        groupButton.setImageResource(R.drawable.ic_action_star_brighted);
+      else
+        groupButton.setImageResource(R.drawable.ic_action_star);
     }
   }
 

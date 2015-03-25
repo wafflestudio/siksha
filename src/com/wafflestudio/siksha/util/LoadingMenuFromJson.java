@@ -8,16 +8,11 @@ import android.util.Log;
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.dialog.DownloadingRetryDialog;
 import com.wafflestudio.siksha.dialog.ProgressDialog;
-import com.wafflestudio.siksha.page.BreakfastPage;
-import com.wafflestudio.siksha.page.DinnerPage;
-import com.wafflestudio.siksha.page.LunchPage;
 import com.wafflestudio.siksha.service.DownloadingJson;
 import com.wafflestudio.siksha.service.DownloadingJsonReceiver;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class LoadingMenuFromJson {
   private Context context;
@@ -39,11 +34,8 @@ public class LoadingMenuFromJson {
       Log.d("is_json_updated", "true");
 
       forms = new ParsingJson(context).getParsedForms();
-
-      RestaurantInfoUtil restaurantInfoUtil = RestaurantInfoUtil.getInstance();
-      RestaurantSequencer restaurantSequencer = RestaurantSequencer.getInstance();
-      restaurantInfoUtil.setMenuMap(forms);
-      restaurantSequencer.setMenuList(restaurantInfoUtil.breakfastMenuMap, restaurantInfoUtil.lunchMenuMap, restaurantInfoUtil.dinnerMenuMap);
+      RestaurantInfoUtil.getInstance().setMenuMap(forms);
+      RestaurantSequencer.getInstance().setMenuListOnSequence();
 
       setAdapters();
       setInitialPage();
@@ -74,10 +66,8 @@ public class LoadingMenuFromJson {
       @Override
       public void onComplete() {
         forms = new ParsingJson(context).getParsedForms();
-
-        RestaurantInfoUtil restaurantInfoUtil = RestaurantInfoUtil.getInstance();
-        restaurantInfoUtil.setMenuMap(forms);
-        RestaurantSequencer.getInstance().setMenuList(restaurantInfoUtil.breakfastMenuMap, restaurantInfoUtil.lunchMenuMap, restaurantInfoUtil.dinnerMenuMap);
+        RestaurantInfoUtil.getInstance().setMenuMap(forms);
+        RestaurantSequencer.getInstance().setMenuListOnSequence();
 
         setAdapters();
         setInitialPage();
@@ -106,11 +96,11 @@ public class LoadingMenuFromJson {
   }
 
   private void setInitialPage() {
-    int time = CalendarUtil.getCurrentHour();
+    int hour = CalendarUtil.getCurrentHour();
 
-    if (time >= 0 && time <= 9)
+    if (hour >= 0 && hour <= 9)
       viewPager.setCurrentItem(0);
-    else if (time >= 10 && time <= 15)
+    else if (hour >= 10 && hour <= 15)
       viewPager.setCurrentItem(1);
     else
       viewPager.setCurrentItem(2);
