@@ -14,7 +14,7 @@ import com.wafflestudio.siksha.service.DownloadingJsonReceiver;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoadingMenuFromJson {
+public class InitialLoadingMenu {
   private Context context;
   private DownloadingJsonReceiver downloadingJsonReceiver;
 
@@ -23,7 +23,7 @@ public class LoadingMenuFromJson {
 
   public RestaurantCrawlingForm[] forms;
 
-  public LoadingMenuFromJson(Context context, DownloadingJsonReceiver downloadingJsonReceiver, ViewPager viewPager) {
+  public InitialLoadingMenu(Context context, DownloadingJsonReceiver downloadingJsonReceiver, ViewPager viewPager) {
     this.context = context;
     this.downloadingJsonReceiver = downloadingJsonReceiver;
     this.viewPager = viewPager;
@@ -78,7 +78,7 @@ public class LoadingMenuFromJson {
 
       @Override
       public void onFail() {
-        new DownloadingRetryDialog(context, LoadingMenuFromJson.this).show();
+        new DownloadingRetryDialog(context, InitialLoadingMenu.this).show();
       }
     });
   }

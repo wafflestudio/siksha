@@ -17,7 +17,7 @@ import com.wafflestudio.siksha.service.DownloadingJsonReceiver;
 import com.wafflestudio.siksha.util.AlarmUtil;
 import com.wafflestudio.siksha.util.CalendarUtil;
 import com.wafflestudio.siksha.util.FontUtil;
-import com.wafflestudio.siksha.util.LoadingMenuFromJson;
+import com.wafflestudio.siksha.util.InitialLoadingMenu;
 import com.wafflestudio.siksha.util.NetworkUtil;
 import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 import com.wafflestudio.siksha.util.RestaurantSequencer;
@@ -83,7 +83,7 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     setBookmarkButtonImage();
 
     downloadingJsonReceiver = new DownloadingJsonReceiver();
-    new LoadingMenuFromJson(this, downloadingJsonReceiver, viewPager).initSetting();
+    new InitialLoadingMenu(this, downloadingJsonReceiver, viewPager).initSetting();
   }
 
   private void registerReceiver() {

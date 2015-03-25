@@ -18,7 +18,8 @@
             android:layout_gravity="center"
             android:scaleX="0.75"
             android:scaleY="0.75"
-            android:src="@drawable/spinner_76_inner_holo" />
+            android:src="@drawable/ic_action_refresh_lunch"
+            android:layout_margin="10dp" />
 
         <TextView
             android:id="@+id/progress_dialog_title"
