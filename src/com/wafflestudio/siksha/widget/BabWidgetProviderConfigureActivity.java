@@ -35,9 +35,9 @@ public class BabWidgetProviderConfigureActivity extends Activity {
         setContentView(R.layout.bab_widget_provider_configure);
         setResult(RESULT_CANCELED);
         FontUtil.getInstance().setFontAsset(this);
-        TextView title = (TextView) findViewById(R.id.configactivity_main_title);
+        TextView title = (TextView) findViewById(R.id.config_activity_main_title);
         title.setTypeface(FontUtil.fontAPAritaDotumMedium);
-        TextView appName = (TextView) findViewById(R.id.configactivity_main_app_name);
+        TextView appName = (TextView) findViewById(R.id.config_activity_main_app_name);
         appName.setTypeface(FontUtil.fontAPAritaDotumMedium);
 
         restaurants = this.getResources().getStringArray(R.array.restaurants);

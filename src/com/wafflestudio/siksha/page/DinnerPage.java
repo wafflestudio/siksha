@@ -39,7 +39,7 @@ public class DinnerPage extends LinearLayout {
 
     indicator = (TextView) findViewById(R.id.dinner_indicator);
     indicator.setTypeface(FontUtil.fontAPAritaDotumMedium);
-    indicator.setText(CalendarUtil.getCurrentDate() + " " + context.getString(R.string.dinner));
+    indicator.setText(CalendarUtil.getCurrentDate().substring(5) + " " + context.getString(R.string.dinner));
 
     expandableListView = (ExpandableListView) findViewById(R.id.dinner_expandable_list_view);
     expandableListView.setAdapter(expandableListAdapter);

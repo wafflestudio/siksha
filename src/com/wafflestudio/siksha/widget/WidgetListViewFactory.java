@@ -72,35 +72,35 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
 
         Log.d("getViewAt", Integer.toString(position));
 
-        remoteView.setTextViewText(R.id.restaurantViewWidget, item.restaurant);
-        remoteView.removeAllViews(R.id.menuListWidget);
+        remoteView.setTextViewText(R.id.restaurant_view_widget, item.restaurant);
+        remoteView.removeAllViews(R.id.menu_list_widget);
         boolean isEmpty = true;
         remoteView.setViewVisibility(R.id.widget_restaurant_empty_view, View.GONE);
         for (int i = 0; i < item.menus.length; i++) {
             if (hour >= 0 && hour <= 9) {
                 if (item.menus[i].time.equals("breakfast")) {
                     RemoteViews child = new RemoteViews(context.getPackageName(), R.layout.bab_widget_menu_list_row);
-                    child.setTextViewText(R.id.menuPriceWidget, item.menus[i].price);
-                    child.setTextViewText(R.id.menuNameWidget, item.menus[i].name);
-                    remoteView.addView(R.id.menuListWidget, child);
+                    child.setTextViewText(R.id.menu_price_widget, item.menus[i].price);
+                    child.setTextViewText(R.id.menu_name_widget, item.menus[i].name);
+                    remoteView.addView(R.id.menu_list_widget, child);
                     isEmpty = false;
                 }
             }
             else if (hour >= 10 && hour <= 15) {
                 if (item.menus[i].time.equals("lunch")) {
                     RemoteViews child = new RemoteViews(context.getPackageName(), R.layout.bab_widget_menu_list_row);
-                    child.setTextViewText(R.id.menuPriceWidget, item.menus[i].price);
-                    child.setTextViewText(R.id.menuNameWidget, item.menus[i].name);
-                    remoteView.addView(R.id.menuListWidget, child);
+                    child.setTextViewText(R.id.menu_price_widget, item.menus[i].price);
+                    child.setTextViewText(R.id.menu_name_widget, item.menus[i].name);
+                    remoteView.addView(R.id.menu_list_widget, child);
                     isEmpty = false;
                 }
             }
             else {
                 if (item.menus[i].time.equals("dinner")) {
                     RemoteViews child = new RemoteViews(context.getPackageName(), R.layout.bab_widget_menu_list_row);
-                    child.setTextViewText(R.id.menuPriceWidget, item.menus[i].price);
-                    child.setTextViewText(R.id.menuNameWidget, item.menus[i].name);
-                    remoteView.addView(R.id.menuListWidget, child);
+                    child.setTextViewText(R.id.menu_price_widget, item.menus[i].price);
+                    child.setTextViewText(R.id.menu_name_widget, item.menus[i].name);
+                    remoteView.addView(R.id.menu_list_widget, child);
                     isEmpty = false;
                 }
             }

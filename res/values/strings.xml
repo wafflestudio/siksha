@@ -24,10 +24,6 @@
     <string name="shaidea">샤이디어</string>
 
     <!-- Widget -->
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="configure">Configure</string>
-    <string name="add_widget">Add widget</string>
-    <string name="cancle_widget">Cancle</string>
     <string name="empty_string">식단 정보가 없습니다.</string>
     <string name="widget_download_fail_string">식단 다운로드 실패! 데이터 네트워크 또는 Wi-Fi를 연결하고, 새로고침 해주세요.</string>
 	
