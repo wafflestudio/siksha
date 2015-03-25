@@ -5,6 +5,17 @@
     android:padding="3dp"
     android:background="@color/white" >
 
+    <TextView
+        android:id="@+id/no_menu_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/restaurant_no_menu"
+        android:textSize="15sp"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        android:gravity="center" />
+
    	<LinearLayout
    	    android:id="@+id/menu_layout"
         android:layout_width="match_parent"
