@@ -77,6 +77,10 @@ public class RestaurantInfoUtil {
       lunchMenuForm.menus = lunchMenus;
       dinnerMenuForm.menus = dinnerMenus;
 
+      breakfastMenuForm.isEmpty = breakfastMenus.size() == 0;
+      lunchMenuForm.isEmpty = lunchMenus.size() == 0;
+      dinnerMenuForm.isEmpty = dinnerMenus.size() == 0;
+
       breakfastMenuMap.put(breakfastMenuForm.restaurant, breakfastMenuForm);
       lunchMenuMap.put(lunchMenuForm.restaurant, lunchMenuForm);
       dinnerMenuMap.put(dinnerMenuForm.restaurant, dinnerMenuForm);

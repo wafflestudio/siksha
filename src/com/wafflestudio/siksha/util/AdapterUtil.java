@@ -54,7 +54,10 @@ public class AdapterUtil {
     }
 
     public int getChildrenCount(int groupPosition) {
-      return forms.get(groupPosition).menus.size();
+      if (forms.get(groupPosition).isEmpty)
+        return 1;
+      else
+        return forms.get(groupPosition).menus.size();
     }
 
     public long getChildId(int groupPosition, int childPosition) {
@@ -119,26 +122,37 @@ public class AdapterUtil {
     }
 
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-      final RestaurantCrawlingForm.MenuInfo menu = forms.get(groupPosition).menus.get(childPosition);
-
       if (convertView == null)
         convertView = LayoutInflater.from(context).inflate(R.layout.child_layout, parent, false);
 
+      TextView noMenuLayout = (TextView) convertView.findViewById(R.id.no_menu_view);
       LinearLayout menuLayout = (LinearLayout) convertView.findViewById(R.id.menu_layout);
       TextView price = (TextView) menuLayout.findViewById(R.id.menu_price);
       TextView name = (TextView) menuLayout.findViewById(R.id.menu_name);
 
-      name.setTypeface(FontUtil.fontAPAritaDotumMedium);
+      if (!forms.get(groupPosition).isEmpty) {
+        name.setTypeface(FontUtil.fontAPAritaDotumMedium);
 
-      price.setText(menu.price);
-      name.setText(menu.name);
+        RestaurantCrawlingForm.MenuInfo menu = forms.get(groupPosition).menus.get(childPosition);
+        price.setText(menu.price);
+        name.setText(menu.name);
 
-      if (pageIndex == 0)
-        price.setBackgroundResource(R.drawable.breakfast_price_style);
-      else if (pageIndex == 1)
-        price.setBackgroundResource(R.drawable.lunch_price_style);
-      else
-        price.setBackgroundResource(R.drawable.dinner_price_style);
+        if (pageIndex == 0)
+          price.setBackgroundResource(R.drawable.breakfast_price_style);
+        else if (pageIndex == 1)
+          price.setBackgroundResource(R.drawable.lunch_price_style);
+        else
+          price.setBackgroundResource(R.drawable.dinner_price_style);
+
+        noMenuLayout.setVisibility(View.GONE);
+        menuLayout.setVisibility(View.VISIBLE);
+      }
+      else {
+        noMenuLayout.setTypeface(FontUtil.fontAPAritaDotumMedium);
+
+        noMenuLayout.setVisibility(View.VISIBLE);
+        menuLayout.setVisibility(View.GONE);
+      }
 
       return convertView;
     }
