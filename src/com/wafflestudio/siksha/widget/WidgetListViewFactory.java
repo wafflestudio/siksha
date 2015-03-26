@@ -2,7 +2,6 @@ package com.wafflestudio.siksha.widget;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -11,7 +10,6 @@ import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.CalendarUtil;
 import com.wafflestudio.siksha.util.ParsingJson;
 import com.wafflestudio.siksha.util.RestaurantCrawlingForm;
-import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
 import java.util.ArrayList;
@@ -124,7 +122,6 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
 
     @Override
     public void onDataSetChanged() {
-        Log.d("WidgetListViewFactory", "onDataSetChanged");
         hour = CalendarUtil.getCurrentHour();
         RestaurantCrawlingForm[] forms = new ParsingJson(context).getParsedForms();
         if (forms != null) {
