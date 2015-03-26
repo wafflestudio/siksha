@@ -12,8 +12,8 @@
     <string name="downloading_retry">다시 하기</string>
     <string name="downloading_cancel">취소</string>
 
-    <string name="notify_widget_dialog_title">\'식샤\' 위젯을 아시나요?</string>
-    <string name="notify_widget_dialog_message">홈 화면에서 \'식샤\' 위젯을 추가하시면, 식단 정보를 더욱 간편하게 볼 수 있습니다.</string>
+    <string name="notify_widget_dialog_title">식샤 위젯을 아시나요?</string>
+    <string name="notify_widget_dialog_message">홈 화면에 식샤 위젯을 추가하시면\n 식단 정보를 더욱 간편하게\n 보실 수 있습니다.</string>
     <string name="notify_widget_dialog_close">닫기</string>
 
 	<string name="restaurant_no_menu">메뉴가 없습니다.</string>
