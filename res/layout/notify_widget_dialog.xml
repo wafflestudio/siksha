@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:background="@color/white" >
+
+    <TextView
+        android:id="@+id/notify_widget_dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:padding="15dp"
+        android:gravity="center_horizontal"
+        android:text="@string/notify_widget_dialog_title" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/main_color_lunch" />
+
+    <TextView
+        android:id="@+id/notify_widget_dialog_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:padding="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/notify_widget_dialog_message" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/main_color_lunch" />
+
+    <Button
+        android:id="@+id/notify_widget_dialog_close_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_button_pressed"
+        android:text="@string/notify_widget_dialog_close" />
+
+</LinearLayout>

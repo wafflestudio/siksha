@@ -43,6 +43,8 @@ public class RestaurantSequencer {
     currentSequence = new ArrayList<String>();
     bookmarkFlagMap = new HashMap<String, Boolean>();
 
+    setBookmarkMode(false);
+
     String recordedSequence = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_SEQUENCE);
     String recordedBookmark = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_BOOKMARK);
     RestaurantInfoUtil restaurantInfoUtil = RestaurantInfoUtil.getInstance();
