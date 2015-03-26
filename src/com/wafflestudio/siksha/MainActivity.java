@@ -45,7 +45,6 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     RestaurantInfoUtil.getInstance().initialize(this);
     RestaurantSequencer.getInstance().initialize(this);
 
-    notifyWidget();
     setLayout();
   }
 
@@ -167,15 +166,6 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
       bookmarkButton.setImageResource(R.drawable.ic_action_accept);
     else
       bookmarkButton.setImageResource(R.drawable.ic_action_star);
-  }
-
-  private void notifyWidget() {
-    boolean isNoticed = SharedPreferenceUtil.loadValueOfBoolean(this, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_NOTIFY_WIDGET);
-
-    if (!isNoticed) {
-      new NotifyWidgetDialog(this).show();
-      SharedPreferenceUtil.save(this, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_NOTIFY_WIDGET, true);
-    }
   }
 
   @Override

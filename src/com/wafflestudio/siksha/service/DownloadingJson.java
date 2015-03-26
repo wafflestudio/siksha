@@ -32,11 +32,17 @@ public class DownloadingJson extends IntentService {
     return recordedDate.equals(CalendarUtil.getCurrentDate());
   }
 
-  public String fetchJsonFromServer() {
+  public String fetchJsonFromServer(String action) {
     StringBuilder stringBuilder = new StringBuilder();
 
     try {
-      URL url = new URL(SERVER_URL);
+      URL url;
+
+      if (action.equals(DownloadingJsonReceiver.ACTION_CURRENT_DOWNLOAD))
+        url = new URL(SERVER_URL);
+      else
+        url = new URL(SERVER_URL + "?alarm=true");
+
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
       connection.setConnectTimeout(10 * 1000);
       connection.setReadTimeout(10 * 1000);
@@ -60,12 +66,10 @@ public class DownloadingJson extends IntentService {
       }
     }
     catch (MalformedURLException e) {
-      Log.d("connection", "MalformedURLException");
       e.printStackTrace();
       return null;
     }
     catch (IOException e) {
-      Log.d("connection", "IOException");
       e.printStackTrace();
       return null;
     }
@@ -118,9 +122,9 @@ public class DownloadingJson extends IntentService {
 
   @Override
   protected void onHandleIntent(Intent intent) {
-    final boolean isSuccess = writeJsonOnInternalStorage(fetchJsonFromServer());
-    final boolean fromWidget = intent.getBooleanExtra("from_widget_user", false);
     final String action = intent.getAction();
+    final boolean isSuccess = writeJsonOnInternalStorage(fetchJsonFromServer(action));
+    final boolean fromWidget = intent.getBooleanExtra("from_widget_user", false);
     Log.d("onHandleIntent", "isSuccess : " + isSuccess + " / " + "action : " + action);
 
     if (isSuccess)

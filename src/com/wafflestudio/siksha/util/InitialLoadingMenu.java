@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.dialog.DownloadingRetryDialog;
+import com.wafflestudio.siksha.dialog.NotifyWidgetDialog;
 import com.wafflestudio.siksha.dialog.ProgressDialog;
 import com.wafflestudio.siksha.service.DownloadingJson;
 import com.wafflestudio.siksha.service.DownloadingJsonReceiver;
@@ -39,6 +40,8 @@ public class InitialLoadingMenu {
 
       setAdapters();
       setInitialPage();
+
+      notifyWidget();
     }
     else {
       Log.d("is_json_updated", "false");
@@ -72,6 +75,8 @@ public class InitialLoadingMenu {
         setAdapters();
         setInitialPage();
 
+        notifyWidget();
+
         if (progressDialog != null && progressDialog.isShowing())
           progressDialog.quitShowing();
       }
@@ -100,9 +105,18 @@ public class InitialLoadingMenu {
 
     if (hour >= 0 && hour <= 9)
       viewPager.setCurrentItem(0);
-    else if (hour >= 10 && hour <= 15)
+    else if (hour >= 10 && hour <= 14)
       viewPager.setCurrentItem(1);
     else
       viewPager.setCurrentItem(2);
+  }
+
+  private void notifyWidget() {
+    boolean isNoticed = SharedPreferenceUtil.loadValueOfBoolean(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_NOTIFY_WIDGET);
+
+    if (!isNoticed) {
+      new NotifyWidgetDialog(context).show();
+      SharedPreferenceUtil.save(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_NOTIFY_WIDGET, true);
+    }
   }
 }
