@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.wafflestudio.siksha.dialog.NotifyWidgetDialog;
 import com.wafflestudio.siksha.service.DownloadingJsonReceiver;
 import com.wafflestudio.siksha.util.AlarmUtil;
 import com.wafflestudio.siksha.util.CalendarUtil;
@@ -21,6 +22,7 @@ import com.wafflestudio.siksha.util.InitialLoadingMenu;
 import com.wafflestudio.siksha.util.NetworkUtil;
 import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 import com.wafflestudio.siksha.util.RestaurantSequencer;
+import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
 public class MainActivity extends Activity implements ViewPager.OnPageChangeListener, View.OnClickListener {
   private RelativeLayout topBar;
@@ -43,6 +45,7 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     RestaurantInfoUtil.getInstance().initialize(this);
     RestaurantSequencer.getInstance().initialize(this);
 
+    notifyWidget();
     setLayout();
   }
 
@@ -164,6 +167,15 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
       bookmarkButton.setImageResource(R.drawable.ic_action_accept);
     else
       bookmarkButton.setImageResource(R.drawable.ic_action_star);
+  }
+
+  private void notifyWidget() {
+    boolean isNoticed = SharedPreferenceUtil.loadValueOfBoolean(this, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_NOTIFY_WIDGET);
+
+    if (!isNoticed) {
+      new NotifyWidgetDialog(this).show();
+      SharedPreferenceUtil.save(this, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_NOTIFY_WIDGET, true);
+    }
   }
 
   @Override
