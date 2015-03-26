@@ -90,15 +90,13 @@ public class BabWidgetProviderConfigureActivity extends Activity {
             this.isChecked = new boolean[restaurants.length];
         }
 
-        public String getChecked() {
-            String result = "";
+        public Set<String> getChecked() {
+            Set<String> restaurantSet = new HashSet<String>();
             for (int i = 0; i < isChecked.length; i++) {
                 if (isChecked[i])
-                    result += "1";
-                else
-                    result += "0";
+                    restaurantSet.add(restaurants[i]);
             }
-            return result;
+            return restaurantSet;
         }
 
         @Override
@@ -150,14 +148,7 @@ public class BabWidgetProviderConfigureActivity extends Activity {
     }
 
     private void startWidget() {
-        Intent intent = new Intent();
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        setResult(RESULT_OK, intent);
-
-        intent.setAction(BabWidgetProvider.CONFIGURATION_FINISHED);
-        sendBroadcast(intent);
-
-        finish();
+        new WidgetBreakfastCheckDialog(this, appWidgetId).show();
     }
 
     static void addWidgetId(Context context, int appWidgetId) {
@@ -202,17 +193,16 @@ public class BabWidgetProviderConfigureActivity extends Activity {
         SharedPreferenceUtil.save(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_WIDGET_ID, idSet);
     }
 
-    static void saveTitlePref(Context context, int appWidgetId, String text) {
+    static void saveTitlePref(Context context, int appWidgetId, Set<String> text) {
         SharedPreferenceUtil.save(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_PREFIX_KEY + appWidgetId, text);
     }
 
-    static String loadTitlePref(Context context, int appWidgetId) {
-        String titleValue = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_PREFIX_KEY + appWidgetId);
-
-        if (!titleValue.equals(""))
-            return titleValue;
-        else
-            return "1";
+    static Set<String> loadTitlePref(Context context, int appWidgetId) {
+        Set<String> titleValue = SharedPreferenceUtil.loadValueOfStringSet(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_PREFIX_KEY + appWidgetId);
+        if (titleValue == null) {
+            titleValue = new HashSet<String>();
+        }
+        return titleValue;
     }
 
     static void deleteTitlePref(Context context, int appWidgetId) {

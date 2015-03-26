@@ -69,9 +69,13 @@ public class BabWidgetProvider extends AppWidgetProvider {
         int hour = CalendarUtil.getCurrentHour();
         String time;
 
-        if (hour >= 0 && hour <= 9)
-            time = "아침";
-        else if (hour >= 10 && hour <= 15)
+        if (hour >= 0 && hour <= 9) {
+            if (SharedPreferenceUtil.loadValueOfBoolean(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_PREFIX_BREAKFAST_KEY + appWidgetId))
+                time = "아침";
+            else
+                time = "점심";
+        }
+        else if (hour >= 10 && hour <= 14)
             time = "점심";
         else
             time = "저녁";
