@@ -83,7 +83,7 @@ public class RestaurantSequencer {
         }
       });
 
-      for(int i = 0; i < currentSequence.size(); i++) {
+      for(int i = currentSequence.size() - 1; i >= 0; i--) {
         if (isBookMarked(currentSequence.get(i)))
           arrangedList.add(0, currentSequence.get(i));
       }
