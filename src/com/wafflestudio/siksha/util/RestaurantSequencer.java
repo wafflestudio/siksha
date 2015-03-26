@@ -13,6 +13,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 public class RestaurantSequencer {
   public static RestaurantSequencer restaurantSequencer;
@@ -78,10 +79,7 @@ public class RestaurantSequencer {
       Collections.sort(arrangedList, new Comparator<String>() {
         @Override
         public int compare(String lhs, String rhs) {
-          int originalIndexOfLhs = originalSequence.indexOf(lhs);
-          int originalIndexOfRhs = originalSequence.indexOf(rhs);
-
-          return (originalIndexOfLhs > originalIndexOfRhs) ? 1 : -1;
+          return originalSequence.indexOf(lhs) > originalSequence.indexOf(rhs) ? 1 : -1;
         }
       });
 
@@ -93,8 +91,19 @@ public class RestaurantSequencer {
       currentSequence = arrangedList;
     }
     else {
-      currentSequence.remove(name);
-      currentSequence.add(0, name);
+      List<String> arrangedList = new ArrayList<String>();
+
+      for(int i = 0; i < currentSequence.size(); i++) {
+        if (isBookMarked(currentSequence.get(i)))
+          arrangedList.add(currentSequence.get(i));
+      }
+
+      for(int i = 0; i < currentSequence.size(); i++) {
+        if (!isBookMarked(currentSequence.get(i)))
+          arrangedList.add(currentSequence.get(i));
+      }
+
+      currentSequence = arrangedList;
     }
   }
 
