@@ -142,7 +142,7 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
 
     if (hour >= 0 && hour <= 9)
       return 0;
-    else if (hour >= 10 && hour <= 15)
+    else if (hour >= 10 && hour <= 14)
       return 1;
     else
       return 2;
