@@ -12,6 +12,10 @@
     <string name="downloading_retry">다시 하기</string>
     <string name="downloading_cancel">취소</string>
 
+    <string name="notify_widget_dialog_title">\'식샤\' 위젯을 아시나요?</string>
+    <string name="notify_widget_dialog_message">홈 화면에서 \'식샤\' 위젯을 추가하시면, 식단 정보를 더욱 간편하게 볼 수 있습니다.</string>
+    <string name="notify_widget_dialog_close">닫기</string>
+
 	<string name="restaurant_no_menu">메뉴가 없습니다.</string>
     <string name="downloading_message">식단을 다운로드하고 있습니다...</string>
 
@@ -24,10 +28,10 @@
     <string name="shaidea">샤이디어</string>
 
     <!-- Widget -->
-    <string name="breakfastcheck_dialog_title">위젯 아침 메뉴 설정</string>
-    <string name="breakfastcheck_dialog_message">이 위젯에서 아침 메뉴를 보시겠습니까? \'아니오\'를 누르면, 아침에 아침 메뉴 대신 점심 메뉴가 위젯에 표시됩니다.</string>
-    <string name="breakfastcheck_dialog_yes">예</string>
-    <string name="breakfastcheck_dialog_no">아니오</string>
+    <string name="breakfast_check_dialog_title">아침 메뉴 설정</string>
+    <string name="breakfast_check_dialog_message">이 위젯에서 아침 메뉴를 보시겠습니까?\n\'아니오\'를 누르면, 아침에 점심 메뉴가 표시됩니다.</string>
+    <string name="breakfast_check_dialog_yes">예</string>
+    <string name="breakfast_check_dialog_no">아니오</string>
     <string name="empty_string">식단 정보가 없습니다.</string>
     <string name="widget_download_fail_string">식단 다운로드 실패! 데이터 네트워크 또는 Wi-Fi를 연결하고, 새로고침 해주세요.</string>
 	

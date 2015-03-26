@@ -43,6 +43,8 @@ public class RestaurantSequencer {
     currentSequence = new ArrayList<String>();
     bookmarkFlagMap = new HashMap<String, Boolean>();
 
+    setBookmarkMode(false);
+
     String recordedSequence = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_SEQUENCE);
     String recordedBookmark = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_BOOKMARK);
     RestaurantInfoUtil restaurantInfoUtil = RestaurantInfoUtil.getInstance();
@@ -83,7 +85,7 @@ public class RestaurantSequencer {
         }
       });
 
-      for(int i = 0; i < currentSequence.size(); i++) {
+      for(int i = currentSequence.size() - 1; i >= 0; i--) {
         if (isBookMarked(currentSequence.get(i)))
           arrangedList.add(0, currentSequence.get(i));
       }
