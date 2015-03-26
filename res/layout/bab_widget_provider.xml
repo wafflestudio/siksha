@@ -3,15 +3,31 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/date_view_widget"
+    <LinearLayout
+        android:id="@+id/widget_title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textColor="@color/white"
-        android:background="@drawable/rounded_widget_roof"
+        android:orientation="horizontal"
+        android:gravity="center"
         android:padding="10dp"
-        android:gravity="center" />
+        android:background="@drawable/rounded_widget_roof" >
+
+        <TextView
+            android:id="@+id/date_view_widget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:layout_marginRight="7dp"
+            android:gravity="center" />
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/ic_action_refresh_lunch" />
+    </LinearLayout>
+
+
 
     <ListView
         android:id="@+id/widget_list_view"

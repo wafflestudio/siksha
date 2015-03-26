@@ -6,7 +6,6 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.wafflestudio.siksha.R;
@@ -31,13 +30,10 @@ public class BabWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON);
-        Log.d("recordedDate", recordedDate);
-        Log.d("WidgetOnUpdate", Integer.toString(appWidgetIds.length));
 
         if (recordedDate.equals(CalendarUtil.getCurrentDate())) {
             final int N = appWidgetIds.length;
             for (int i = 0; i < N; i++) {
-                Log.d("WidgetOnUpdate", "WidgetId" + Integer.toString(appWidgetIds[i]) + Boolean.toString(BabWidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])));
                 if (BabWidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])) {
                     RemoteViews remoteViews = updateWidgetListView(context, appWidgetIds[i], true);
                     appWidgetManager.updateAppWidget(appWidgetIds[i], null);
@@ -60,7 +56,6 @@ public class BabWidgetProvider extends AppWidgetProvider {
     }
 
     private RemoteViews updateWidgetListView(Context context, int appWidgetId, boolean isSuccess) {
-        Log.d("UpdateWidgetListView", Integer.toString(appWidgetId));
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.bab_widget_provider);
         Intent remoteIntent = new Intent(context, WidgetRemoteService.class);
         remoteIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
@@ -94,7 +89,7 @@ public class BabWidgetProvider extends AppWidgetProvider {
         refreshIntent.setAction(WIDGET_REFRESH);
         refreshIntent.setData(Uri.fromParts("content", String.valueOf(appWidgetId + randomNumber), null));
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, refreshIntent, 0);
-        remoteViews.setOnClickPendingIntent(R.id.date_view_widget, pendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.widget_title_bar, pendingIntent);
 
         return remoteViews;
     }
@@ -105,10 +100,8 @@ public class BabWidgetProvider extends AppWidgetProvider {
 
         if (intent.getAction().equals(CONFIGURATION_FINISHED)) {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-            Log.d("WidgetOnReceive_Config_Finished", Integer.toString(appWidgetId));
 
             String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON);
-            Log.d("recordedDate", recordedDate);
 
             if (recordedDate.equals(CalendarUtil.getCurrentDate())) {
                 RemoteViews remoteViews = updateWidgetListView(context, appWidgetId, true);
@@ -121,7 +114,6 @@ public class BabWidgetProvider extends AppWidgetProvider {
         }
 
         if (intent.getAction().equals(DATA_FETCHED)) {
-            Log.d("WidgetOnReceive_DATA_FETCHED", "Broadcast_Received");
             boolean isSuccess = intent.getBooleanExtra("is_success", false);
             boolean fromWidgetUser = intent.getBooleanExtra("from_widget_user", false);
 
@@ -131,7 +123,6 @@ public class BabWidgetProvider extends AppWidgetProvider {
 
                 while (iterator.hasNext()) {
                     int appWidgetId = Integer.valueOf(iterator.next());
-                    Log.d("WidgetOnReceive_DATA_FETCHED", Integer.toString(appWidgetId));
                     AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
                     RemoteViews remoteViews = updateWidgetListView(context, appWidgetId, isSuccess);
@@ -147,7 +138,6 @@ public class BabWidgetProvider extends AppWidgetProvider {
 
                     while (iterator.hasNext()) {
                         int appWidgetId = Integer.valueOf(iterator.next());
-                        Log.d("WidgetOnReceive_DATA_FETCHED", Integer.toString(appWidgetId));
                         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
                         RemoteViews remoteViews = updateWidgetListView(context, appWidgetId, isSuccess);
@@ -161,11 +151,8 @@ public class BabWidgetProvider extends AppWidgetProvider {
 
         if (intent.getAction().equals(WIDGET_REFRESH)) {
             int appWidgetId = Integer.valueOf(intent.getData().getSchemeSpecificPart()) - BabWidgetProvider.randomNumber;
-            Log.d("WidgetOnReceive_Widget_Refresh", Integer.toString(appWidgetId));
 
             String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON);
-            Log.d("WidgetOnReceive_Widget_Refresh", recordedDate);
-            Log.d("WidgetOnReceive_Widget_Refresh", CalendarUtil.getCurrentDate());
 
             if (recordedDate.equals(CalendarUtil.getCurrentDate())) {
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
@@ -185,7 +172,6 @@ public class BabWidgetProvider extends AppWidgetProvider {
         final int N = appWidgetIds.length;
 
         for (int i = 0; i < N; i++) {
-            Log.d("WidgetOnDeleted", Integer.toString(appWidgetIds[i]));
             BabWidgetProviderConfigureActivity.removeWidgetId(context, appWidgetIds[i]);
             BabWidgetProviderConfigureActivity.deleteTitlePref(context, appWidgetIds[i]);
         }
