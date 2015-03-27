@@ -18,6 +18,7 @@
 
 	<string name="restaurant_no_menu">메뉴가 없습니다.</string>
     <string name="downloading_message">식단을 다운로드하고 있습니다...</string>
+    <string name="quit_back_pressed_twice">\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.</string>
 
     <string name="breakfast">아침</string>
     <string name="lunch">점심</string>
