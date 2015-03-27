@@ -34,6 +34,8 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
 
   private DownloadingJsonReceiver downloadingJsonReceiver;
 
+  private BackPressCloseHandler backPressCloseHandler;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -45,7 +47,14 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     RestaurantInfoUtil.getInstance().initialize(this);
     RestaurantSequencer.getInstance().initialize(this);
 
+    backPressCloseHandler = new BackPressCloseHandler(this);
+
     setLayout();
+  }
+
+  @Override
+  public void onBackPressed() {
+    backPressCloseHandler.onBackPressed();
   }
 
   @Override
