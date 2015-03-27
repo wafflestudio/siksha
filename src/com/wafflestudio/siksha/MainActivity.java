@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wafflestudio.siksha.dialog.NotifyWidgetDialog;
 import com.wafflestudio.siksha.service.DownloadingJsonReceiver;
@@ -34,7 +35,8 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
 
   private DownloadingJsonReceiver downloadingJsonReceiver;
 
-  private BackPressCloseHandler backPressCloseHandler;
+  private long backKeyPressedTime = 0;
+  private Toast toast;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +49,37 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     RestaurantInfoUtil.getInstance().initialize(this);
     RestaurantSequencer.getInstance().initialize(this);
 
-    backPressCloseHandler = new BackPressCloseHandler(this);
-
     setLayout();
   }
 
-  @Override
   public void onBackPressed() {
-    backPressCloseHandler.onBackPressed();
+    RestaurantSequencer restaurantSequencer = RestaurantSequencer.getInstance();
+
+    if(restaurantSequencer.isBookmarkMode()){
+      restaurantSequencer.setBookmarkMode(false);
+      restaurantSequencer.notifyChangeToAdapters(true);
+      setBookmarkButtonImage();
+
+    }else{
+      if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+        backKeyPressedTime = System.currentTimeMillis();
+        showGuide();
+        return;
+      }
+      if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+        this.finish();
+        toast.cancel();
+      }
+    }
   }
+
+
+  private void showGuide() {
+    toast = Toast.makeText(this, "\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.",
+            Toast.LENGTH_SHORT);
+    toast.show();
+  }
+
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
