@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
@@ -35,8 +36,7 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
 
   private DownloadingJsonReceiver downloadingJsonReceiver;
 
-  private long backKeyPressedTime = 0;
-  private Toast toast;
+  private boolean isBackPressedTwice;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -52,35 +52,6 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     setLayout();
   }
 
-  public void onBackPressed() {
-    RestaurantSequencer restaurantSequencer = RestaurantSequencer.getInstance();
-
-    if(restaurantSequencer.isBookmarkMode()){
-      restaurantSequencer.setBookmarkMode(false);
-      restaurantSequencer.notifyChangeToAdapters(true);
-      setBookmarkButtonImage();
-
-    }else{
-      if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
-        backKeyPressedTime = System.currentTimeMillis();
-        showGuide();
-        return;
-      }
-      if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-        this.finish();
-        toast.cancel();
-      }
-    }
-  }
-
-
-  private void showGuide() {
-    toast = Toast.makeText(this, "\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.",
-            Toast.LENGTH_SHORT);
-    toast.show();
-  }
-
-
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.hide_menu, menu);
@@ -88,6 +59,7 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     return super.onCreateOptionsMenu(menu);
   }
 
+  @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.maker_menu:
@@ -166,6 +138,34 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
         }
 
         break;
+    }
+  }
+
+  @Override
+  public void onBackPressed() {
+    RestaurantSequencer restaurantSequencer = RestaurantSequencer.getInstance();
+
+    if (restaurantSequencer.isBookmarkMode()) {
+      restaurantSequencer.setBookmarkMode(false);
+      setBookmarkButtonImage();
+      restaurantSequencer.notifyChangeToAdapters(true);
+    }
+    else {
+      if (isBackPressedTwice) {
+        super.onBackPressed();
+        return;
+      }
+
+      isBackPressedTwice = true;
+      Toast.makeText(this, R.string.quit_back_pressed_twice, Toast.LENGTH_SHORT).show();
+
+      new Handler().postDelayed(new Runnable() {
+
+        @Override
+        public void run() {
+          isBackPressedTwice = false;
+        }
+      }, 2000);
     }
   }
 
