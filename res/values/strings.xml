@@ -30,7 +30,7 @@
 
     <!-- Widget -->
     <string name="breakfast_check_dialog_title">아침 메뉴 설정</string>
-    <string name="breakfast_check_dialog_message">이 위젯에서 아침 메뉴를 보시겠습니까?\n\'아니오\'를 누르면, 아침에 점심 메뉴가 표시됩니다.</string>
+    <string name="breakfast_check_dialog_message">위젯에서 아침 메뉴를 보시겠습니까?</string>
     <string name="breakfast_check_dialog_yes">예</string>
     <string name="breakfast_check_dialog_no">아니오</string>
     <string name="empty_string">식단 정보가 없습니다.</string>
