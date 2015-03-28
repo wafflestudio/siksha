@@ -15,7 +15,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.wafflestudio.siksha.dialog.NotifyWidgetDialog;
 import com.wafflestudio.siksha.service.DownloadingJsonReceiver;
 import com.wafflestudio.siksha.util.AlarmUtil;
 import com.wafflestudio.siksha.util.CalendarUtil;
@@ -24,7 +23,6 @@ import com.wafflestudio.siksha.util.InitialLoadingMenu;
 import com.wafflestudio.siksha.util.NetworkUtil;
 import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 import com.wafflestudio.siksha.util.RestaurantSequencer;
-import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
 public class MainActivity extends Activity implements ViewPager.OnPageChangeListener, View.OnClickListener {
   private RelativeLayout topBar;
@@ -45,7 +43,7 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
 
     AlarmUtil.registerAlarm(this);
     NetworkUtil.getInstance().setConnectivityManager(this);
-    FontUtil.getInstance().setFontAsset(this);
+    FontUtil.getInstance().setFontAsset(getAssets());
     RestaurantInfoUtil.getInstance().initialize(this);
     RestaurantSequencer.getInstance().initialize(this);
 

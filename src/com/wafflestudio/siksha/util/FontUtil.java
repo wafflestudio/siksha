@@ -1,6 +1,5 @@
 package com.wafflestudio.siksha.util;
 
-import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
 
@@ -15,13 +14,14 @@ public class FontUtil {
   public static FontUtil getInstance() {
     if (fontUtil == null)
       fontUtil = new FontUtil();
+
     return fontUtil;
   }
 
-  public void setFontAsset(Context context) {
-    AssetManager assetManager = context.getAssets();
-
-    fontAPAritaDotumMedium = Typeface.createFromAsset(assetManager, "Arita-Dotum-Medium.otf");
-    fontAPAritaDotumSemiBold = Typeface.createFromAsset(assetManager, "Arita-Dotum-SemiBold.otf");
+  public void setFontAsset(AssetManager assetManager) {
+    if (fontAPAritaDotumMedium == null)
+      fontAPAritaDotumMedium = Typeface.createFromAsset(assetManager, "Arita-Dotum-Medium.otf");
+    if (fontAPAritaDotumSemiBold == null)
+      fontAPAritaDotumSemiBold = Typeface.createFromAsset(assetManager, "Arita-Dotum-SemiBold.otf");
   }
 }

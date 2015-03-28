@@ -28,19 +28,22 @@ public class WidgetBreakfastCheckDialog extends Dialog {
         super(context);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.bab_widget_breakfast_check_dialog);
-        setCanceledOnTouchOutside(false);
 
+        setCanceledOnTouchOutside(false);
         setUIComponents();
+
         positiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
+
                 SharedPreferenceUtil.save(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_PREFIX_BREAKFAST_KEY + appWidgetId, true);
                 Intent intent = new Intent();
                 intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
                 ((Activity) context).setResult(Activity.RESULT_OK, intent);
                 intent.setAction(BabWidgetProvider.CONFIGURATION_FINISHED);
                 context.sendBroadcast(intent);
+
                 ((Activity) context).finish();
             }
         });
@@ -48,12 +51,14 @@ public class WidgetBreakfastCheckDialog extends Dialog {
             @Override
             public void onClick(View v) {
                 dismiss();
+
                 SharedPreferenceUtil.save(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_PREFIX_BREAKFAST_KEY + appWidgetId, false);
                 Intent intent = new Intent();
                 intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
                 ((Activity) context).setResult(Activity.RESULT_OK, intent);
                 intent.setAction(BabWidgetProvider.CONFIGURATION_FINISHED);
                 context.sendBroadcast(intent);
+
                 ((Activity) context).finish();
             }
         });

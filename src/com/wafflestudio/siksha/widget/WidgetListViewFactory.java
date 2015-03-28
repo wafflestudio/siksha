@@ -18,12 +18,12 @@ import java.util.Set;
 public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFactory {
     private Context context = null;
 
-    private ArrayList<String> cafeList;
-    private ArrayList<RestaurantCrawlingForm> cafeMenuList;
+    private ArrayList<String> restaurantList;
+    private ArrayList<RestaurantCrawlingForm> restaurantMenuList;
 
     private int appWidgetId;
     private int hour;
-    String[] restaurants;
+    private String[] restaurants;
 
     public WidgetListViewFactory(Context context, Intent intent) {
         this.context = context;
@@ -32,21 +32,21 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
         Set<String> input = BabWidgetProviderConfigureActivity.loadTitlePref(context, appWidgetId);
 
         restaurants = context.getResources().getStringArray(R.array.restaurants);
+        restaurantList = new ArrayList<String>();
 
-        cafeList = new ArrayList<String>();
         for (int i = 0; i < restaurants.length; i++) {
             if (input.contains(restaurants[i]))
-                cafeList.add(restaurants[i]);
+                restaurantList.add(restaurants[i]);
         }
 
-        cafeMenuList = new ArrayList<RestaurantCrawlingForm>();
+        restaurantMenuList = new ArrayList<RestaurantCrawlingForm>();
         RestaurantCrawlingForm[] forms = new ParsingJson(context).getParsedForms();
 
         if (forms != null) {
-            for (int i = 0; i < cafeList.size(); i++) {
+            for (int i = 0; i < restaurantList.size(); i++) {
                 for (int j = 0; j < forms.length; j++) {
-                    if (cafeList.get(i).equals(forms[j].restaurant)) {
-                        cafeMenuList.add(forms[j]);
+                    if (restaurantList.get(i).equals(forms[j].restaurant)) {
+                        restaurantMenuList.add(forms[j]);
                         break;
                     }
                 }
@@ -56,7 +56,7 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
 
     @Override
     public int getCount() {
-        return cafeMenuList.size();
+        return restaurantMenuList.size();
     }
 
     @Override
@@ -67,11 +67,11 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
     @Override
     public RemoteViews getViewAt(int position) {
         final RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.bab_widget_restaurant_list_row);
-        RestaurantCrawlingForm item = cafeMenuList.get(position);
+        RestaurantCrawlingForm item = restaurantMenuList.get(position);
+        boolean isEmpty = true;
 
         remoteView.setTextViewText(R.id.restaurant_view_widget, item.restaurant);
         remoteView.removeAllViews(R.id.menu_list_widget);
-        boolean isEmpty = true;
         remoteView.setViewVisibility(R.id.widget_restaurant_empty_view, View.GONE);
 
         String time;
@@ -96,8 +96,10 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
                 isEmpty = false;
             }
         }
+
         if (isEmpty)
             remoteView.setViewVisibility(R.id.widget_restaurant_empty_view, View.VISIBLE);
+
         return remoteView;
     }
 
@@ -117,19 +119,19 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
     }
 
     @Override
-    public void onCreate() {
-    }
+    public void onCreate() { }
 
     @Override
     public void onDataSetChanged() {
         hour = CalendarUtil.getCurrentHour();
         RestaurantCrawlingForm[] forms = new ParsingJson(context).getParsedForms();
+
         if (forms != null) {
-            cafeMenuList = new ArrayList<RestaurantCrawlingForm>();
-            for (int i = 0; i < cafeList.size(); i++) {
+            restaurantMenuList = new ArrayList<RestaurantCrawlingForm>();
+            for (int i = 0; i < restaurantList.size(); i++) {
                 for (int j = 0; j < forms.length; j++) {
-                    if (cafeList.get(i).equals(forms[j].restaurant)) {
-                        cafeMenuList.add(forms[j]);
+                    if (restaurantList.get(i).equals(forms[j].restaurant)) {
+                        restaurantMenuList.add(forms[j]);
                         break;
                     }
                 }

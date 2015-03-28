@@ -26,6 +26,7 @@ public class BabWidgetProviderConfigureActivity extends Activity {
     private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     String[] restaurants;
 
+    private ImageButton addButton;
     private ListView listView;
     private ListAdapter listAdapter;
 
@@ -34,16 +35,18 @@ public class BabWidgetProviderConfigureActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bab_widget_provider_configure);
         setResult(RESULT_CANCELED);
-        FontUtil.getInstance().setFontAsset(this);
+
+        FontUtil.getInstance().setFontAsset(getAssets());
+        restaurants = getResources().getStringArray(R.array.restaurants);
+
         TextView title = (TextView) findViewById(R.id.config_activity_main_title);
-        title.setTypeface(FontUtil.fontAPAritaDotumMedium);
         TextView appName = (TextView) findViewById(R.id.config_activity_main_app_name);
+        title.setTypeface(FontUtil.fontAPAritaDotumMedium);
         appName.setTypeface(FontUtil.fontAPAritaDotumMedium);
 
-        restaurants = this.getResources().getStringArray(R.array.restaurants);
-
+        addButton = (ImageButton) findViewById(R.id.widget_config_accept_button);
         listView = (ListView) findViewById(R.id.widget_configure_listview);
-        ImageButton addButton = (ImageButton) findViewById(R.id.widget_config_accept_button);
+
         listAdapter = new ListAdapter(this);
         listView.setAdapter(listAdapter);
 
@@ -75,7 +78,6 @@ public class BabWidgetProviderConfigureActivity extends Activity {
         }
         if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish();
-            return;
         }
     }
 
@@ -120,8 +122,8 @@ public class BabWidgetProviderConfigureActivity extends Activity {
 
                 viewHolder = new ViewHolder();
                 viewHolder.box = (CheckBox) convertView.findViewById(R.id.widget_configure_checkbox);
-                convertView.setTag(viewHolder);
 
+                convertView.setTag(viewHolder);
             }
             else
                 viewHolder = (ViewHolder) convertView.getTag();
