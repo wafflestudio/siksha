@@ -13,8 +13,8 @@ public class BootServiceReceiver extends BroadcastReceiver {
     if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
       Log.d("boot", intent.getAction());
 
-      // register alarm when booting device is completed & alarm is not registered previously
-      AlarmUtil.registerAlarm(context);
+      // register alarm when booting device is completed
+      AlarmUtil.setAlarm(context);
     }
   }
 }
