@@ -33,7 +33,7 @@ public class RestaurantInfoDialog extends Dialog {
     locationDetails.setTypeface(FontUtil.fontAPAritaDotumMedium);
 
     restaurantView.setText(restaurantName);
-    operatingHoursDetails.setText(RestaurantInfoUtil.getInstance().operatingHoursMap.get(restaurantName));
-		locationDetails.setText(RestaurantInfoUtil.getInstance().locationsMap.get(restaurantName));
+    operatingHoursDetails.setText(RestaurantInfoUtil.getInstance().operatingHourMap.get(restaurantName));
+		locationDetails.setText(RestaurantInfoUtil.getInstance().locationMap.get(restaurantName));
 	}
 }

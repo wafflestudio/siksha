@@ -16,8 +16,8 @@ public class RestaurantInfoUtil {
   public String[] operatingHours;
   public String[] locations;
 
-  public Map<String, String> operatingHoursMap;
-  public Map<String, String> locationsMap;
+  public Map<String, String> operatingHourMap;
+  public Map<String, String> locationMap;
 
   public Map<String, RestaurantClassifiedForm> breakfastMenuMap;
   public Map<String, RestaurantClassifiedForm> lunchMenuMap;
@@ -33,8 +33,8 @@ public class RestaurantInfoUtil {
   }
 
   public void initialize(Context context) {
-    operatingHoursMap = new HashMap<String, String>();
-    locationsMap = new HashMap<String, String>();
+    operatingHourMap = new HashMap<String, String>();
+    locationMap = new HashMap<String, String>();
 
     breakfastMenuMap = new HashMap<String, RestaurantClassifiedForm>();
     lunchMenuMap = new HashMap<String, RestaurantClassifiedForm>();
@@ -45,8 +45,8 @@ public class RestaurantInfoUtil {
     locations = context.getResources().getStringArray(R.array.locations);
 
     for (int i = 0; i < restaurants.length; i++) {
-      operatingHoursMap.put(restaurants[i], operatingHours[i]);
-      locationsMap.put(restaurants[i], locations[i]);
+      operatingHourMap.put(restaurants[i], operatingHours[i]);
+      locationMap.put(restaurants[i], locations[i]);
     }
   }
 

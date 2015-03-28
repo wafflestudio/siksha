@@ -18,16 +18,14 @@ public class NetworkUtil {
   }
 
   public void setConnectivityManager(Context context) {
-    connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    if (connectivityManager == null)
+      connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
   }
 
   public boolean isOnline() {
     NetworkInfo mobileNetwork = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
     NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-    if (mobileNetwork.isConnected() || wifi.isConnected())
-      return true;
-    else
-      return false;
+    return mobileNetwork.isConnected() || wifi.isConnected();
   }
 }
