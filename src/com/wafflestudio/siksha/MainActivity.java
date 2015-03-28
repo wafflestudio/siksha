@@ -148,6 +148,9 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     if (restaurantSequencer.isBookmarkMode()) {
       restaurantSequencer.setBookmarkMode(false);
       setBookmarkButtonImage();
+
+      restaurantSequencer.cancelBookmarkAll(this);
+      restaurantSequencer.setMenuListOnSequence();
       restaurantSequencer.notifyChangeToAdapters(true);
     }
     else {
@@ -160,7 +163,6 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
       Toast.makeText(this, R.string.quit_back_pressed_twice, Toast.LENGTH_SHORT).show();
 
       new Handler().postDelayed(new Runnable() {
-
         @Override
         public void run() {
           isBackPressedTwice = false;
