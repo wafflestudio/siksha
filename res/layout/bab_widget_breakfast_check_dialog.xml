@@ -6,27 +6,12 @@
     android:background="@color/white" >
 
     <TextView
-        android:id="@+id/breakfast_check_dialog_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="23sp"
-        android:textStyle="bold"
-        android:padding="15dp"
-        android:gravity="center_horizontal"
-        android:text="@string/breakfast_check_dialog_title" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/main_color_lunch" />
-
-    <TextView
         android:id="@+id/breakfast_check_dialog_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="17sp"
+        android:textSize="22sp"
         android:padding="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_margin="15dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/breakfast_check_dialog_message" />
