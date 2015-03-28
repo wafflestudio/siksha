@@ -24,7 +24,7 @@ public class DownloadingJsonReceiver extends BroadcastReceiver {
     boolean isSuccess = intent.getBooleanExtra("is_success", false);
     String action = intent.getAction();
 
-    if (action.equals(ACTION_CURRENT_DOWNLOAD)) {
+    if (action != null && action.equals(ACTION_CURRENT_DOWNLOAD)) {
       if (isSuccess)
         onCompleteDownloadListener.onComplete();
       else

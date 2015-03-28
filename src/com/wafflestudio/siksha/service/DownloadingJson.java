@@ -38,7 +38,7 @@ public class DownloadingJson extends IntentService {
     try {
       URL url;
 
-      if (action.equals(DownloadingJsonReceiver.ACTION_CURRENT_DOWNLOAD))
+      if (CalendarUtil.getCurrentHour() == 0 &&  CalendarUtil.getCurrentMin() < 5)
         url = new URL(SERVER_URL);
       else
         url = new URL(SERVER_URL + "?alarm=true");
