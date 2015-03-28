@@ -150,6 +150,7 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
       restaurantSequencer.cancelBookmarkAll(this);
       restaurantSequencer.setMenuListOnSequence();
       restaurantSequencer.notifyChangeToAdapters(true);
+      restaurantSequencer.expandBookmarkAll();
     }
     else {
       if (isBackPressedTwice) {

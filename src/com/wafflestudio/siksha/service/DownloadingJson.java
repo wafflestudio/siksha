@@ -32,13 +32,13 @@ public class DownloadingJson extends IntentService {
     return recordedDate.equals(CalendarUtil.getCurrentDate());
   }
 
-  public String fetchJsonFromServer(String action) {
+  public String fetchJsonFromServer() {
     StringBuilder stringBuilder = new StringBuilder();
 
     try {
       URL url;
 
-      if (CalendarUtil.getCurrentHour() == 0 &&  CalendarUtil.getCurrentMin() < 5)
+      if (CalendarUtil.getCurrentHour() == 0 && CalendarUtil.getCurrentMin() < 5)
         url = new URL(SERVER_URL);
       else
         url = new URL(SERVER_URL + "?alarm=true");
@@ -123,7 +123,7 @@ public class DownloadingJson extends IntentService {
   @Override
   protected void onHandleIntent(Intent intent) {
     final String action = intent.getAction();
-    final boolean isSuccess = writeJsonOnInternalStorage(fetchJsonFromServer(action));
+    final boolean isSuccess = writeJsonOnInternalStorage(fetchJsonFromServer());
     final boolean fromWidget = intent.getBooleanExtra("from_widget_user", false);
     Log.d("onHandleIntent", "isSuccess : " + isSuccess + " / " + "action : " + action);
 
