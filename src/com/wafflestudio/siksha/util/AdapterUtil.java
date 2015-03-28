@@ -100,7 +100,7 @@ public class AdapterUtil {
           RestaurantSequencer restaurantSequencer = RestaurantSequencer.getInstance();
 
           if (!restaurantSequencer.isBookmarkMode()) {
-            RestaurantInfoDialog dialog = new RestaurantInfoDialog(context, restaurantSequencer.currentSequence.get(groupPosition));
+            RestaurantInfoDialog dialog = new RestaurantInfoDialog(context, restaurantSequencer.currentSequence.get(groupPosition), pageIndex);
             dialog.setCanceledOnTouchOutside(true);
             dialog.show();
           }
