@@ -7,6 +7,7 @@ import com.wafflestudio.siksha.page.BreakfastPage;
 import com.wafflestudio.siksha.page.DinnerPage;
 import com.wafflestudio.siksha.page.LunchPage;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -157,6 +158,29 @@ public class RestaurantSequencer {
     breakfastPage.collapseAllGroup();
     lunchPage.collapseAllGroup();
     dinnerPage.collapseAllGroup();
+  }
+
+  public void cancelBookmarkAll(Context context) {
+    WeakReference<Context> weakReference = new WeakReference<Context>(context);
+
+    String recordedSequence = SharedPreferenceUtil.loadValueOfString(weakReference.get(), SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_SEQUENCE);
+    String recordedBookmark = SharedPreferenceUtil.loadValueOfString(weakReference.get(), SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_BOOKMARK);
+
+    if (!recordedSequence.equals("")) {
+      List<String> previousSequence = new ArrayList<String>();
+      Collections.addAll(previousSequence, recordedSequence.split("/"));
+      currentSequence = previousSequence;
+    }
+    else
+      currentSequence = originalSequence;
+
+    for(int i = 0; i < currentSequence.size(); i++)
+      setBookmark(currentSequence.get(i), false);
+
+    if (!recordedBookmark.equals("")) {
+      for(String bookmark : recordedBookmark.split("/"))
+        setBookmark(bookmark, true);
+    }
   }
 
   public boolean isBookmarkMode() {
