@@ -18,7 +18,7 @@ import java.util.Set;
 
 /**
  * Implementation of App Widget functionality.
- * App Widget Configuration implemented in {@link BabWidgetProviderConfigureActivity BabWidgetProviderConfigureActivity}
+ * App Widget Configuration implemented in {@link WidgetProviderConfigureActivity WidgetProviderConfigureActivity}
  */
 
 public class WidgetProvider extends AppWidgetProvider {
@@ -34,7 +34,7 @@ public class WidgetProvider extends AppWidgetProvider {
         if (recordedDate.equals(CalendarUtil.getCurrentDate())) {
             final int N = appWidgetIds.length;
             for (int i = 0; i < N; i++) {
-                if (BabWidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])) {
+                if (WidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])) {
                     RemoteViews remoteViews = updateWidgetListView(context, appWidgetIds[i], true);
                     appWidgetManager.updateAppWidget(appWidgetIds[i], null);
                     appWidgetManager.updateAppWidget(appWidgetIds[i], remoteViews);
@@ -45,7 +45,7 @@ public class WidgetProvider extends AppWidgetProvider {
         else {
             final int N = appWidgetIds.length;
             for (int i = 0; i < N; i++) {
-                if (BabWidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])) {
+                if (WidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])) {
                     context.startService(new Intent(context, DownloadingJson.class).putExtra("from_widget_user", false));
                     break;
                 }
@@ -56,7 +56,7 @@ public class WidgetProvider extends AppWidgetProvider {
     }
 
     private RemoteViews updateWidgetListView(Context context, int appWidgetId, boolean isSuccess) {
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.bab_widget_provider);
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_provider);
         Intent remoteIntent = new Intent(context, WidgetRemoteService.class);
         remoteIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         remoteIntent.setData(Uri.fromParts("content", String.valueOf(appWidgetId + randomNumber), null));
@@ -118,7 +118,7 @@ public class WidgetProvider extends AppWidgetProvider {
             boolean fromWidgetUser = intent.getBooleanExtra("from_widget_user", false);
 
             if (isSuccess) {
-                Set<String> idSet = BabWidgetProviderConfigureActivity.getAllWidgetIds(context);
+                Set<String> idSet = WidgetProviderConfigureActivity.getAllWidgetIds(context);
                 Iterator<String> iterator = idSet.iterator();
 
                 while (iterator.hasNext()) {
@@ -133,7 +133,7 @@ public class WidgetProvider extends AppWidgetProvider {
             }
             else {
                 if (fromWidgetUser) {
-                    Set<String> idSet = BabWidgetProviderConfigureActivity.getAllWidgetIds(context);
+                    Set<String> idSet = WidgetProviderConfigureActivity.getAllWidgetIds(context);
                     Iterator<String> iterator = idSet.iterator();
 
                     while (iterator.hasNext()) {
@@ -172,8 +172,8 @@ public class WidgetProvider extends AppWidgetProvider {
         final int N = appWidgetIds.length;
 
         for (int i = 0; i < N; i++) {
-            BabWidgetProviderConfigureActivity.removeWidgetId(context, appWidgetIds[i]);
-            BabWidgetProviderConfigureActivity.deleteTitlePref(context, appWidgetIds[i]);
+            WidgetProviderConfigureActivity.removeWidgetId(context, appWidgetIds[i]);
+            WidgetProviderConfigureActivity.deleteTitlePref(context, appWidgetIds[i]);
         }
     }
 }

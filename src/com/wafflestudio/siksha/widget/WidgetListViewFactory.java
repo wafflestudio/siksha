@@ -13,39 +13,30 @@ import com.wafflestudio.siksha.util.RestaurantCrawlingForm;
 import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFactory {
     private Context context = null;
 
-    private ArrayList<String> restaurantList;
+    private String[] restaurantList;
     private ArrayList<RestaurantCrawlingForm> restaurantMenuList;
 
     private int appWidgetId;
     private int hour;
-    private String[] restaurants;
 
     public WidgetListViewFactory(Context context, Intent intent) {
         this.context = context;
 
-        appWidgetId = Integer.valueOf(intent.getData().getSchemeSpecificPart()) - BabWidgetProvider.randomNumber;
-        Set<String> input = BabWidgetProviderConfigureActivity.loadTitlePref(context, appWidgetId);
-
-        restaurants = context.getResources().getStringArray(R.array.restaurants);
-        restaurantList = new ArrayList<String>();
-
-        for (int i = 0; i < restaurants.length; i++) {
-            if (input.contains(restaurants[i]))
-                restaurantList.add(restaurants[i]);
-        }
+        appWidgetId = Integer.valueOf(intent.getData().getSchemeSpecificPart()) - WidgetProvider.randomNumber;
+        String input = WidgetProviderConfigureActivity.loadTitlePref(context, appWidgetId);
+        restaurantList = input.split("#");
 
         restaurantMenuList = new ArrayList<RestaurantCrawlingForm>();
         RestaurantCrawlingForm[] forms = new ParsingJson(context).getParsedForms();
 
         if (forms != null) {
-            for (int i = 0; i < restaurantList.size(); i++) {
+            for (int i = 0; i < restaurantList.length; i++) {
                 for (int j = 0; j < forms.length; j++) {
-                    if (restaurantList.get(i).equals(forms[j].restaurant)) {
+                    if (restaurantList[i].equals(forms[j].restaurant)) {
                         restaurantMenuList.add(forms[j]);
                         break;
                     }
@@ -66,7 +57,7 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
 
     @Override
     public RemoteViews getViewAt(int position) {
-        final RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.bab_widget_restaurant_list_row);
+        final RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.widget_restaurant_list_row);
         RestaurantCrawlingForm item = restaurantMenuList.get(position);
         boolean isEmpty = true;
 
@@ -89,7 +80,7 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
 
         for (int i = 0; i < item.menus.length; i++) {
             if (item.menus[i].time.equals(time)) {
-                RemoteViews child = new RemoteViews(context.getPackageName(), R.layout.bab_widget_menu_list_row);
+                RemoteViews child = new RemoteViews(context.getPackageName(), R.layout.widget_menu_list_row);
                 child.setTextViewText(R.id.menu_price_widget, item.menus[i].price);
                 child.setTextViewText(R.id.menu_name_widget, item.menus[i].name);
                 remoteView.addView(R.id.menu_list_widget, child);
@@ -128,9 +119,9 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
 
         if (forms != null) {
             restaurantMenuList = new ArrayList<RestaurantCrawlingForm>();
-            for (int i = 0; i < restaurantList.size(); i++) {
+            for (int i = 0; i < restaurantList.length; i++) {
                 for (int j = 0; j < forms.length; j++) {
-                    if (restaurantList.get(i).equals(forms[j].restaurant)) {
+                    if (restaurantList[i].equals(forms[j].restaurant)) {
                         restaurantMenuList.add(forms[j]);
                         break;
                     }

@@ -27,7 +27,7 @@ public class WidgetBreakfastCheckDialog extends Dialog {
     public WidgetBreakfastCheckDialog (final Context context, final int appWidgetId) {
         super(context);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.bab_widget_breakfast_check_dialog);
+        setContentView(R.layout.widget_breakfast_check_dialog);
 
         setCanceledOnTouchOutside(false);
         setUIComponents();
@@ -41,7 +41,7 @@ public class WidgetBreakfastCheckDialog extends Dialog {
                 Intent intent = new Intent();
                 intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
                 ((Activity) context).setResult(Activity.RESULT_OK, intent);
-                intent.setAction(BabWidgetProvider.CONFIGURATION_FINISHED);
+                intent.setAction(WidgetProvider.CONFIGURATION_FINISHED);
                 context.sendBroadcast(intent);
 
                 ((Activity) context).finish();
@@ -56,7 +56,7 @@ public class WidgetBreakfastCheckDialog extends Dialog {
                 Intent intent = new Intent();
                 intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
                 ((Activity) context).setResult(Activity.RESULT_OK, intent);
-                intent.setAction(BabWidgetProvider.CONFIGURATION_FINISHED);
+                intent.setAction(WidgetProvider.CONFIGURATION_FINISHED);
                 context.sendBroadcast(intent);
 
                 ((Activity) context).finish();

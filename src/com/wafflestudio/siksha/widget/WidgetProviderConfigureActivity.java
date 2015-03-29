@@ -34,7 +34,7 @@ public class WidgetProviderConfigureActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.bab_widget_provider_configure);
+        setContentView(R.layout.widget_provider_configure);
         setResult(RESULT_CANCELED);
 
         FontUtil.getInstance().setFontAsset(getAssets());
@@ -138,7 +138,7 @@ public class WidgetProviderConfigureActivity extends Activity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = inflater.inflate(R.layout.bab_widget_configure_list_row, null);
+                convertView = inflater.inflate(R.layout.widget_configure_list_row, null);
 
                 viewHolder = new ViewHolder();
                 viewHolder.box = (CheckBox) convertView.findViewById(R.id.widget_configure_checkbox);
