@@ -19,7 +19,6 @@ import com.wafflestudio.siksha.util.SharedPreferenceUtil;
  */
 
 public class WidgetBreakfastCheckDialog extends Dialog {
-    private TextView title;
     private TextView message;
     private Button positiveButton;
     private Button negativeButton;
@@ -65,12 +64,10 @@ public class WidgetBreakfastCheckDialog extends Dialog {
     }
 
     private void setUIComponents() {
-        //title = (TextView) findViewById(R.id.breakfast_check_dialog_title);
         message = (TextView) findViewById(R.id.breakfast_check_dialog_message);
         positiveButton = (Button) findViewById(R.id.breakfast_check_dialog_positive_button);
         negativeButton = (Button) findViewById(R.id.breakfast_check_dialog_negative_button);
 
-        //title.setTypeface(FontUtil.fontAPAritaDotumSemiBold);
         message.setTypeface(FontUtil.fontAPAritaDotumMedium);
         positiveButton.setTypeface(FontUtil.fontAPAritaDotumMedium);
         negativeButton.setTypeface(FontUtil.fontAPAritaDotumMedium);
