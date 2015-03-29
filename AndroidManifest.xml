@@ -36,14 +36,14 @@
         </activity>
 
         <activity
-            android:name=".widget.BabWidgetProviderConfigureActivity"
+            android:name=".widget.WidgetProviderConfigureActivity"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
 
-        <receiver android:name=".widget.BabWidgetProvider" >
+        <receiver android:name=".widget.WidgetProvider" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.wafflestudio.siksha.DATA_FETCHED" />

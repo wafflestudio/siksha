@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.wafflestudio.siksha.util.CalendarUtil;
 import com.wafflestudio.siksha.util.SharedPreferenceUtil;
-import com.wafflestudio.siksha.widget.BabWidgetProvider;
+import com.wafflestudio.siksha.widget.WidgetProvider;
 
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
@@ -106,7 +106,7 @@ public class DownloadingJson extends IntentService {
   }
 
   public void sendSignalToWidget(boolean fromWidgetUser, boolean isSuccess) {
-    Intent widgetUpdate = new Intent(BabWidgetProvider.DATA_FETCHED);
+    Intent widgetUpdate = new Intent(WidgetProvider.DATA_FETCHED);
     widgetUpdate.putExtra("is_success", isSuccess);
     widgetUpdate.putExtra("from_widget_user", fromWidgetUser);
     sendBroadcast(widgetUpdate);
