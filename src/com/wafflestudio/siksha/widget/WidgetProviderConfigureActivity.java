@@ -19,10 +19,11 @@ import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.FontUtil;
 import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public class BabWidgetProviderConfigureActivity extends Activity {
+public class WidgetProviderConfigureActivity extends Activity {
     private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     String[] restaurants;
 
@@ -54,8 +55,8 @@ public class BabWidgetProviderConfigureActivity extends Activity {
                 new AdapterView.OnItemClickListener() {
                   @Override
                   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    listAdapter.setChecked(position);
-                    listAdapter.notifyDataSetChanged();
+                      listAdapter.setChecked(position);
+                      listAdapter.notifyDataSetChanged();
                   }
                 }
         );
@@ -64,8 +65,8 @@ public class BabWidgetProviderConfigureActivity extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        addWidgetId(BabWidgetProviderConfigureActivity.this, appWidgetId);
-                        saveTitlePref(BabWidgetProviderConfigureActivity.this, appWidgetId, listAdapter.getChecked());
+                        addWidgetId(WidgetProviderConfigureActivity.this, appWidgetId);
+                        saveTitlePref(WidgetProviderConfigureActivity.this, appWidgetId, listAdapter.getChecked());
                         startWidget();
                     }
                 }
@@ -81,29 +82,48 @@ public class BabWidgetProviderConfigureActivity extends Activity {
         }
     }
 
+    public boolean isEarlier(String r1, String r2) {
+        int i, j;
+        for (i = 0; i < restaurants.length; i++) {
+            if (restaurants[i].equals(r1))
+                break;
+        }
+        for (j = 0; j < restaurants.length; j++) {
+            if (restaurants[j].equals(r2))
+                break;
+        }
+        return i < j;
+    }
+
     class ListAdapter extends BaseAdapter {
         private ViewHolder viewHolder;
         private LayoutInflater inflater;
 
-        private boolean[] isChecked;
+        ArrayList<String> restaurantSequence;
+        int isChecked;
 
         public ListAdapter(Context context) {
             inflater = LayoutInflater.from(context);
-            this.isChecked = new boolean[restaurants.length];
+            restaurantSequence = new ArrayList<String>();
+            for (int i = 0; i < restaurants.length; i++)
+                restaurantSequence.add(restaurants[i]);
+            isChecked = 0;
         }
 
-        public Set<String> getChecked() {
-            Set<String> restaurantSet = new HashSet<String>();
-            for (int i = 0; i < isChecked.length; i++) {
-                if (isChecked[i])
-                    restaurantSet.add(restaurants[i]);
+        public String getChecked() {
+            if (isChecked <= 0)
+                return "";
+            String checkedSequence = restaurantSequence.get(0);
+            for (int i = 1; i < isChecked; i++) {
+                checkedSequence += "#";
+                checkedSequence += restaurantSequence.get(i);
             }
-            return restaurantSet;
+            return checkedSequence;
         }
 
         @Override
         public int getCount() {
-            return isChecked.length;
+            return restaurantSequence.size();
         }
 
         public long getItemId(int position) {
@@ -112,7 +132,7 @@ public class BabWidgetProviderConfigureActivity extends Activity {
 
         @Override
         public String getItem(int position) {
-            return restaurants[position];
+            return restaurantSequence.get(position);
         }
 
         @Override
@@ -128,20 +148,35 @@ public class BabWidgetProviderConfigureActivity extends Activity {
             else
                 viewHolder = (ViewHolder) convertView.getTag();
 
-            final String restaurantName = restaurants[position];
+            final String restaurantName = restaurantSequence.get(position);
             TextView textView = (TextView) convertView.findViewById(R.id.widget_configure_row_restaurant);
             textView.setText(restaurantName);
             textView.setTypeface(FontUtil.fontAPAritaDotumMedium);
 
             viewHolder.box.setClickable(false);
             viewHolder.box.setFocusable(false);
-            viewHolder.box.setChecked(isChecked[position]);
+            viewHolder.box.setChecked(position < isChecked);
 
             return convertView;
         }
 
         public void setChecked(int position) {
-            isChecked[position] = !isChecked[position];
+            String checkedRestaurant = restaurantSequence.get(position);
+            if (position < isChecked) {
+                int i;
+                for (i = isChecked; i < restaurantSequence.size(); i++) {
+                    if (isEarlier(checkedRestaurant, restaurantSequence.get(i)))
+                        break;
+                }
+                restaurantSequence.add(i, checkedRestaurant);
+                restaurantSequence.remove(position);
+                isChecked--;
+            }
+            else {
+                restaurantSequence.remove(position);
+                restaurantSequence.add(isChecked, checkedRestaurant);
+                isChecked++;
+            }
         }
 
         private class ViewHolder {
@@ -195,14 +230,14 @@ public class BabWidgetProviderConfigureActivity extends Activity {
         SharedPreferenceUtil.save(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_WIDGET_ID, idSet);
     }
 
-    static void saveTitlePref(Context context, int appWidgetId, Set<String> text) {
+    static void saveTitlePref(Context context, int appWidgetId, String text) {
         SharedPreferenceUtil.save(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_PREFIX_KEY + appWidgetId, text);
     }
 
-    static Set<String> loadTitlePref(Context context, int appWidgetId) {
-        Set<String> titleValue = SharedPreferenceUtil.loadValueOfStringSet(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_PREFIX_KEY + appWidgetId);
+    static String loadTitlePref(Context context, int appWidgetId) {
+        String titleValue = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_PREFIX_KEY + appWidgetId);
         if (titleValue == null) {
-            titleValue = new HashSet<String>();
+            titleValue = "";
         }
         return titleValue;
     }

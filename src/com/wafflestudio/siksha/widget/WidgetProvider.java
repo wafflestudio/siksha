@@ -21,7 +21,7 @@ import java.util.Set;
  * App Widget Configuration implemented in {@link BabWidgetProviderConfigureActivity BabWidgetProviderConfigureActivity}
  */
 
-public class BabWidgetProvider extends AppWidgetProvider {
+public class WidgetProvider extends AppWidgetProvider {
     public static final String CONFIGURATION_FINISHED = "com.wafflestudio.siksha.CONFIGURATION_FINISHED";
     public static final String DATA_FETCHED = "com.wafflestudio.siksha.DATA_FETCHED";
     public static final String WIDGET_REFRESH = "com.wafflestudio.siksha.WIDGET_REFRESH";
@@ -85,7 +85,7 @@ public class BabWidgetProvider extends AppWidgetProvider {
             remoteViews.setTextViewText(R.id.date_view_widget, CalendarUtil.getCurrentDate().substring(5) + " " + time);
         }
 
-        Intent refreshIntent = new Intent(context, BabWidgetProvider.class);
+        Intent refreshIntent = new Intent(context, WidgetProvider.class);
         refreshIntent.setAction(WIDGET_REFRESH);
         refreshIntent.setData(Uri.fromParts("content", String.valueOf(appWidgetId + randomNumber), null));
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, refreshIntent, 0);
@@ -150,7 +150,7 @@ public class BabWidgetProvider extends AppWidgetProvider {
         }
 
         if (intent.getAction().equals(WIDGET_REFRESH)) {
-            int appWidgetId = Integer.valueOf(intent.getData().getSchemeSpecificPart()) - BabWidgetProvider.randomNumber;
+            int appWidgetId = Integer.valueOf(intent.getData().getSchemeSpecificPart()) - WidgetProvider.randomNumber;
 
             String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON);
 

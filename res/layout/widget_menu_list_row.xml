@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:textSize="13sp"
             android:textColor="@color/black"
-            android:layout_marginLeft="5dp" />
+            android:layout_marginLeft="2dp" />
 
         <TextView
             android:id="@+id/menu_name_widget"
