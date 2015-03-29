@@ -27,8 +27,6 @@
             android:src="@drawable/ic_action_refresh_lunch" />
     </LinearLayout>
 
-
-
     <ListView
         android:id="@+id/widget_list_view"
         android:layout_width="match_parent"

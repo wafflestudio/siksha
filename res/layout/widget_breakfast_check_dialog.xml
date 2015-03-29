@@ -9,9 +9,9 @@
         android:id="@+id/breakfast_check_dialog_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:padding="15dp"
-        android:layout_margin="15dp"
+        android:textSize="21sp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/breakfast_check_dialog_message" />

@@ -39,17 +39,17 @@ public class RestaurantInfoDialog extends Dialog {
     if (pageIndex == 0) {
       topBar.setBackgroundResource(R.drawable.rounded_dialog_roof_breakfast);
       dialogIcon.setImageResource(R.drawable.ic_launcher_breakfast);
-      restaurantView.setTextColor(Color.parseColor("#5abec6"));
+      restaurantView.setTextColor(context.getResources().getColor(R.color.main_color_breakfast));
     }
     else if (pageIndex == 1) {
       topBar.setBackgroundResource(R.drawable.rounded_dialog_roof_lunch);
       dialogIcon.setImageResource(R.drawable.ic_launcher);
-      restaurantView.setTextColor(Color.parseColor("#f48a5b"));
+      restaurantView.setTextColor(context.getResources().getColor(R.color.main_color_lunch));
     }
     else {
       topBar.setBackgroundResource(R.drawable.rounded_dialog_roof_dinner);
       dialogIcon.setImageResource(R.drawable.ic_launcher_dinner);
-      restaurantView.setTextColor(Color.parseColor("#7171c9"));
+      restaurantView.setTextColor(context.getResources().getColor(R.color.main_color_dinner));
     }
 
     restaurantView.setTypeface(FontUtil.fontAPAritaDotumSemiBold);
