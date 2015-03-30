@@ -6,7 +6,7 @@
     android:previewImage="@drawable/widget_launcher"
     android:initialLayout="@layout/widget_provider"
     android:configure="com.wafflestudio.siksha.widget.WidgetProviderConfigureActivity"
-    android:resizeMode="vertical"
+    android:resizeMode="vertical|horizontal"
     android:widgetCategory="home_screen"
     android:initialKeyguardLayout="@layout/widget_provider" >
 </appwidget-provider>
