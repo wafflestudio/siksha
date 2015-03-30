@@ -4,9 +4,12 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.wafflestudio.siksha.service.AlarmServiceReceiver;
 
+import java.security.acl.NotOwnerException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class AlarmUtil {
@@ -18,18 +21,44 @@ public class AlarmUtil {
     }
 
     public static void setAlarm(Context context) {
-        final long cycleTime = 24 * 60 * 60 * 1000;
+        //final long cycleTime = 24 * 60 * 60 * 1000;
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(context, AlarmServiceReceiver.class);
         PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 5);
 
-        alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), cycleTime, sender);
+        Calendar moment = Calendar.getInstance();
+        Calendar now = Calendar.getInstance();
+        moment.setTimeInMillis(System.currentTimeMillis());
+        now.setTimeInMillis(System.currentTimeMillis());
+
+        moment.set(Calendar.HOUR_OF_DAY, 0);
+        moment.set(Calendar.MINUTE, 5);
+        moment.set(Calendar.SECOND, 0);
+        now.set(Calendar.SECOND, 0);
+
+
+        if(now.before(moment)){
+            //now is faster than alarm. initial alarm is on today.
+            Log.e("here", "here");
+        }
+        else {
+            moment.add(Calendar.DAY_OF_MONTH, 1);
+            Log.e("there", "there");
+        }
+
+        SimpleDateFormat momentFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+        SimpleDateFormat nowFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+
+        String momentString = momentFormat.format(moment.getTime());
+        String nowString = nowFormat.format(now.getTime());
+
+        Log.e("moment", momentString);
+        Log.e("now", nowString);
+
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, moment.getTimeInMillis(), AlarmManager.INTERVAL_DAY, sender);
         SharedPreferenceUtil.save(context, SharedPreferenceUtil.PREF_ALARM_NAME, SharedPreferenceUtil.PREF_KEY_JSON, true);
     }
 }
