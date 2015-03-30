@@ -47,7 +47,7 @@ public class InitialLoadingMenu {
       Log.d("is_json_updated", "false");
 
       if (!NetworkUtil.getInstance().isOnline())
-        new DownloadingRetryDialog(context, this).show();
+        new DownloadingRetryDialog(context, this, progressDialog).show();
       else
         startDownloadingService(context);
     }
@@ -83,7 +83,7 @@ public class InitialLoadingMenu {
 
       @Override
       public void onFail() {
-        new DownloadingRetryDialog(context, InitialLoadingMenu.this).show();
+        new DownloadingRetryDialog(context, InitialLoadingMenu.this, progressDialog).show();
       }
     });
   }
