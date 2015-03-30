@@ -20,11 +20,12 @@ public class DownloadingRetryDialog extends Dialog {
   private Button positiveButton;
   private Button negativeButton;
 
-  public DownloadingRetryDialog(final Context context, final InitialLoadingMenu initialLoadingMenu) {
+  public DownloadingRetryDialog(final Context context, final InitialLoadingMenu initialLoadingMenu, final ProgressDialog progressDialog) {
     super(context);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.downloading_retry_dialog);
     setCanceledOnTouchOutside(false);
+    setCancelable(false);
 
     setUIComponents();
     positiveButton.setOnClickListener(new View.OnClickListener() {
@@ -32,6 +33,8 @@ public class DownloadingRetryDialog extends Dialog {
       public void onClick(View v) {
         if (NetworkUtil.getInstance().isOnline()) {
           dismiss();
+          if(progressDialog != null && progressDialog.isShowing())
+            progressDialog.quitShowing();
           initialLoadingMenu.startDownloadingService(context);
         }
         else
@@ -42,6 +45,8 @@ public class DownloadingRetryDialog extends Dialog {
       @Override
       public void onClick(View v) {
         dismiss();
+          if(progressDialog != null && progressDialog.isShowing())
+            progressDialog.quitShowing();
         ((Activity) context).finish();
       }
     });
