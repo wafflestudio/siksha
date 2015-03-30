@@ -47,7 +47,7 @@ public class InitialLoadingMenu {
       Log.d("is_json_updated", "false");
 
       if (!NetworkUtil.getInstance().isOnline())
-        new DownloadingRetryDialog(context, this, progressDialog).show();
+        new DownloadingRetryDialog(context, this, null).show();
       else
         startDownloadingService(context);
     }

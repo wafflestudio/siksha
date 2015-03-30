@@ -33,6 +33,8 @@ public class DownloadingRetryDialog extends Dialog {
       public void onClick(View v) {
         if (NetworkUtil.getInstance().isOnline()) {
           dismiss();
+          if(progressDialog != null && progressDialog.isShowing())
+            progressDialog.quitShowing();
           initialLoadingMenu.startDownloadingService(context);
         }
         else
@@ -43,7 +45,8 @@ public class DownloadingRetryDialog extends Dialog {
       @Override
       public void onClick(View v) {
         dismiss();
-        progressDialog.quitShowing();
+          if(progressDialog != null && progressDialog.isShowing())
+            progressDialog.quitShowing();
         ((Activity) context).finish();
       }
     });
