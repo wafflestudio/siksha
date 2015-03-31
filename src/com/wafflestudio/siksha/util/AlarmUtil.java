@@ -33,17 +33,15 @@ public class AlarmUtil {
         moment.setTimeInMillis(System.currentTimeMillis());
         now.setTimeInMillis(System.currentTimeMillis());
 
-        moment.set(Calendar.HOUR_OF_DAY, 0);
-        moment.set(Calendar.MINUTE, 5);
+        moment.set(Calendar.HOUR_OF_DAY, 21);
+        moment.set(Calendar.MINUTE, 0);
         moment.set(Calendar.SECOND, 0);
         now.set(Calendar.SECOND, 0);
 
-
-        if(now.before(moment)){
+        if (now.before(moment)) {
             //now is faster than alarm. initial alarm is on today.
             Log.e("here", "here");
-        }
-        else {
+        } else {
             moment.add(Calendar.DAY_OF_MONTH, 1);
             Log.e("there", "there");
         }
@@ -56,7 +54,6 @@ public class AlarmUtil {
 
         Log.e("moment", momentString);
         Log.e("now", nowString);
-
 
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, moment.getTimeInMillis(), AlarmManager.INTERVAL_DAY, sender);
         SharedPreferenceUtil.save(context, SharedPreferenceUtil.PREF_ALARM_NAME, SharedPreferenceUtil.PREF_KEY_JSON, true);

@@ -29,9 +29,8 @@ public class WidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON);
-
-        if (recordedDate.equals(CalendarUtil.getCurrentDate())) {
+        int option = DownloadingJson.downloadOption();
+        if (DownloadingJson.isJsonUpdated(context, option)) {
             final int N = appWidgetIds.length;
             for (int i = 0; i < N; i++) {
                 if (WidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])) {
@@ -46,12 +45,14 @@ public class WidgetProvider extends AppWidgetProvider {
             final int N = appWidgetIds.length;
             for (int i = 0; i < N; i++) {
                 if (WidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])) {
-                    context.startService(new Intent(context, DownloadingJson.class).putExtra("from_widget_user", false));
+                    Intent downloadIntent = new Intent(context, DownloadingJson.class);
+                    downloadIntent.putExtra(DownloadingJson.KEY_OPTION, option);
+                    downloadIntent.putExtra("from_widget_user", false);
+                    context.startService(downloadIntent);
                     break;
                 }
             }
         }
-
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
@@ -64,7 +65,7 @@ public class WidgetProvider extends AppWidgetProvider {
         int hour = CalendarUtil.getCurrentHour();
         String time;
 
-        if (hour >= 0 && hour <= 9) {
+        if (hour <= 9 || hour >= 21) {
             if (SharedPreferenceUtil.loadValueOfBoolean(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_PREFIX_BREAKFAST_KEY + appWidgetId))
                 time = "아침";
             else
@@ -82,7 +83,12 @@ public class WidgetProvider extends AppWidgetProvider {
         }
         else {
             remoteViews.setEmptyView(R.id.widget_list_view, R.id.widget_download_fail_view);
-            remoteViews.setTextViewText(R.id.date_view_widget, CalendarUtil.getCurrentDate().substring(5) + " " + time);
+            String date;
+            if (DownloadingJson.downloadOption() != 2)
+                date = CalendarUtil.getCurrentDate();
+            else
+                date = CalendarUtil.getTomorrowDate();
+            remoteViews.setTextViewText(R.id.date_view_widget, date.substring(5) + " " + time);
         }
 
         Intent refreshIntent = new Intent(context, WidgetProvider.class);
@@ -100,17 +106,19 @@ public class WidgetProvider extends AppWidgetProvider {
 
         if (intent.getAction().equals(CONFIGURATION_FINISHED)) {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-
-            String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON);
-
-            if (recordedDate.equals(CalendarUtil.getCurrentDate())) {
+            int option = DownloadingJson.downloadOption();
+            if (DownloadingJson.isJsonUpdated(context, option)) {
                 RemoteViews remoteViews = updateWidgetListView(context, appWidgetId, true);
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
                 appWidgetManager.updateAppWidget(appWidgetId, null);
                 appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
             }
-            else
-                context.startService(new Intent(context, DownloadingJson.class).putExtra("from_widget_user", true));
+            else {
+                Intent downloadIntent = new Intent(context, DownloadingJson.class);
+                downloadIntent.putExtra(DownloadingJson.KEY_OPTION, option);
+                downloadIntent.putExtra("from_widget_user", true);
+                context.startService(downloadIntent);
+            }
         }
 
         if (intent.getAction().equals(DATA_FETCHED)) {
@@ -151,10 +159,8 @@ public class WidgetProvider extends AppWidgetProvider {
 
         if (intent.getAction().equals(WIDGET_REFRESH)) {
             int appWidgetId = Integer.valueOf(intent.getData().getSchemeSpecificPart()) - WidgetProvider.randomNumber;
-
-            String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON);
-
-            if (recordedDate.equals(CalendarUtil.getCurrentDate())) {
+            int option = DownloadingJson.downloadOption();
+            if (DownloadingJson.isJsonUpdated(context, option)) {
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
                 RemoteViews remoteViews = updateWidgetListView(context, appWidgetId, true);
@@ -162,8 +168,12 @@ public class WidgetProvider extends AppWidgetProvider {
                 appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list_view);
             }
-            else
-                context.startService(new Intent(context, DownloadingJson.class).putExtra("from_widget_user", true));
+            else {
+                Intent downloadIntent = new Intent(context, DownloadingJson.class);
+                downloadIntent.putExtra(DownloadingJson.KEY_OPTION, option);
+                downloadIntent.putExtra("from_widget_user", true);
+                context.startService(downloadIntent);
+            }
         }
     }
 

@@ -39,7 +39,7 @@ public class LunchPage extends LinearLayout {
 
     indicator = (TextView) findViewById(R.id.lunch_indicator);
     indicator.setTypeface(FontUtil.fontAPAritaDotumMedium);
-    indicator.setText(CalendarUtil.getCurrentDate().substring(5) + " " + context.getString(R.string.lunch));
+    indicator.setText(SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON).substring(5) + " " + context.getString(R.string.lunch));
 
     expandableListView = (ExpandableListView) findViewById(R.id.lunch_expandable_list_view);
     expandableListView.setAdapter(expandableListAdapter);

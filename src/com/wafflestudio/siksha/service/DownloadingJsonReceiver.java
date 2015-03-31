@@ -13,7 +13,7 @@ public class DownloadingJsonReceiver extends BroadcastReceiver {
 
   public interface OnCompleteDownloadListener {
     public void onComplete();
-    public void onFail();
+    public void onFail(int option);
   }
 
   public void setOnCompleteDownloadListener(OnCompleteDownloadListener onCompleteDownloadListener) {
@@ -24,13 +24,14 @@ public class DownloadingJsonReceiver extends BroadcastReceiver {
   public void onReceive(Context context, Intent intent) {
     boolean isSuccess = intent.getBooleanExtra("is_success", false);
     String action = intent.getAction();
+    final int option = intent.getIntExtra(DownloadingJson.KEY_OPTION, 0);
     Log.d("DownloadingReciever_Action : ", action);
 
     if (action != null && action.equals(ACTION_CURRENT_DOWNLOAD)) {
       if (isSuccess)
         onCompleteDownloadListener.onComplete();
       else
-        onCompleteDownloadListener.onFail();
+        onCompleteDownloadListener.onFail(option);
     }
   }
 }
