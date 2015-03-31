@@ -14,21 +14,22 @@
             android:id="@+id/menu_price_widget"
             android:gravity="center"
             android:layout_gravity="center_vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="13sp"
+            android:textSize="12sp"
             android:textColor="@color/black"
+            android:layout_weight="1"
             android:layout_marginLeft="2dp" />
 
         <TextView
             android:id="@+id/menu_name_widget"
-            android:gravity="center"
             android:layout_gravity="center_vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="13sp"
+            android:textSize="12sp"
             android:textColor="@color/black"
-            android:layout_marginLeft="5dp" />
+            android:layout_weight="4"
+            android:layout_marginLeft="4dp" />
 
     </LinearLayout>
 
