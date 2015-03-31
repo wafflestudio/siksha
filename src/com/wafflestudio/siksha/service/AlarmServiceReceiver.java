@@ -6,13 +6,12 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.wafflestudio.siksha.util.CalendarUtil;
-import com.wafflestudio.siksha.util.NetworkUtil;
 
 public class AlarmServiceReceiver extends BroadcastReceiver {
   @Override
   public void onReceive(Context context, Intent intent) {
     Log.d("alarm_time", CalendarUtil.getCurrentDate() + CalendarUtil.getCurrentHour() + "h" + CalendarUtil.getCurrentMin() + "m");
-    int option = DownloadingJson.downloadOption();
+    int option = DownloadingJson.getDownloadOption();
 
     if (!DownloadingJson.isJsonUpdated(context, option)) {
       Intent jsonDownload = new Intent(context, DownloadingJson.class);

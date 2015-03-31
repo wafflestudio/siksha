@@ -17,7 +17,6 @@ public class ProgressDialog extends Dialog {
   private String message;
 
   private ImageView progress;
-  private TextView title;
 
   public ProgressDialog(Context context, String message) {
     super(context, R.style.progress_dialog);
@@ -33,7 +32,7 @@ public class ProgressDialog extends Dialog {
     setCanceledOnTouchOutside(false);
 
     progress = (ImageView) findViewById(R.id.progress_image);
-    title = (TextView) findViewById(R.id.progress_dialog_title);
+    TextView title = (TextView) findViewById(R.id.progress_dialog_title);
 
     title.setText(message);
     title.setTypeface(FontUtil.fontAPAritaDotumMedium);

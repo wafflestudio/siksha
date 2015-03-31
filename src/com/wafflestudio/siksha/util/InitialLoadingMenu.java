@@ -31,7 +31,8 @@ public class InitialLoadingMenu {
   }
 
   public void initSetting() {
-    int option = DownloadingJson.downloadOption();
+    int option = DownloadingJson.getDownloadOption();
+
     if (DownloadingJson.isJsonUpdated(context, option)) {
       Log.d("is_json_updated", "true");
 
@@ -48,7 +49,7 @@ public class InitialLoadingMenu {
       Log.d("is_json_updated", "false");
 
       if (!NetworkUtil.getInstance().isOnline())
-        new DownloadingRetryDialog(context, this, null, option).show();
+        new DownloadingRetryDialog(context, this, option).show();
       else
         startDownloadingService(context, option);
     }
@@ -84,7 +85,10 @@ public class InitialLoadingMenu {
 
       @Override
       public void onFail(int option) {
-        new DownloadingRetryDialog(context, InitialLoadingMenu.this, progressDialog, option).show();
+        if (progressDialog != null && progressDialog.isShowing())
+          progressDialog.quitShowing();
+
+        new DownloadingRetryDialog(context, InitialLoadingMenu.this, option).show();
       }
     });
   }

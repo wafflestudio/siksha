@@ -29,7 +29,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        int option = DownloadingJson.downloadOption();
+        int option = DownloadingJson.getDownloadOption();
         if (DownloadingJson.isJsonUpdated(context, option)) {
             final int N = appWidgetIds.length;
             for (int i = 0; i < N; i++) {
@@ -84,7 +84,7 @@ public class WidgetProvider extends AppWidgetProvider {
         else {
             remoteViews.setEmptyView(R.id.widget_list_view, R.id.widget_download_fail_view);
             String date;
-            if (DownloadingJson.downloadOption() != 2)
+            if (DownloadingJson.getDownloadOption() != 2)
                 date = CalendarUtil.getCurrentDate();
             else
                 date = CalendarUtil.getTomorrowDate();
@@ -106,7 +106,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
         if (intent.getAction().equals(CONFIGURATION_FINISHED)) {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-            int option = DownloadingJson.downloadOption();
+            int option = DownloadingJson.getDownloadOption();
             if (DownloadingJson.isJsonUpdated(context, option)) {
                 RemoteViews remoteViews = updateWidgetListView(context, appWidgetId, true);
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
@@ -159,7 +159,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
         if (intent.getAction().equals(WIDGET_REFRESH)) {
             int appWidgetId = Integer.valueOf(intent.getData().getSchemeSpecificPart()) - WidgetProvider.randomNumber;
-            int option = DownloadingJson.downloadOption();
+            int option = DownloadingJson.getDownloadOption();
             if (DownloadingJson.isJsonUpdated(context, option)) {
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
