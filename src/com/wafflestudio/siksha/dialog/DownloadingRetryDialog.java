@@ -20,7 +20,7 @@ public class DownloadingRetryDialog extends Dialog {
   private Button positiveButton;
   private Button negativeButton;
 
-  public DownloadingRetryDialog(final Context context, final InitialLoadingMenu initialLoadingMenu, final ProgressDialog progressDialog) {
+  public DownloadingRetryDialog(final Context context, final InitialLoadingMenu initialLoadingMenu, final ProgressDialog progressDialog, final int option) {
     super(context);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.downloading_retry_dialog);
@@ -35,7 +35,7 @@ public class DownloadingRetryDialog extends Dialog {
           dismiss();
           if(progressDialog != null && progressDialog.isShowing())
             progressDialog.quitShowing();
-          initialLoadingMenu.startDownloadingService(context);
+          initialLoadingMenu.startDownloadingService(context, option);
         }
         else
           Toast.makeText(context, R.string.downloading_network_state, Toast.LENGTH_SHORT).show();

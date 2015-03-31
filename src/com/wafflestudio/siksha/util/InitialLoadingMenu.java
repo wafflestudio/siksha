@@ -31,7 +31,8 @@ public class InitialLoadingMenu {
   }
 
   public void initSetting() {
-    if (DownloadingJson.isJsonUpdated(context)) {
+    int option = DownloadingJson.downloadOption();
+    if (DownloadingJson.isJsonUpdated(context, option)) {
       Log.d("is_json_updated", "true");
 
       forms = new ParsingJson(context).getParsedForms();
@@ -47,9 +48,9 @@ public class InitialLoadingMenu {
       Log.d("is_json_updated", "false");
 
       if (!NetworkUtil.getInstance().isOnline())
-        new DownloadingRetryDialog(context, this, null).show();
+        new DownloadingRetryDialog(context, this, null, option).show();
       else
-        startDownloadingService(context);
+        startDownloadingService(context, option);
     }
   }
 
@@ -82,13 +83,13 @@ public class InitialLoadingMenu {
       }
 
       @Override
-      public void onFail() {
-        new DownloadingRetryDialog(context, InitialLoadingMenu.this, progressDialog).show();
+      public void onFail(int option) {
+        new DownloadingRetryDialog(context, InitialLoadingMenu.this, progressDialog, option).show();
       }
     });
   }
 
-  public void startDownloadingService(final Context context) {
+  public void startDownloadingService(final Context context, int option) {
     setReceiverCallBack();
 
     progressDialog = new ProgressDialog(context, context.getString(R.string.downloading_message));
@@ -97,13 +98,14 @@ public class InitialLoadingMenu {
 
     Intent intent = new Intent(context, DownloadingJson.class);
     intent.setAction(DownloadingJsonReceiver.ACTION_CURRENT_DOWNLOAD);
+    intent.putExtra(DownloadingJson.KEY_OPTION, option);
     context.startService(intent);
   }
 
   private void setInitialPage() {
     int hour = CalendarUtil.getCurrentHour();
 
-    if (hour >= 0 && hour <= 9)
+    if (hour <= 9 || hour >= 21)
       viewPager.setCurrentItem(0);
     else if (hour >= 10 && hour <= 14)
       viewPager.setCurrentItem(1);

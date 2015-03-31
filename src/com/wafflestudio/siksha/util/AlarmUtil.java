@@ -33,8 +33,8 @@ public class AlarmUtil {
     moment.setTimeInMillis(System.currentTimeMillis());
     now.setTimeInMillis(System.currentTimeMillis());
 
-    moment.set(Calendar.HOUR_OF_DAY, 0);
-    moment.set(Calendar.MINUTE, 5);
+    moment.set(Calendar.HOUR_OF_DAY, 21);
+    moment.set(Calendar.MINUTE, 0);
     moment.set(Calendar.SECOND, 0);
     now.set(Calendar.SECOND, 0);
 

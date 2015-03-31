@@ -20,28 +20,51 @@ import java.net.URL;
 
 public class DownloadingJson extends IntentService {
   public static final String SERVER_URL = "http://kanggyu94.fun25.co.kr:13203/restaurants";
+  public static final String TODAY_URL = "?date=today";
+  public static final String TOMORROW_URL = "?date=tomorrow";
+  public static final String KEY_OPTION = "download_option";
 
   public DownloadingJson() {
     super("com.wafflestudio.siksha.DownloadingJson");
   }
 
-  public static boolean isJsonUpdated(Context context) {
+  public static boolean isJsonUpdated(Context context, int option) {
     String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON);
     Log.d("recorded_date", recordedDate);
-
-    return recordedDate.equals(CalendarUtil.getCurrentDate());
+    switch (option) {
+      case 0:
+      case 1:
+        return recordedDate.equals(CalendarUtil.getCurrentDate());
+      case 2:
+        return recordedDate.equals(CalendarUtil.getTomorrowDate());
+      default:
+        return recordedDate.equals(CalendarUtil.getCurrentDate());
+    }
   }
 
-  public String fetchJsonFromServer() {
+  public static int downloadOption() {
+    int hour = CalendarUtil.getCurrentHour();
+    int min = CalendarUtil.getCurrentMin();
+    if (hour == 0 && min < 5)
+      return 0;
+    else if (hour < 21)
+      return 1;
+    else
+      return 2;
+  }
+
+  public String fetchJsonFromServer(int option) {
     StringBuilder stringBuilder = new StringBuilder();
 
     try {
       URL url;
 
-      if (CalendarUtil.getCurrentHour() == 0 && CalendarUtil.getCurrentMin() < 5)
-        url = new URL(SERVER_URL);
-      else
-        url = new URL(SERVER_URL + "?alarm=true");
+      switch (option) {
+        case 0: url = new URL(SERVER_URL); break;
+        case 1: url = new URL(SERVER_URL + TODAY_URL); break;
+        case 2: url = new URL(SERVER_URL + TOMORROW_URL); break;
+        default: url = new URL(SERVER_URL); break;
+      }
 
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
       connection.setConnectTimeout(10 * 1000);
@@ -99,10 +122,14 @@ public class DownloadingJson extends IntentService {
     return true;
   }
 
-  private void saveDateOnSharedPreference() {
-    String currentDate = CalendarUtil.getCurrentDate();
-    SharedPreferenceUtil.save(getApplicationContext(), SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON, currentDate);
-    Log.d("save_date", currentDate);
+  private void saveDateOnSharedPreference(int option) {
+    String date;
+      if (option != 2)
+        date = CalendarUtil.getCurrentDate();
+      else
+        date = CalendarUtil.getTomorrowDate();
+    SharedPreferenceUtil.save(getApplicationContext(), SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON, date);
+    Log.d("save_date", date);
   }
 
   public void sendSignalToWidget(boolean fromWidgetUser, boolean isSuccess) {
@@ -112,25 +139,27 @@ public class DownloadingJson extends IntentService {
     sendBroadcast(widgetUpdate);
   }
 
-  public void sendSignalToApp(String action, boolean isSuccess) {
+  public void sendSignalToApp(String action, boolean isSuccess, int option) {
     Intent intent = new Intent();
     intent.addCategory(Intent.CATEGORY_DEFAULT);
     intent.setAction(action);
     intent.putExtra("is_success", isSuccess);
+    intent.putExtra(KEY_OPTION, option);
     sendBroadcast(intent);
   }
 
   @Override
   protected void onHandleIntent(Intent intent) {
     final String action = intent.getAction();
-    final boolean isSuccess = writeJsonOnInternalStorage(fetchJsonFromServer());
+    final int option = intent.getIntExtra(KEY_OPTION, 0);
+    final boolean isSuccess = writeJsonOnInternalStorage(fetchJsonFromServer(option));
     final boolean fromWidget = intent.getBooleanExtra("from_widget_user", false);
     Log.d("onHandleIntent", "isSuccess : " + isSuccess + " / " + "action : " + action);
 
     if (isSuccess)
-      saveDateOnSharedPreference();
+      saveDateOnSharedPreference(option);
 
-    sendSignalToApp(action, isSuccess);
+    sendSignalToApp(action, isSuccess, option);
     sendSignalToWidget(fromWidget, isSuccess);
   }
 }

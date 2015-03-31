@@ -173,7 +173,7 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
   private int getPageIndexOnHour() {
     int hour = CalendarUtil.getCurrentHour();
 
-    if (hour >= 0 && hour <= 9)
+    if (hour <= 9 || hour >= 21)
       return 0;
     else if (hour >= 10 && hour <= 14)
       return 1;

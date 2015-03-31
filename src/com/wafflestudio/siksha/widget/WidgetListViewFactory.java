@@ -67,7 +67,7 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
 
         String time;
 
-        if (hour >= 0 && hour <= 9) {
+        if (hour <= 9 || hour >= 21) {
             if (SharedPreferenceUtil.loadValueOfBoolean(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_PREFIX_BREAKFAST_KEY + appWidgetId))
                 time = "breakfast";
             else

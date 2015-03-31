@@ -37,7 +37,7 @@ public class BreakfastPage extends LinearLayout {
 
     indicator = (TextView) findViewById(R.id.breakfast_indicator);
     indicator.setTypeface(FontUtil.fontAPAritaDotumMedium);
-    indicator.setText(CalendarUtil.getCurrentDate().substring(5) + " " + context.getString(R.string.breakfast));
+    indicator.setText(SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON).substring(5) + " " + context.getString(R.string.breakfast));
 
     expandableListView = (ExpandableListView) findViewById(R.id.breakfast_expandable_list_view);
     expandableListView.setAdapter(expandableListAdapter);
