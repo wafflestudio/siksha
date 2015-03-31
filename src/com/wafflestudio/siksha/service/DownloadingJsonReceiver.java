@@ -24,8 +24,7 @@ public class DownloadingJsonReceiver extends BroadcastReceiver {
   public void onReceive(Context context, Intent intent) {
     boolean isSuccess = intent.getBooleanExtra("is_success", false);
     String action = intent.getAction();
-    final int option = intent.getIntExtra(DownloadingJson.KEY_OPTION, 0);
-    Log.d("DownloadingReciever_Action : ", action);
+    int option = intent.getIntExtra(DownloadingJson.KEY_OPTION, 0);
 
     if (action != null && action.equals(ACTION_CURRENT_DOWNLOAD)) {
       if (isSuccess)

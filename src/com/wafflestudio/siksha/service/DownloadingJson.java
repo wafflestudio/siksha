@@ -20,9 +20,13 @@ import java.net.URL;
 
 public class DownloadingJson extends IntentService {
   public static final String SERVER_URL = "http://kanggyu94.fun25.co.kr:13203/restaurants";
-  public static final String TODAY_URL = "?date=today";
-  public static final String TOMORROW_URL = "?date=tomorrow";
+  public static final String QUERY_TODAY = "?date=today";
+  public static final String QUERY_TOMORROW = "?date=tomorrow";
   public static final String KEY_OPTION = "download_option";
+
+  public static final int OPTION_CRAWLING_INSTANTLY = 0;
+  public static final int OPTION_CACHED_TODAY = 1;
+  public static final int OPTION_CACHED_TOMORROW = 2;
 
   public DownloadingJson() {
     super("com.wafflestudio.siksha.DownloadingJson");
@@ -31,26 +35,23 @@ public class DownloadingJson extends IntentService {
   public static boolean isJsonUpdated(Context context, int option) {
     String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON);
     Log.d("recorded_date", recordedDate);
-    switch (option) {
-      case 0:
-      case 1:
-        return recordedDate.equals(CalendarUtil.getCurrentDate());
-      case 2:
-        return recordedDate.equals(CalendarUtil.getTomorrowDate());
-      default:
-        return recordedDate.equals(CalendarUtil.getCurrentDate());
-    }
+
+    if (option == OPTION_CACHED_TOMORROW)
+      return recordedDate.equals(CalendarUtil.getTomorrowDate());
+    else
+      return recordedDate.equals(CalendarUtil.getCurrentDate());
   }
 
-  public static int downloadOption() {
+  public static int getDownloadOption() {
     int hour = CalendarUtil.getCurrentHour();
     int min = CalendarUtil.getCurrentMin();
+
     if (hour == 0 && min < 5)
-      return 0;
+      return OPTION_CRAWLING_INSTANTLY; // request server for crawling web page instantly
     else if (hour < 21)
-      return 1;
+      return OPTION_CACHED_TODAY; // request server for fetching cached json about today contents
     else
-      return 2;
+      return OPTION_CACHED_TOMORROW; // request server for fetching cached json about tomorrow contents
   }
 
   public String fetchJsonFromServer(int option) {
@@ -60,10 +61,15 @@ public class DownloadingJson extends IntentService {
       URL url;
 
       switch (option) {
-        case 0: url = new URL(SERVER_URL); break;
-        case 1: url = new URL(SERVER_URL + TODAY_URL); break;
-        case 2: url = new URL(SERVER_URL + TOMORROW_URL); break;
-        default: url = new URL(SERVER_URL); break;
+        case OPTION_CACHED_TODAY :
+          url = new URL(SERVER_URL + QUERY_TODAY);
+          break;
+        case OPTION_CACHED_TOMORROW :
+          url = new URL(SERVER_URL + QUERY_TOMORROW);
+          break;
+        default :
+          url = new URL(SERVER_URL);
+          break;
       }
 
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -124,10 +130,12 @@ public class DownloadingJson extends IntentService {
 
   private void saveDateOnSharedPreference(int option) {
     String date;
-      if (option != 2)
-        date = CalendarUtil.getCurrentDate();
-      else
-        date = CalendarUtil.getTomorrowDate();
+
+    if (option != OPTION_CACHED_TOMORROW)
+      date = CalendarUtil.getCurrentDate();
+    else
+      date = CalendarUtil.getTomorrowDate();
+
     SharedPreferenceUtil.save(getApplicationContext(), SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON, date);
     Log.d("save_date", date);
   }
@@ -154,6 +162,7 @@ public class DownloadingJson extends IntentService {
     final int option = intent.getIntExtra(KEY_OPTION, 0);
     final boolean isSuccess = writeJsonOnInternalStorage(fetchJsonFromServer(option));
     final boolean fromWidget = intent.getBooleanExtra("from_widget_user", false);
+
     Log.d("onHandleIntent", "isSuccess : " + isSuccess + " / " + "action : " + action);
 
     if (isSuccess)

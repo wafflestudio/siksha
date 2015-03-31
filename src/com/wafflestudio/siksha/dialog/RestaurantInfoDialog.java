@@ -13,28 +13,18 @@ import com.wafflestudio.siksha.util.FontUtil;
 import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 
 public class RestaurantInfoDialog extends Dialog {
-  private TextView restaurantView;
-
-  private TextView operatingHoursTitle;
-  private TextView locationTitle;
-	private TextView operatingHoursDetails;
-	private TextView locationDetails;
-
-  private View topBar;
-  private ImageView dialogIcon;
-
-	public RestaurantInfoDialog(Context context, String restaurantName, int pageIndex) {
+  public RestaurantInfoDialog(Context context, String restaurantName, int pageIndex) {
 		super(context, R.style.restaurant_info_dialog);
     setContentView(R.layout.restaurant_info_dialog);
 
-    restaurantView = (TextView) findViewById(R.id.restaurant_info_dialog_title);
-    operatingHoursTitle = (TextView) findViewById(R.id.operating_hour);
-    locationTitle = (TextView) findViewById(R.id.location);
-    operatingHoursDetails = (TextView) findViewById(R.id.operating_hour_details);
-		locationDetails = (TextView) findViewById(R.id.location_details);
+    TextView restaurantView = (TextView) findViewById(R.id.restaurant_info_dialog_title);
+    TextView operatingHoursTitle = (TextView) findViewById(R.id.operating_hour);
+    TextView locationTitle = (TextView) findViewById(R.id.location);
+    TextView operatingHoursDetails = (TextView) findViewById(R.id.operating_hour_details);
+    TextView locationDetails = (TextView) findViewById(R.id.location_details);
 
-    topBar = findViewById(R.id.restaurant_info_dialog_top_bar);
-    dialogIcon = (ImageView) findViewById(R.id.restaurant_info_dialog_icon);
+    View topBar = findViewById(R.id.restaurant_info_dialog_top_bar);
+    ImageView dialogIcon = (ImageView) findViewById(R.id.restaurant_info_dialog_icon);
 
     if (pageIndex == 0) {
       topBar.setBackgroundResource(R.drawable.rounded_dialog_roof_breakfast);

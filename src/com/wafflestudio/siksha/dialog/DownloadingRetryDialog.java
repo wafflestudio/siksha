@@ -15,26 +15,23 @@ import com.wafflestudio.siksha.util.InitialLoadingMenu;
 import com.wafflestudio.siksha.util.NetworkUtil;
 
 public class DownloadingRetryDialog extends Dialog {
-  private TextView title;
-  private TextView message;
   private Button positiveButton;
   private Button negativeButton;
 
-  public DownloadingRetryDialog(final Context context, final InitialLoadingMenu initialLoadingMenu, final ProgressDialog progressDialog, final int option) {
+  public DownloadingRetryDialog(final Context context, final InitialLoadingMenu initialLoadingMenu, final int option) {
     super(context);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.downloading_retry_dialog);
+
     setCanceledOnTouchOutside(false);
     setCancelable(false);
-
     setUIComponents();
+
     positiveButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         if (NetworkUtil.getInstance().isOnline()) {
           dismiss();
-          if(progressDialog != null && progressDialog.isShowing())
-            progressDialog.quitShowing();
           initialLoadingMenu.startDownloadingService(context, option);
         }
         else
@@ -45,16 +42,14 @@ public class DownloadingRetryDialog extends Dialog {
       @Override
       public void onClick(View v) {
         dismiss();
-          if(progressDialog != null && progressDialog.isShowing())
-            progressDialog.quitShowing();
         ((Activity) context).finish();
       }
     });
   }
 
   private void setUIComponents() {
-    title = (TextView) findViewById(R.id.downloading_dialog_title);
-    message = (TextView) findViewById(R.id.downloading_dialog_message);
+    TextView title = (TextView) findViewById(R.id.downloading_dialog_title);
+    TextView message = (TextView) findViewById(R.id.downloading_dialog_message);
     positiveButton = (Button) findViewById(R.id.downloading_dialog_positive_button);
     negativeButton = (Button) findViewById(R.id.downloading_dialog_negative_button);
 

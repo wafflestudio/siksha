@@ -26,11 +26,7 @@ import com.wafflestudio.siksha.util.RestaurantSequencer;
 
 public class MainActivity extends Activity implements ViewPager.OnPageChangeListener, View.OnClickListener {
   private RelativeLayout topBar;
-  private TextView title;
-  private TextView appName;
   private ImageButton bookmarkButton;
-
-  private ViewPager viewPager;
 
   private DownloadingJsonReceiver downloadingJsonReceiver;
 
@@ -71,12 +67,12 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
 
   private void setLayout() {
     topBar = (RelativeLayout) findViewById(R.id.activity_main_top_bar);
-    title = (TextView) findViewById(R.id.activity_main_title);
-    appName = (TextView) findViewById(R.id.activity_main_app_name);
+    TextView title = (TextView) findViewById(R.id.activity_main_title);
+    TextView appName = (TextView) findViewById(R.id.activity_main_app_name);
     bookmarkButton = (ImageButton) findViewById(R.id.bookmark_button);
     bookmarkButton.setOnClickListener(this);
 
-    viewPager = (ViewPager) findViewById(R.id.view_pager);
+    ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
     viewPager.setOffscreenPageLimit(2);
     viewPager.setOnPageChangeListener(this);
 

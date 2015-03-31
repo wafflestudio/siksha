@@ -11,8 +11,6 @@ import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.FontUtil;
 
 public class NotifyWidgetDialog extends Dialog {
-  private TextView title;
-  private TextView message;
   private Button closeButton;
 
   public NotifyWidgetDialog(final Context context) {
@@ -31,8 +29,8 @@ public class NotifyWidgetDialog extends Dialog {
   }
 
   private void setUIComponents() {
-    title = (TextView) findViewById(R.id.notify_widget_dialog_title);
-    message = (TextView) findViewById(R.id.notify_widget_dialog_message);
+    TextView title = (TextView) findViewById(R.id.notify_widget_dialog_title);
+    TextView message = (TextView) findViewById(R.id.notify_widget_dialog_message);
     closeButton = (Button) findViewById(R.id.notify_widget_dialog_close_button);
 
     title.setTypeface(FontUtil.fontAPAritaDotumSemiBold);
