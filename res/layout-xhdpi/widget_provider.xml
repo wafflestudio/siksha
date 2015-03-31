@@ -9,21 +9,21 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:padding="10dp"
+        android:padding="9dp"
         android:background="@drawable/rounded_widget_roof" >
 
         <TextView
             android:id="@+id/date_view_widget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="17sp"
             android:textColor="@color/white"
-            android:layout_marginRight="7dp"
+            android:layout_marginRight="6dp"
             android:gravity="center" />
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
             android:scaleType="fitXY"
             android:src="@drawable/ic_action_refresh_lunch" />
     </LinearLayout>
@@ -33,9 +33,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_widget"
-        android:paddingLeft="4.5dp"
-        android:paddingRight="4.5dp"
-        android:paddingBottom="4.5dp" />
+        android:paddingLeft="4.2dp"
+        android:paddingRight="4.2dp"
+        android:paddingBottom="4.2dp" />
 
     <TextView
         android:id="@+id/widget_empty_view"

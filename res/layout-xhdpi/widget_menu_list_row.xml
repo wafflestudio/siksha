@@ -16,7 +16,7 @@
             android:layout_gravity="center_vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="13sp"
+            android:textSize="12.5sp"
             android:textColor="@color/black"
             android:layout_weight="1"
             android:layout_marginLeft="2dp" />
@@ -26,10 +26,10 @@
             android:layout_gravity="center_vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="13sp"
+            android:textSize="12.5sp"
             android:textColor="@color/black"
             android:layout_weight="4"
-            android:layout_marginLeft="5dp" />
+            android:layout_marginLeft="4dp" />
 
     </LinearLayout>
 
