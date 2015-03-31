@@ -26,7 +26,6 @@ public class AlarmUtil {
     Intent intent = new Intent(context, AlarmServiceReceiver.class);
     PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
 
-
     Calendar moment = Calendar.getInstance();
     Calendar now = Calendar.getInstance();
     moment.setTimeInMillis(System.currentTimeMillis());
@@ -37,11 +36,8 @@ public class AlarmUtil {
     moment.set(Calendar.SECOND, 0);
     now.set(Calendar.SECOND, 0);
 
-
-    if(now.before(moment)){
-          //now is faster than alarm. initial alarm is on today.
-    }
-    else {
+    // now is faster than alarm. initial alarm is on today.
+    if (!now.before(moment)) {
       moment.add(Calendar.DAY_OF_MONTH, 1);
     }
 

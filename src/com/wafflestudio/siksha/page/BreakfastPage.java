@@ -1,6 +1,7 @@
 package com.wafflestudio.siksha.page;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import com.wafflestudio.siksha.util.RestaurantSequencer;
 import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class BreakfastPage extends LinearLayout {
@@ -20,8 +22,6 @@ public class BreakfastPage extends LinearLayout {
 
   public ExpandableListView expandableListView;
   public AdapterUtil.ExpandableListAdapter expandableListAdapter;
-
-  private TextView indicator;
 
   public BreakfastPage(Context context, AdapterUtil.ExpandableListAdapter expandableListAdapter) {
     super(context);
@@ -35,7 +35,7 @@ public class BreakfastPage extends LinearLayout {
   private void initSetting() {
     inflate(context, R.layout.breakfast_page, this);
 
-    indicator = (TextView) findViewById(R.id.breakfast_indicator);
+    TextView indicator = (TextView) findViewById(R.id.breakfast_indicator);
     indicator.setTypeface(FontUtil.fontAPAritaDotumMedium);
     indicator.setText(SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON).substring(5) + " " + context.getString(R.string.breakfast));
 
@@ -45,6 +45,29 @@ public class BreakfastPage extends LinearLayout {
       @Override
       public void onGroupExpand(int groupPosition) {
         collapseItems(groupPosition);
+      }
+    });
+    expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+      @Override
+      public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long id) {
+        RestaurantSequencer restaurantSequencer = RestaurantSequencer.getInstance();
+
+        if (restaurantSequencer.isBookmarkMode()) {
+          String name = restaurantSequencer.currentSequence.get(groupPosition);
+
+          if (!restaurantSequencer.isBookMarked(name))
+            restaurantSequencer.setBookmark(name, true);
+          else
+            restaurantSequencer.setBookmark(name, false);
+
+          restaurantSequencer.modifySequence(name);
+          restaurantSequencer.setMenuListOnSequence();
+          restaurantSequencer.notifyChangeToAdapters(false);
+
+          return true;
+        }
+        else
+          return false;
       }
     });
     
@@ -78,8 +101,7 @@ public class BreakfastPage extends LinearLayout {
     }
     else {
       List<String> bookmarkList = new ArrayList<String>();
-      for(String bookmark : recordedBookmark.split("/"))
-        bookmarkList.add(bookmark);
+      Collections.addAll(bookmarkList, recordedBookmark.split("/"));
 
       for (int i = 0; i < restaurantSequencer.currentSequence.size(); i++) {
         if (!bookmarkList.contains(restaurantSequencer.currentSequence.get(i)) && i != groupPosition)

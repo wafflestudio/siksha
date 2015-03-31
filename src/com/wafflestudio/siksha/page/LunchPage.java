@@ -2,6 +2,7 @@ package com.wafflestudio.siksha.page;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,8 +24,6 @@ public class LunchPage extends LinearLayout {
   public ExpandableListView expandableListView;
   public AdapterUtil.ExpandableListAdapter expandableListAdapter;
 
-  private TextView indicator;
-
   public LunchPage(Context context, AdapterUtil.ExpandableListAdapter expandableListAdapter) {
     super(context);
 
@@ -37,7 +36,7 @@ public class LunchPage extends LinearLayout {
   private void initSetting() {
     inflate(context, R.layout.lunch_page, this);
 
-    indicator = (TextView) findViewById(R.id.lunch_indicator);
+    TextView indicator = (TextView) findViewById(R.id.lunch_indicator);
     indicator.setTypeface(FontUtil.fontAPAritaDotumMedium);
     indicator.setText(SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON).substring(5) + " " + context.getString(R.string.lunch));
 
@@ -47,6 +46,29 @@ public class LunchPage extends LinearLayout {
       @Override
       public void onGroupExpand(int groupPosition) {
         collapseItems(groupPosition);
+      }
+    });
+    expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+      @Override
+      public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long id) {
+        RestaurantSequencer restaurantSequencer = RestaurantSequencer.getInstance();
+
+        if (restaurantSequencer.isBookmarkMode()) {
+          String name = restaurantSequencer.currentSequence.get(groupPosition);
+
+          if (!restaurantSequencer.isBookMarked(name))
+            restaurantSequencer.setBookmark(name, true);
+          else
+            restaurantSequencer.setBookmark(name, false);
+
+          restaurantSequencer.modifySequence(name);
+          restaurantSequencer.setMenuListOnSequence();
+          restaurantSequencer.notifyChangeToAdapters(false);
+
+          return true;
+        }
+        else
+          return false;
       }
     });
 
