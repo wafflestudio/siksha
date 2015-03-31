@@ -21,7 +21,6 @@ public class AlarmUtil {
     }
 
     public static void setAlarm(Context context) {
-        //final long cycleTime = 24 * 60 * 60 * 1000;
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(context, AlarmServiceReceiver.class);
@@ -40,20 +39,9 @@ public class AlarmUtil {
 
         if (now.before(moment)) {
             //now is faster than alarm. initial alarm is on today.
-            Log.e("here", "here");
         } else {
             moment.add(Calendar.DAY_OF_MONTH, 1);
-            Log.e("there", "there");
         }
-
-        SimpleDateFormat momentFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
-        SimpleDateFormat nowFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
-
-        String momentString = momentFormat.format(moment.getTime());
-        String nowString = nowFormat.format(now.getTime());
-
-        Log.e("moment", momentString);
-        Log.e("now", nowString);
 
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, moment.getTimeInMillis(), AlarmManager.INTERVAL_DAY, sender);
         SharedPreferenceUtil.save(context, SharedPreferenceUtil.PREF_ALARM_NAME, SharedPreferenceUtil.PREF_KEY_JSON, true);
