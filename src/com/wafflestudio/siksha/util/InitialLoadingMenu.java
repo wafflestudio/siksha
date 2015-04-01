@@ -32,8 +32,9 @@ public class InitialLoadingMenu {
 
   public void initSetting() {
     int option = DownloadingJson.getDownloadOption();
+    String downloadingDate = DownloadingJson.getDownloadingDate(option);
 
-    if (DownloadingJson.isJsonUpdated(context, option)) {
+    if (DownloadingJson.isJsonUpdated(context, downloadingDate)) {
       Log.d("is_json_updated", "true");
 
       forms = new ParsingJson(context).getParsedForms();
@@ -49,9 +50,9 @@ public class InitialLoadingMenu {
       Log.d("is_json_updated", "false");
 
       if (!NetworkUtil.getInstance().isOnline())
-        new DownloadingRetryDialog(context, this, option).show();
+        new DownloadingRetryDialog(context, this, option, downloadingDate).show();
       else
-        startDownloadingService(context, option);
+        startDownloadingService(context, option, downloadingDate);
     }
   }
 
@@ -84,16 +85,16 @@ public class InitialLoadingMenu {
       }
 
       @Override
-      public void onFail(int option) {
+      public void onFail(int option, String downloadingDate) {
         if (progressDialog != null && progressDialog.isShowing())
           progressDialog.quitShowing();
 
-        new DownloadingRetryDialog(context, InitialLoadingMenu.this, option).show();
+        new DownloadingRetryDialog(context, InitialLoadingMenu.this, option, downloadingDate).show();
       }
     });
   }
 
-  public void startDownloadingService(final Context context, int option) {
+  public void startDownloadingService(final Context context, int option, String downloadingDate) {
     setReceiverCallBack();
 
     progressDialog = new ProgressDialog(context, context.getString(R.string.downloading_message));
@@ -103,6 +104,7 @@ public class InitialLoadingMenu {
     Intent intent = new Intent(context, DownloadingJson.class);
     intent.setAction(DownloadingJsonReceiver.ACTION_CURRENT_DOWNLOAD);
     intent.putExtra(DownloadingJson.KEY_OPTION, option);
+    intent.putExtra(DownloadingJson.KEY_DATE, downloadingDate);
     context.startService(intent);
   }
 
