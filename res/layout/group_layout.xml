@@ -17,7 +17,7 @@
         android:layout_height="50dp"
         android:scaleType="fitXY"
         android:padding="15dp"
-        android:background="@drawable/item_pressed"
+        android:background="@color/transparent"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true" />
        

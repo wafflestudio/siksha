@@ -85,16 +85,16 @@ public class InitialLoadingMenu {
       }
 
       @Override
-      public void onFail(int option, String downloadingDate) {
+      public void onFail(int option, String downloadDate) {
         if (progressDialog != null && progressDialog.isShowing())
           progressDialog.quitShowing();
 
-        new DownloadingRetryDialog(context, InitialLoadingMenu.this, option, downloadingDate).show();
+        new DownloadingRetryDialog(context, InitialLoadingMenu.this, option, downloadDate).show();
       }
     });
   }
 
-  public void startDownloadingService(final Context context, int option, String downloadingDate) {
+  public void startDownloadingService(final Context context, int option, String downloadDate) {
     setReceiverCallBack();
 
     progressDialog = new ProgressDialog(context, context.getString(R.string.downloading_message));
@@ -104,7 +104,7 @@ public class InitialLoadingMenu {
     Intent intent = new Intent(context, DownloadingJson.class);
     intent.setAction(DownloadingJsonReceiver.ACTION_CURRENT_DOWNLOAD);
     intent.putExtra(DownloadingJson.KEY_OPTION, option);
-    intent.putExtra(DownloadingJson.KEY_DATE, downloadingDate);
+    intent.putExtra(DownloadingJson.KEY_DATE, downloadDate);
     context.startService(intent);
   }
 
