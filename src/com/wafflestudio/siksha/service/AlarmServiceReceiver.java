@@ -10,14 +10,15 @@ import com.wafflestudio.siksha.util.CalendarUtil;
 public class AlarmServiceReceiver extends BroadcastReceiver {
   @Override
   public void onReceive(Context context, Intent intent) {
-    Log.d("alarm_time", CalendarUtil.getCurrentDate() + CalendarUtil.getCurrentHour() + "h" + CalendarUtil.getCurrentMin() + "m");
-    int option = DownloadingJson.getDownloadOption();
-    String downloadingDate = DownloadingJson.getDownloadingDate(option);
+    Log.d("alarm_time", CalendarUtil.getCurrentDate() + " " + CalendarUtil.getCurrentHour() + "h " + CalendarUtil.getCurrentMin() + "m");
 
-    if (!DownloadingJson.isJsonUpdated(context, downloadingDate)) {
+    int option = DownloadingJson.getDownloadOption();
+    String downloadDate = DownloadingJson.getDownloadingDate(option);
+
+    if (!DownloadingJson.isJsonUpdated(context, downloadDate)) {
       Intent jsonDownload = new Intent(context, DownloadingJson.class);
       jsonDownload.putExtra(DownloadingJson.KEY_OPTION, option);
-      jsonDownload.putExtra(DownloadingJson.KEY_DATE, downloadingDate);
+      jsonDownload.putExtra(DownloadingJson.KEY_DATE, downloadDate);
       jsonDownload.setAction(DownloadingJsonReceiver.ACTION_PRE_DOWNLOAD);
       context.startService(jsonDownload);
     }

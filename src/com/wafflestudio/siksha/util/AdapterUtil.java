@@ -88,9 +88,9 @@ public class AdapterUtil {
       restaurantNameView.setText(name);
 
       if (isInitialization)
-        setGroupButtonImage(name);
+        setGroupButtonAttr(name);
       else
-        modifyGroupButtonImage(name);
+        modifyGroupButtonAttr(name);
 
       groupButton.setFocusable(false);
       groupButton.setOnClickListener(new View.OnClickListener() {
@@ -102,16 +102,6 @@ public class AdapterUtil {
             RestaurantInfoDialog dialog = new RestaurantInfoDialog(context, restaurantSequencer.currentSequence.get(groupPosition), pageIndex);
             dialog.setCanceledOnTouchOutside(true);
             dialog.show();
-          }
-          else {
-            if (!restaurantSequencer.isBookMarked(name))
-              restaurantSequencer.setBookmark(name, true);
-            else
-              restaurantSequencer.setBookmark(name, false);
-
-            restaurantSequencer.modifySequence(name);
-            restaurantSequencer.setMenuListOnSequence();
-            restaurantSequencer.notifyChangeToAdapters(false);
           }
         }
       });
@@ -155,7 +145,7 @@ public class AdapterUtil {
       return convertView;
     }
 
-    private void setGroupButtonImage(String name) {
+    private void setGroupButtonAttr(String name) {
       if (!RestaurantSequencer.getInstance().isBookmarkMode()) {
         if (pageIndex == 0)
           groupButton.setImageResource(R.drawable.ic_action_info_breakfast);
@@ -163,6 +153,8 @@ public class AdapterUtil {
           groupButton.setImageResource(R.drawable.ic_action_info_lunch);
         else
           groupButton.setImageResource(R.drawable.ic_action_info_dinner);
+
+        groupButton.setBackgroundResource(R.drawable.item_pressed);
       }
       else {
         String recordedBookmark = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_BOOKMARK);
@@ -176,12 +168,14 @@ public class AdapterUtil {
           if (bookmarkList.contains(name))
             groupButton.setImageResource(R.drawable.ic_action_star_brighted);
           else
-            modifyGroupButtonImage(name);
+            modifyGroupButtonAttr(name);
         }
+
+        groupButton.setBackgroundColor(context.getResources().getColor(R.color.transparent));
       }
     }
 
-    private void modifyGroupButtonImage(String name) {
+    private void modifyGroupButtonAttr(String name) {
       if (RestaurantSequencer.getInstance().isBookMarked(name))
         groupButton.setImageResource(R.drawable.ic_action_star_brighted);
       else

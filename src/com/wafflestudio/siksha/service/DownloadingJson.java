@@ -19,7 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class DownloadingJson extends IntentService {
-  public static final String SERVER_URL = "http://kanggyu94.fun25.co.kr:13203/restaurants";
+  public static final String SERVER_URL = "http://siksha.kr:3280/restaurants";
   public static final String QUERY_TODAY = "?date=today";
   public static final String QUERY_TOMORROW = "?date=tomorrow";
   public static final String KEY_OPTION = "download_option";
@@ -33,11 +33,11 @@ public class DownloadingJson extends IntentService {
     super("com.wafflestudio.siksha.DownloadingJson");
   }
 
-  public static boolean isJsonUpdated(Context context, String downloadingDate) {
+  public static boolean isJsonUpdated(Context context, String downloadDate) {
     String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON);
     Log.d("recorded_date", recordedDate);
 
-    return recordedDate.equals(downloadingDate);
+    return recordedDate.equals(downloadDate);
   }
 
   public static int getDownloadOption() {
