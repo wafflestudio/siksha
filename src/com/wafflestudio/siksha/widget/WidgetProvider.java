@@ -30,7 +30,8 @@ public class WidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         int option = DownloadingJson.getDownloadOption();
-        if (DownloadingJson.isJsonUpdated(context, option)) {
+        String downloadingDate = DownloadingJson.getDownloadingDate(option);
+        if (DownloadingJson.isJsonUpdated(context, downloadingDate)) {
             final int N = appWidgetIds.length;
             for (int i = 0; i < N; i++) {
                 if (WidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])) {
@@ -47,6 +48,7 @@ public class WidgetProvider extends AppWidgetProvider {
                 if (WidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])) {
                     Intent downloadIntent = new Intent(context, DownloadingJson.class);
                     downloadIntent.putExtra(DownloadingJson.KEY_OPTION, option);
+                    downloadIntent.putExtra(DownloadingJson.KEY_DATE, downloadingDate);
                     downloadIntent.putExtra("from_widget_user", false);
                     context.startService(downloadIntent);
                     break;
@@ -107,7 +109,8 @@ public class WidgetProvider extends AppWidgetProvider {
         if (intent.getAction().equals(CONFIGURATION_FINISHED)) {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             int option = DownloadingJson.getDownloadOption();
-            if (DownloadingJson.isJsonUpdated(context, option)) {
+            String downloadingDate = DownloadingJson.getDownloadingDate(option);
+            if (DownloadingJson.isJsonUpdated(context, downloadingDate)) {
                 RemoteViews remoteViews = updateWidgetListView(context, appWidgetId, true);
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
                 appWidgetManager.updateAppWidget(appWidgetId, null);
@@ -116,6 +119,7 @@ public class WidgetProvider extends AppWidgetProvider {
             else {
                 Intent downloadIntent = new Intent(context, DownloadingJson.class);
                 downloadIntent.putExtra(DownloadingJson.KEY_OPTION, option);
+                downloadIntent.putExtra(DownloadingJson.KEY_DATE, downloadingDate);
                 downloadIntent.putExtra("from_widget_user", true);
                 context.startService(downloadIntent);
             }
@@ -160,7 +164,8 @@ public class WidgetProvider extends AppWidgetProvider {
         if (intent.getAction().equals(WIDGET_REFRESH)) {
             int appWidgetId = Integer.valueOf(intent.getData().getSchemeSpecificPart()) - WidgetProvider.randomNumber;
             int option = DownloadingJson.getDownloadOption();
-            if (DownloadingJson.isJsonUpdated(context, option)) {
+            String downloadingDate = DownloadingJson.getDownloadingDate(option);
+            if (DownloadingJson.isJsonUpdated(context, downloadingDate)) {
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
                 RemoteViews remoteViews = updateWidgetListView(context, appWidgetId, true);
@@ -171,6 +176,7 @@ public class WidgetProvider extends AppWidgetProvider {
             else {
                 Intent downloadIntent = new Intent(context, DownloadingJson.class);
                 downloadIntent.putExtra(DownloadingJson.KEY_OPTION, option);
+                downloadIntent.putExtra(DownloadingJson.KEY_DATE, downloadingDate);
                 downloadIntent.putExtra("from_widget_user", true);
                 context.startService(downloadIntent);
             }
