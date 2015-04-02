@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wafflestudio.siksha.R;
@@ -87,6 +88,11 @@ public class AdapterUtil {
       restaurantNameView.setTypeface(FontUtil.fontAPAritaDotumSemiBold);
       restaurantNameView.setText(name);
 
+      if (RestaurantSequencer.getInstance().isBookmarkMode())
+        ((RelativeLayout) convertView).setAddStatesFromChildren(true);
+      else
+        ((RelativeLayout) convertView).setAddStatesFromChildren(false);
+
       if (isInitialization)
         setGroupButtonAttr(name);
       else
@@ -95,13 +101,23 @@ public class AdapterUtil {
       groupButton.setFocusable(false);
       groupButton.setOnClickListener(new View.OnClickListener() {
         @Override
-        public void onClick(View v) {
+        public void onClick(View view) {
           RestaurantSequencer restaurantSequencer = RestaurantSequencer.getInstance();
 
           if (!restaurantSequencer.isBookmarkMode()) {
             RestaurantInfoDialog dialog = new RestaurantInfoDialog(context, restaurantSequencer.currentSequence.get(groupPosition), pageIndex);
             dialog.setCanceledOnTouchOutside(true);
             dialog.show();
+          }
+          else {
+            if (!restaurantSequencer.isBookMarked(name))
+              restaurantSequencer.setBookmark(name, true);
+            else
+              restaurantSequencer.setBookmark(name, false);
+
+            restaurantSequencer.modifySequence(name);
+            restaurantSequencer.setMenuListOnSequence();
+            restaurantSequencer.notifyChangeToAdapters(false);
           }
         }
       });
