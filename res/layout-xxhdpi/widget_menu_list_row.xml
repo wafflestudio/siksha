@@ -18,8 +18,8 @@
             android:layout_height="wrap_content"
             android:textSize="13sp"
             android:textColor="@color/black"
-            android:layout_weight="1"
-            android:layout_marginLeft="2dp" />
+            android:layout_weight="2"
+            android:layout_marginLeft="1dp" />
 
         <TextView
             android:id="@+id/menu_name_widget"
