@@ -26,6 +26,7 @@
             android:layout_height="22dp"
             android:scaleType="fitXY"
             android:src="@drawable/ic_action_refresh_lunch" />
+
     </LinearLayout>
 
     <ListView
