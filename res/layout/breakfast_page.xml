@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/app_sub_color_breakfast" >
+        android:background="@color/sub_color_breakfast" >
 
         <TextView
             android:id="@+id/breakfast_indicator"

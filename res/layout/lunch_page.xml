@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/app_sub_color_lunch" >
+        android:background="@color/sub_color_lunch" >
 
         <ImageButton
             android:id="@+id/lunch_prev_btn"

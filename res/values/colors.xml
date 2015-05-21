@@ -3,10 +3,10 @@
     <color name="main_color_breakfast">#5abec6</color>
     <color name="main_color_lunch">#f48a5b</color>
     <color name="main_color_dinner">#7171c9</color>
-    <color name="app_sub_color_breakfast">#bedadd</color>
-    <color name="app_sub_color_lunch">#fde2b9</color>
-    <color name="app_sub_color_dinner">#c7d0f3</color>
-    <color name="app_sub_color_2">#f3f3f3</color>
+    <color name="sub_color_breakfast">#bedadd</color>
+    <color name="sub_color_lunch">#fde2b9</color>
+    <color name="sub_color_dinner">#c7d0f3</color>
+    <color name="sub_color_2">#f3f3f3</color>
     <color name="widget_sub_color">#eaeaea</color>
     <color name="dialog_content_color">#f0edec</color>
 
