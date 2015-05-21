@@ -14,7 +14,7 @@ import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 
 public class RestaurantInfoDialog extends Dialog {
   public RestaurantInfoDialog(Context context, String restaurantName, int pageIndex) {
-		super(context, R.style.restaurant_info_dialog);
+    super(context, R.style.restaurant_info_dialog);
     setContentView(R.layout.restaurant_info_dialog);
 
     TextView restaurantView = (TextView) findViewById(R.id.restaurant_info_dialog_title);
@@ -50,6 +50,6 @@ public class RestaurantInfoDialog extends Dialog {
 
     restaurantView.setText(restaurantName);
     operatingHoursDetails.setText(RestaurantInfoUtil.getInstance().operatingHourMap.get(restaurantName));
-		locationDetails.setText(RestaurantInfoUtil.getInstance().locationMap.get(restaurantName));
-	}
+    locationDetails.setText(RestaurantInfoUtil.getInstance().locationMap.get(restaurantName));
+  }
 }
