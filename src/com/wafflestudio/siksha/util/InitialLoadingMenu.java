@@ -32,27 +32,35 @@ public class InitialLoadingMenu {
 
   public void initSetting() {
     int option = DownloadingJson.getDownloadOption();
-    String downloadingDate = DownloadingJson.getDownloadingDate(option);
+    String downloadDate = DownloadingJson.getDownloadDate(option);
 
-    if (DownloadingJson.isJsonUpdated(context, downloadingDate)) {
+    if (DownloadingJson.isJsonUpdated(context, downloadDate)) {
       Log.d("is_json_updated", "true");
 
-      forms = new ParsingJson(context).getParsedForms();
-      RestaurantInfoUtil.getInstance().setMenuMap(forms);
-      RestaurantSequencer.getInstance().setMenuListOnSequence();
+      if (CalendarUtil.isVetDataUpdateTime() && !DownloadingJson.isVetDataUpdated(context, CalendarUtil.getTodayDate())) {
+        if (!NetworkUtil.getInstance().isOnline())
+          new DownloadingRetryDialog(context, this, option, downloadDate).show();
+        else
+          startDownloadingService(context, option, downloadDate);
+      }
+      else {
+        forms = new ParsingJson(context).getParsedForms();
+        RestaurantInfoUtil.getInstance().setMenuMap(forms);
+        RestaurantSequencer.getInstance().setMenuListOnSequence();
 
-      setAdapters();
-      setInitialPage();
+        setAdapters();
+        setInitialPage();
 
-      notifyWidget();
+        notifyWidget();
+      }
     }
     else {
       Log.d("is_json_updated", "false");
 
       if (!NetworkUtil.getInstance().isOnline())
-        new DownloadingRetryDialog(context, this, option, downloadingDate).show();
+        new DownloadingRetryDialog(context, this, option, downloadDate).show();
       else
-        startDownloadingService(context, option, downloadingDate);
+        startDownloadingService(context, option, downloadDate);
     }
   }
 

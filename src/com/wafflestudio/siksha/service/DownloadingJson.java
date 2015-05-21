@@ -40,9 +40,16 @@ public class DownloadingJson extends IntentService {
     return recordedDate.equals(downloadDate);
   }
 
+  public static boolean isVetDataUpdated(Context context, String downloadDate) {
+    String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_VET_DATA);
+    Log.d("recorded_date", recordedDate);
+
+    return recordedDate.equals(downloadDate);
+  }
+
   public static int getDownloadOption() {
     int hour = CalendarUtil.getCurrentHour();
-    int min = CalendarUtil.getCurrentMin();
+    int min = CalendarUtil.getCurrentMinute();
 
     if (hour == 0 && min < 5)
       return OPTION_CRAWLING_INSTANTLY; // request server for crawling web page instantly
@@ -52,11 +59,11 @@ public class DownloadingJson extends IntentService {
       return OPTION_CACHED_TOMORROW; // request server for fetching cached json about tomorrow contents
   }
 
-  public static String getDownloadingDate(int option) {
+  public static String getDownloadDate(int option) {
     if (option == OPTION_CACHED_TOMORROW)
       return CalendarUtil.getTomorrowDate();
     else
-      return CalendarUtil.getCurrentDate();
+      return CalendarUtil.getTodayDate();
   }
 
   public String fetchJsonFromServer(int option) {
@@ -133,9 +140,14 @@ public class DownloadingJson extends IntentService {
     return true;
   }
 
-  private void saveDateOnSharedPreference(String downloadingDate) {
-    SharedPreferenceUtil.save(getApplicationContext(), SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON, downloadingDate);
-    Log.d("save_date", downloadingDate);
+  private void saveDateOnSharedPreference(String downloadDate) {
+    SharedPreferenceUtil.save(getApplicationContext(), SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON, downloadDate);
+    Log.d("save_date", downloadDate);
+
+    if (CalendarUtil.isVetDataUpdateTime()) {
+      SharedPreferenceUtil.save(getApplicationContext(), SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_VET_DATA, downloadDate);
+      Log.d("vet_data_update_date", downloadDate);
+    }
   }
 
   public void sendSignalToWidget(boolean fromWidgetUser, boolean isSuccess) {
@@ -145,13 +157,13 @@ public class DownloadingJson extends IntentService {
     sendBroadcast(widgetUpdate);
   }
 
-  public void sendSignalToApp(String action, boolean isSuccess, int option, String downloadingDate) {
+  public void sendSignalToApp(String action, boolean isSuccess, int option, String downloadDate) {
     Intent intent = new Intent();
     intent.addCategory(Intent.CATEGORY_DEFAULT);
     intent.setAction(action);
     intent.putExtra("is_success", isSuccess);
     intent.putExtra(KEY_OPTION, option);
-    intent.putExtra(KEY_DATE, downloadingDate);
+    intent.putExtra(KEY_DATE, downloadDate);
     sendBroadcast(intent);
   }
 
@@ -159,16 +171,16 @@ public class DownloadingJson extends IntentService {
   protected void onHandleIntent(Intent intent) {
     final String action = intent.getAction();
     final int option = intent.getIntExtra(KEY_OPTION, OPTION_CRAWLING_INSTANTLY);
-    final String downloadingDate = intent.getStringExtra(KEY_DATE);
+    final String downloadDate = intent.getStringExtra(KEY_DATE);
     final boolean isSuccess = writeJsonOnInternalStorage(fetchJsonFromServer(option));
     final boolean fromWidget = intent.getBooleanExtra("from_widget_user", false);
 
     Log.d("onHandleIntent", "isSuccess : " + isSuccess + " / " + "action : " + action);
 
     if (isSuccess)
-      saveDateOnSharedPreference(downloadingDate);
+      saveDateOnSharedPreference(downloadDate);
 
-    sendSignalToApp(action, isSuccess, option, downloadingDate);
+    sendSignalToApp(action, isSuccess, option, downloadDate);
     sendSignalToWidget(fromWidget, isSuccess);
   }
 }

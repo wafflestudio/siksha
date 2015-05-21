@@ -52,7 +52,7 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/bab_widget_provider_info" />
+                android:resource="@xml/widget_provider_info" />
         </receiver>
 
         <receiver

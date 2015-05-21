@@ -12,6 +12,7 @@ public class SharedPreferenceUtil {
   public static final String PREF_WIDGET_NAME = "com.wafflestudio.siksha.widget.WidgetProvider";
 
   public static final String PREF_KEY_JSON = "json_date";
+  public static final String PREF_KEY_VET_DATA = "vet_data_date";
   public static final String PREF_PREFIX_KEY = "widget_";
   public static final String PREF_PREFIX_BREAKFAST_KEY = "widget_breakfast";
   public static final String PREF_WIDGET_ID = "widget_ids";
