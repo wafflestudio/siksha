@@ -15,38 +15,38 @@ import com.wafflestudio.siksha.service.DownloadingJsonReceiver;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InitialLoadingMenu {
+public class InitialLoadingTask {
   private Context context;
   private DownloadingJsonReceiver downloadingJsonReceiver;
 
   private ViewPager viewPager;
   private ProgressDialog progressDialog;
 
-  public RestaurantCrawlingForm[] forms;
+  public MenuCrawlingForm[] forms;
 
-  public InitialLoadingMenu(Context context, DownloadingJsonReceiver downloadingJsonReceiver, ViewPager viewPager) {
+  public InitialLoadingTask(Context context, DownloadingJsonReceiver downloadingJsonReceiver, ViewPager viewPager) {
     this.context = context;
     this.downloadingJsonReceiver = downloadingJsonReceiver;
     this.viewPager = viewPager;
   }
 
-  public void initSetting() {
+  public void initialize() {
     int option = DownloadingJson.getDownloadOption();
     String downloadDate = DownloadingJson.getDownloadDate(option);
 
     if (DownloadingJson.isJsonUpdated(context, downloadDate)) {
       Log.d("is_json_updated", "true");
 
-      if (CalendarUtil.isVetDataUpdateTime() && !DownloadingJson.isVetDataUpdated(context, CalendarUtil.getTodayDate())) {
+      if (!DownloadingJson.isVetDataUpdated(context, downloadDate) && CalendarUtil.isVetDataUpdateTime()) {
         if (!NetworkUtil.getInstance().isOnline())
           new DownloadingRetryDialog(context, this, option, downloadDate).show();
         else
-          startDownloadingService(context, option, downloadDate);
+          startDownloadService(context, option, downloadDate);
       }
       else {
         forms = new ParsingJson(context).getParsedForms();
         RestaurantInfoUtil.getInstance().setMenuMap(forms);
-        RestaurantSequencer.getInstance().setMenuListOnSequence();
+        Sequencer.getInstance().setMenuListOnSequence();
 
         setAdapters();
         setInitialPage();
@@ -60,17 +60,17 @@ public class InitialLoadingMenu {
       if (!NetworkUtil.getInstance().isOnline())
         new DownloadingRetryDialog(context, this, option, downloadDate).show();
       else
-        startDownloadingService(context, option, downloadDate);
+        startDownloadService(context, option, downloadDate);
     }
   }
 
   private void setAdapters() {
-    RestaurantSequencer restaurantSequencer = RestaurantSequencer.getInstance();
+    Sequencer sequencer = Sequencer.getInstance();
 
     List<AdapterUtil.ExpandableListAdapter> adapters = new ArrayList<AdapterUtil.ExpandableListAdapter>();
-    adapters.add(new AdapterUtil.ExpandableListAdapter(context, restaurantSequencer.breakfastMenuList, 0));
-    adapters.add(new AdapterUtil.ExpandableListAdapter(context, restaurantSequencer.lunchMenuList, 1));
-    adapters.add(new AdapterUtil.ExpandableListAdapter(context, restaurantSequencer.dinnerMenuList, 2));
+    adapters.add(new AdapterUtil.ExpandableListAdapter(context, sequencer.breakfastMenuList, 0));
+    adapters.add(new AdapterUtil.ExpandableListAdapter(context, sequencer.lunchMenuList, 1));
+    adapters.add(new AdapterUtil.ExpandableListAdapter(context, sequencer.dinnerMenuList, 2));
 
     viewPager.setAdapter(new AdapterUtil.ViewPagerAdapter(context, adapters));
   }
@@ -81,7 +81,7 @@ public class InitialLoadingMenu {
       public void onComplete() {
         forms = new ParsingJson(context).getParsedForms();
         RestaurantInfoUtil.getInstance().setMenuMap(forms);
-        RestaurantSequencer.getInstance().setMenuListOnSequence();
+        Sequencer.getInstance().setMenuListOnSequence();
 
         setAdapters();
         setInitialPage();
@@ -97,12 +97,12 @@ public class InitialLoadingMenu {
         if (progressDialog != null && progressDialog.isShowing())
           progressDialog.quitShowing();
 
-        new DownloadingRetryDialog(context, InitialLoadingMenu.this, option, downloadDate).show();
+        new DownloadingRetryDialog(context, InitialLoadingTask.this, option, downloadDate).show();
       }
     });
   }
 
-  public void startDownloadingService(final Context context, int option, String downloadDate) {
+  public void startDownloadService(final Context context, int option, String downloadDate) {
     setReceiverCallBack();
 
     progressDialog = new ProgressDialog(context, context.getString(R.string.downloading_message));

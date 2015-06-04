@@ -8,9 +8,8 @@ import android.widget.TextView;
 
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.AdapterUtil;
-import com.wafflestudio.siksha.util.CalendarUtil;
 import com.wafflestudio.siksha.util.FontUtil;
-import com.wafflestudio.siksha.util.RestaurantSequencer;
+import com.wafflestudio.siksha.util.Sequencer;
 import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
 import java.util.ArrayList;
@@ -50,19 +49,19 @@ public class BreakfastPage extends LinearLayout {
     expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
       @Override
       public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long id) {
-        RestaurantSequencer restaurantSequencer = RestaurantSequencer.getInstance();
+        Sequencer sequencer = Sequencer.getInstance();
 
-        if (restaurantSequencer.isBookmarkMode()) {
-          String name = restaurantSequencer.currentSequence.get(groupPosition);
+        if (sequencer.isBookmarkMode()) {
+          String name = sequencer.currentSequence.get(groupPosition);
 
-          if (!restaurantSequencer.isBookMarked(name))
-            restaurantSequencer.setBookmark(name, true);
+          if (!sequencer.isBookMarked(name))
+            sequencer.setBookmark(name, true);
           else
-            restaurantSequencer.setBookmark(name, false);
+            sequencer.setBookmark(name, false);
 
-          restaurantSequencer.modifySequence(name);
-          restaurantSequencer.setMenuListOnSequence();
-          restaurantSequencer.notifyChangeToAdapters(false);
+          sequencer.modifySequence(name);
+          sequencer.setMenuListOnSequence();
+          sequencer.notifyChangeToAdapters(false);
 
           return true;
         }
@@ -81,20 +80,20 @@ public class BreakfastPage extends LinearLayout {
       return;
 
     for (String name : recordedBookmark.split("/"))
-      expandableListView.expandGroup(RestaurantSequencer.getInstance().currentSequence.indexOf(name));
+      expandableListView.expandGroup(Sequencer.getInstance().currentSequence.indexOf(name));
   }
 
   public void collapseAllGroup() {
-    for(int i = 0; i < RestaurantSequencer.getInstance().currentSequence.size(); i++)
+    for(int i = 0; i < Sequencer.getInstance().currentSequence.size(); i++)
       expandableListView.collapseGroup(i);
   }
 
   public void collapseItems(int groupPosition) {
-    RestaurantSequencer restaurantSequencer = RestaurantSequencer.getInstance();
+    Sequencer sequencer = Sequencer.getInstance();
     String recordedBookmark = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_BOOKMARK);
 
     if (recordedBookmark.equals("")) {
-      for(int i = 0; i < restaurantSequencer.currentSequence.size(); i++) {
+      for(int i = 0; i < sequencer.currentSequence.size(); i++) {
         if (i != groupPosition)
           expandableListView.collapseGroup(i);
       }
@@ -103,8 +102,8 @@ public class BreakfastPage extends LinearLayout {
       List<String> bookmarkList = new ArrayList<String>();
       Collections.addAll(bookmarkList, recordedBookmark.split("/"));
 
-      for (int i = 0; i < restaurantSequencer.currentSequence.size(); i++) {
-        if (!bookmarkList.contains(restaurantSequencer.currentSequence.get(i)) && i != groupPosition)
+      for (int i = 0; i < sequencer.currentSequence.size(); i++) {
+        if (!bookmarkList.contains(sequencer.currentSequence.get(i)) && i != groupPosition)
           expandableListView.collapseGroup(i);
       }
     }

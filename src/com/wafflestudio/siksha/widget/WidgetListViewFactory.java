@@ -9,7 +9,7 @@ import android.widget.RemoteViewsService;
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.CalendarUtil;
 import com.wafflestudio.siksha.util.ParsingJson;
-import com.wafflestudio.siksha.util.RestaurantCrawlingForm;
+import com.wafflestudio.siksha.util.MenuCrawlingForm;
 import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
     private Context context = null;
 
     private String[] restaurantList;
-    private ArrayList<RestaurantCrawlingForm> restaurantMenuList;
+    private ArrayList<MenuCrawlingForm> restaurantMenuList;
 
     private int appWidgetId;
     private int hour;
@@ -30,8 +30,8 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
         String input = WidgetProviderConfigureActivity.loadTitlePref(context, appWidgetId);
         restaurantList = input.split("#");
 
-        restaurantMenuList = new ArrayList<RestaurantCrawlingForm>();
-        RestaurantCrawlingForm[] forms = new ParsingJson(context).getParsedForms();
+        restaurantMenuList = new ArrayList<MenuCrawlingForm>();
+        MenuCrawlingForm[] forms = new ParsingJson(context).getParsedForms();
 
         if (forms != null) {
             for (int i = 0; i < restaurantList.length; i++) {
@@ -58,7 +58,7 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
     @Override
     public RemoteViews getViewAt(int position) {
         final RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.widget_restaurant_list_row);
-        RestaurantCrawlingForm item = restaurantMenuList.get(position);
+        MenuCrawlingForm item = restaurantMenuList.get(position);
         boolean isEmpty = true;
 
         remoteView.setTextViewText(R.id.restaurant_view_widget, item.restaurant);
@@ -115,10 +115,10 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
     @Override
     public void onDataSetChanged() {
         hour = CalendarUtil.getCurrentHour();
-        RestaurantCrawlingForm[] forms = new ParsingJson(context).getParsedForms();
+        MenuCrawlingForm[] forms = new ParsingJson(context).getParsedForms();
 
         if (forms != null) {
-            restaurantMenuList = new ArrayList<RestaurantCrawlingForm>();
+            restaurantMenuList = new ArrayList<MenuCrawlingForm>();
             for (int i = 0; i < restaurantList.length; i++) {
                 for (int j = 0; j < forms.length; j++) {
                     if (restaurantList[i].equals(forms[j].restaurant)) {

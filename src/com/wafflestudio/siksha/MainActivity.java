@@ -19,10 +19,10 @@ import com.wafflestudio.siksha.service.DownloadingJsonReceiver;
 import com.wafflestudio.siksha.util.AlarmUtil;
 import com.wafflestudio.siksha.util.CalendarUtil;
 import com.wafflestudio.siksha.util.FontUtil;
-import com.wafflestudio.siksha.util.InitialLoadingMenu;
+import com.wafflestudio.siksha.util.InitialLoadingTask;
 import com.wafflestudio.siksha.util.NetworkUtil;
 import com.wafflestudio.siksha.util.RestaurantInfoUtil;
-import com.wafflestudio.siksha.util.RestaurantSequencer;
+import com.wafflestudio.siksha.util.Sequencer;
 
 public class MainActivity extends Activity implements ViewPager.OnPageChangeListener, View.OnClickListener {
   private RelativeLayout topBar;
@@ -41,14 +41,14 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     NetworkUtil.getInstance().setConnectivityManager(this);
     FontUtil.getInstance().setFontAsset(getAssets());
     RestaurantInfoUtil.getInstance().initialize(this);
-    RestaurantSequencer.getInstance().initialize(this);
+    Sequencer.getInstance().initialize(this);
 
     setLayout();
   }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.hide_menu, menu);
+    getMenuInflater().inflate(R.menu.hidden_menu, menu);
 
     return super.onCreateOptionsMenu(menu);
   }
@@ -79,12 +79,12 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     title.setTypeface(FontUtil.fontAPAritaDotumMedium);
     appName.setTypeface(FontUtil.fontAPAritaDotumMedium);
 
-    RestaurantSequencer.getInstance().setViewPager(viewPager);
+    Sequencer.getInstance().setViewPager(viewPager);
     setTopBarBackgroundColor(getPageIndexOnHour());
     setBookmarkButtonImage();
 
     downloadingJsonReceiver = new DownloadingJsonReceiver();
-    new InitialLoadingMenu(this, downloadingJsonReceiver, viewPager).initSetting();
+    new InitialLoadingTask(this, downloadingJsonReceiver, viewPager).initialize();
   }
 
   private void registerReceiver() {
@@ -111,24 +111,24 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
 
     switch (id) {
       case R.id.bookmark_button:
-        RestaurantSequencer restaurantSequencer = RestaurantSequencer.getInstance();
+        Sequencer sequencer = Sequencer.getInstance();
 
-        if (!restaurantSequencer.isBookmarkMode()) {
-          restaurantSequencer.setBookmarkMode(true);
+        if (!sequencer.isBookmarkMode()) {
+          sequencer.setBookmarkMode(true);
           bookmarkButton.setImageResource(R.drawable.ic_action_accept);
 
-          restaurantSequencer.notifyChangeToAdapters(true);
-          restaurantSequencer.collapseAll();
+          sequencer.notifyChangeToAdapters(true);
+          sequencer.collapseAll();
         }
         else {
-          restaurantSequencer.setBookmarkMode(false);
+          sequencer.setBookmarkMode(false);
           bookmarkButton.setImageResource(R.drawable.ic_action_star);
 
-          restaurantSequencer.setMenuListOnSequence();
-          restaurantSequencer.recordRestaurantSequence(MainActivity.this);
-          restaurantSequencer.recordBookmarkList(MainActivity.this);
-          restaurantSequencer.notifyChangeToAdapters(true);
-          restaurantSequencer.expandBookmarkAll();
+          sequencer.setMenuListOnSequence();
+          sequencer.recordRestaurantSequence(MainActivity.this);
+          sequencer.recordBookmarkList(MainActivity.this);
+          sequencer.notifyChangeToAdapters(true);
+          sequencer.expandBookmarkAll();
         }
 
         break;
@@ -137,16 +137,16 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
 
   @Override
   public void onBackPressed() {
-    RestaurantSequencer restaurantSequencer = RestaurantSequencer.getInstance();
+    Sequencer sequencer = Sequencer.getInstance();
 
-    if (restaurantSequencer.isBookmarkMode()) {
-      restaurantSequencer.setBookmarkMode(false);
+    if (sequencer.isBookmarkMode()) {
+      sequencer.setBookmarkMode(false);
       setBookmarkButtonImage();
 
-      restaurantSequencer.cancelBookmarkAll(this);
-      restaurantSequencer.setMenuListOnSequence();
-      restaurantSequencer.notifyChangeToAdapters(true);
-      restaurantSequencer.expandBookmarkAll();
+      sequencer.cancelBookmarkAll(this);
+      sequencer.setMenuListOnSequence();
+      sequencer.notifyChangeToAdapters(true);
+      sequencer.expandBookmarkAll();
     }
     else {
       if (isBackPressedTwice) {
@@ -192,7 +192,7 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
   }
 
   private void setBookmarkButtonImage() {
-    if (RestaurantSequencer.getInstance().isBookmarkMode())
+    if (Sequencer.getInstance().isBookmarkMode())
       bookmarkButton.setImageResource(R.drawable.ic_action_accept);
     else
       bookmarkButton.setImageResource(R.drawable.ic_action_star);

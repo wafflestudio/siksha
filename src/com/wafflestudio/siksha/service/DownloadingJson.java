@@ -19,7 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class DownloadingJson extends IntentService {
-  public static final String SERVER_URL = "http://siksha.kr:3280/restaurants";
+  public static final String SERVER_URL = "http://siksha.kr:3280/menus/view";
   public static final String QUERY_TODAY = "?date=today";
   public static final String QUERY_TOMORROW = "?date=tomorrow";
   public static final String KEY_OPTION = "download_option";
@@ -42,7 +42,7 @@ public class DownloadingJson extends IntentService {
 
   public static boolean isVetDataUpdated(Context context, String downloadDate) {
     String recordedDate = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_VET_DATA);
-    Log.d("recorded_date", recordedDate);
+    Log.d("recorded_vet_date", recordedDate);
 
     return recordedDate.equals(downloadDate);
   }
@@ -146,7 +146,7 @@ public class DownloadingJson extends IntentService {
 
     if (CalendarUtil.isVetDataUpdateTime()) {
       SharedPreferenceUtil.save(getApplicationContext(), SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_VET_DATA, downloadDate);
-      Log.d("vet_data_update_date", downloadDate);
+      Log.d("vet_update_date", downloadDate);
     }
   }
 

@@ -15,7 +15,7 @@ public class ParsingJson {
     this.context = context;
   }
 
-  public RestaurantCrawlingForm[] getParsedForms() {
+  public MenuCrawlingForm[] getParsedForms() {
     StringBuilder stringBuilder = new StringBuilder();
 
     try {
@@ -27,7 +27,7 @@ public class ParsingJson {
         stringBuilder.append(line);
       }
 
-      return new Gson().fromJson(stringBuilder.toString(), RestaurantCrawlingForm[].class);
+      return new Gson().fromJson(stringBuilder.toString(), MenuCrawlingForm[].class);
     }
     catch (Exception e) {
       e.printStackTrace();
