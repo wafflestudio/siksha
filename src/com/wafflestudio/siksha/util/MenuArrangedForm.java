@@ -2,10 +2,10 @@ package com.wafflestudio.siksha.util;
 
 import java.util.List;
 
-public class RestaurantClassifiedForm {
+public class MenuArrangedForm {
   public String restaurant;
 
   public boolean isEmpty;
 
-  public List<RestaurantCrawlingForm.MenuInfo> menus;
+  public List<MenuCrawlingForm.MenuInfo> menus;
 }

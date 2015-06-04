@@ -15,28 +15,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RestaurantSequencer {
-  public static RestaurantSequencer restaurantSequencer;
+public class Sequencer {
+  public static Sequencer sequencer;
 
   public List<String> originalSequence;
   public List<String> currentSequence;
 
-  public List<RestaurantClassifiedForm> breakfastMenuList;
-  public List<RestaurantClassifiedForm> lunchMenuList;
-  public List<RestaurantClassifiedForm> dinnerMenuList;
+  public List<MenuArrangedForm> breakfastMenuList;
+  public List<MenuArrangedForm> lunchMenuList;
+  public List<MenuArrangedForm> dinnerMenuList;
 
   private ViewPager viewPager;
 
   private Map<String, Boolean> bookmarkFlagMap;
   private boolean bookmarkMode;
 
-  private RestaurantSequencer() { }
+  private Sequencer() { }
 
-  public static RestaurantSequencer getInstance() {
-    if (restaurantSequencer == null)
-      restaurantSequencer = new RestaurantSequencer();
+  public static Sequencer getInstance() {
+    if (sequencer == null)
+      sequencer = new Sequencer();
 
-    return restaurantSequencer;
+    return sequencer;
   }
 
   public void initialize(Context context) {
@@ -110,9 +110,9 @@ public class RestaurantSequencer {
   public void setMenuListOnSequence() {
     RestaurantInfoUtil restaurantInfoUtil = RestaurantInfoUtil.getInstance();
 
-    breakfastMenuList = new ArrayList<RestaurantClassifiedForm>();
-    lunchMenuList = new ArrayList<RestaurantClassifiedForm>();
-    dinnerMenuList = new ArrayList<RestaurantClassifiedForm>();
+    breakfastMenuList = new ArrayList<MenuArrangedForm>();
+    lunchMenuList = new ArrayList<MenuArrangedForm>();
+    dinnerMenuList = new ArrayList<MenuArrangedForm>();
 
     for(String name : currentSequence) {
       breakfastMenuList.add(restaurantInfoUtil.breakfastMenuMap.get(name));

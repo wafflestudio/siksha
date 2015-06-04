@@ -11,14 +11,14 @@ import android.widget.Toast;
 
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.FontUtil;
-import com.wafflestudio.siksha.util.InitialLoadingMenu;
+import com.wafflestudio.siksha.util.InitialLoadingTask;
 import com.wafflestudio.siksha.util.NetworkUtil;
 
 public class DownloadingRetryDialog extends Dialog {
   private Button positiveButton;
   private Button negativeButton;
 
-  public DownloadingRetryDialog(final Context context, final InitialLoadingMenu initialLoadingMenu, final int option, final String downloadDate) {
+  public DownloadingRetryDialog(final Context context, final InitialLoadingTask initialLoadingTask, final int option, final String downloadDate) {
     super(context);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.downloading_retry_dialog);
@@ -32,7 +32,7 @@ public class DownloadingRetryDialog extends Dialog {
       public void onClick(View v) {
         if (NetworkUtil.getInstance().isOnline()) {
           dismiss();
-          initialLoadingMenu.startDownloadingService(context, option, downloadDate);
+          initialLoadingTask.startDownloadService(context, option, downloadDate);
         }
         else
           Toast.makeText(context, R.string.downloading_network_state, Toast.LENGTH_SHORT).show();

@@ -2,7 +2,7 @@ package com.wafflestudio.siksha.util;
 
 import com.google.gson.annotations.SerializedName;
 
-public class RestaurantCrawlingForm {
+public class MenuCrawlingForm {
   @SerializedName("restaurant")
   public String restaurant;
 

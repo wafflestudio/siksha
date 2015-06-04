@@ -26,14 +26,14 @@ public class AdapterUtil {
     private Context context;
 
     private int pageIndex;
-    public List<RestaurantClassifiedForm> forms;
+    public List<MenuArrangedForm> forms;
 
     private TextView restaurantNameView;
     private ImageButton groupButton;
 
     public boolean isInitialization;
 
-    public ExpandableListAdapter(Context context, List<RestaurantClassifiedForm> forms, int pageIndex) {
+    public ExpandableListAdapter(Context context, List<MenuArrangedForm> forms, int pageIndex) {
       this.context = context;
       this.forms = forms;
       this.pageIndex = pageIndex;
@@ -49,7 +49,7 @@ public class AdapterUtil {
       return groupPosition;
     }
 
-    public RestaurantClassifiedForm getGroup(int groupPosition) {
+    public MenuArrangedForm getGroup(int groupPosition) {
       return forms.get(groupPosition);
     }
 
@@ -64,7 +64,7 @@ public class AdapterUtil {
       return childPosition;
     }
 
-    public RestaurantCrawlingForm.MenuInfo getChild(int groupPosition, int childPosition) {
+    public MenuCrawlingForm.MenuInfo getChild(int groupPosition, int childPosition) {
       return forms.get(groupPosition).menus.get(childPosition);
     }
 
@@ -88,7 +88,7 @@ public class AdapterUtil {
       restaurantNameView.setTypeface(FontUtil.fontAPAritaDotumSemiBold);
       restaurantNameView.setText(name);
 
-      if (RestaurantSequencer.getInstance().isBookmarkMode())
+      if (Sequencer.getInstance().isBookmarkMode())
         ((RelativeLayout) convertView).setAddStatesFromChildren(true);
       else
         ((RelativeLayout) convertView).setAddStatesFromChildren(false);
@@ -102,22 +102,22 @@ public class AdapterUtil {
       groupButton.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-          RestaurantSequencer restaurantSequencer = RestaurantSequencer.getInstance();
+          Sequencer sequencer = Sequencer.getInstance();
 
-          if (!restaurantSequencer.isBookmarkMode()) {
-            RestaurantInfoDialog dialog = new RestaurantInfoDialog(context, restaurantSequencer.currentSequence.get(groupPosition), pageIndex);
+          if (!sequencer.isBookmarkMode()) {
+            RestaurantInfoDialog dialog = new RestaurantInfoDialog(context, sequencer.currentSequence.get(groupPosition), pageIndex);
             dialog.setCanceledOnTouchOutside(true);
             dialog.show();
           }
           else {
-            if (!restaurantSequencer.isBookMarked(name))
-              restaurantSequencer.setBookmark(name, true);
+            if (!sequencer.isBookMarked(name))
+              sequencer.setBookmark(name, true);
             else
-              restaurantSequencer.setBookmark(name, false);
+              sequencer.setBookmark(name, false);
 
-            restaurantSequencer.modifySequence(name);
-            restaurantSequencer.setMenuListOnSequence();
-            restaurantSequencer.notifyChangeToAdapters(false);
+            sequencer.modifySequence(name);
+            sequencer.setMenuListOnSequence();
+            sequencer.notifyChangeToAdapters(false);
           }
         }
       });
@@ -137,7 +137,7 @@ public class AdapterUtil {
       if (!forms.get(groupPosition).isEmpty) {
         name.setTypeface(FontUtil.fontAPAritaDotumMedium);
 
-        RestaurantCrawlingForm.MenuInfo menu = forms.get(groupPosition).menus.get(childPosition);
+        MenuCrawlingForm.MenuInfo menu = forms.get(groupPosition).menus.get(childPosition);
         price.setText(menu.price);
         name.setText(menu.name);
 
@@ -162,7 +162,7 @@ public class AdapterUtil {
     }
 
     private void setGroupButtonAttr(String name) {
-      if (!RestaurantSequencer.getInstance().isBookmarkMode()) {
+      if (!Sequencer.getInstance().isBookmarkMode()) {
         if (pageIndex == 0)
           groupButton.setImageResource(R.drawable.ic_action_info_breakfast);
         else if (pageIndex == 1)
@@ -192,7 +192,7 @@ public class AdapterUtil {
     }
 
     private void modifyGroupButtonAttr(String name) {
-      if (RestaurantSequencer.getInstance().isBookMarked(name))
+      if (Sequencer.getInstance().isBookMarked(name))
         groupButton.setImageResource(R.drawable.ic_action_star_brighted);
       else
         groupButton.setImageResource(R.drawable.ic_action_star);

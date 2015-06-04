@@ -12,8 +12,8 @@ public class DownloadingJsonReceiver extends BroadcastReceiver {
   private OnCompleteDownloadListener onCompleteDownloadListener;
 
   public interface OnCompleteDownloadListener {
-    public void onComplete();
-    public void onFail(int option, String downloadingDate);
+    void onComplete();
+    void onFail(int option, String downloadingDate);
   }
 
   public void setOnCompleteDownloadListener(OnCompleteDownloadListener onCompleteDownloadListener) {

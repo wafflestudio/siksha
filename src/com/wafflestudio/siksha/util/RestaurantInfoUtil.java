@@ -19,9 +19,9 @@ public class RestaurantInfoUtil {
   public Map<String, String> operatingHourMap;
   public Map<String, String> locationMap;
 
-  public Map<String, RestaurantClassifiedForm> breakfastMenuMap;
-  public Map<String, RestaurantClassifiedForm> lunchMenuMap;
-  public Map<String, RestaurantClassifiedForm> dinnerMenuMap;
+  public Map<String, MenuArrangedForm> breakfastMenuMap;
+  public Map<String, MenuArrangedForm> lunchMenuMap;
+  public Map<String, MenuArrangedForm> dinnerMenuMap;
 
   private RestaurantInfoUtil() { }
 
@@ -36,9 +36,9 @@ public class RestaurantInfoUtil {
     operatingHourMap = new HashMap<String, String>();
     locationMap = new HashMap<String, String>();
 
-    breakfastMenuMap = new HashMap<String, RestaurantClassifiedForm>();
-    lunchMenuMap = new HashMap<String, RestaurantClassifiedForm>();
-    dinnerMenuMap = new HashMap<String, RestaurantClassifiedForm>();
+    breakfastMenuMap = new HashMap<String, MenuArrangedForm>();
+    lunchMenuMap = new HashMap<String, MenuArrangedForm>();
+    dinnerMenuMap = new HashMap<String, MenuArrangedForm>();
 
     restaurants = context.getResources().getStringArray(R.array.restaurants);
     operatingHours = context.getResources().getStringArray(R.array.operating_hours);
@@ -50,17 +50,17 @@ public class RestaurantInfoUtil {
     }
   }
 
-  public void setMenuMap(RestaurantCrawlingForm[] forms) {
-    for (RestaurantCrawlingForm form : forms) {
-      RestaurantClassifiedForm breakfastMenuForm = new RestaurantClassifiedForm();
-      RestaurantClassifiedForm lunchMenuForm = new RestaurantClassifiedForm();
-      RestaurantClassifiedForm dinnerMenuForm = new RestaurantClassifiedForm();
+  public void setMenuMap(MenuCrawlingForm[] forms) {
+    for (MenuCrawlingForm form : forms) {
+      MenuArrangedForm breakfastMenuForm = new MenuArrangedForm();
+      MenuArrangedForm lunchMenuForm = new MenuArrangedForm();
+      MenuArrangedForm dinnerMenuForm = new MenuArrangedForm();
 
-      List<RestaurantCrawlingForm.MenuInfo> breakfastMenus = new ArrayList<RestaurantCrawlingForm.MenuInfo>();
-      List<RestaurantCrawlingForm.MenuInfo> lunchMenus = new ArrayList<RestaurantCrawlingForm.MenuInfo>();
-      List<RestaurantCrawlingForm.MenuInfo> dinnerMenus = new ArrayList<RestaurantCrawlingForm.MenuInfo>();
+      List<MenuCrawlingForm.MenuInfo> breakfastMenus = new ArrayList<MenuCrawlingForm.MenuInfo>();
+      List<MenuCrawlingForm.MenuInfo> lunchMenus = new ArrayList<MenuCrawlingForm.MenuInfo>();
+      List<MenuCrawlingForm.MenuInfo> dinnerMenus = new ArrayList<MenuCrawlingForm.MenuInfo>();
 
-      for (RestaurantCrawlingForm.MenuInfo menu : form.menus) {
+      for (MenuCrawlingForm.MenuInfo menu : form.menus) {
         if (menu.time.equals("breakfast"))
           breakfastMenus.add(menu);
         else if (menu.time.equals("lunch"))
