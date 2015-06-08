@@ -20,8 +20,11 @@ import java.net.URL;
 
 public class DownloadingJson extends IntentService {
   public static final String SERVER_URL = "http://siksha.kr:3280/menus/view";
+  public static final String REDIRECT_SERVER_URL = "http://kanggyu94.fun25.co.kr:13204/menus/view";
+
   public static final String QUERY_TODAY = "?date=today";
   public static final String QUERY_TOMORROW = "?date=tomorrow";
+
   public static final String KEY_OPTION = "download_option";
   public static final String KEY_DATE = "download_date";
 
@@ -66,27 +69,41 @@ public class DownloadingJson extends IntentService {
       return CalendarUtil.getTodayDate();
   }
 
-  public String fetchJsonFromServer(int option) {
-    StringBuilder stringBuilder = new StringBuilder();
+  public URL getFullURL(int option, boolean isAlive) {
+    final String BASE_URL = isAlive ? SERVER_URL : REDIRECT_SERVER_URL;
+    URL url = null;
 
     try {
-      URL url;
-
       switch (option) {
-        case OPTION_CACHED_TODAY :
-          url = new URL(SERVER_URL + QUERY_TODAY);
+        case OPTION_CACHED_TODAY:
+          url = new URL(BASE_URL + QUERY_TODAY);
           break;
-        case OPTION_CACHED_TOMORROW :
-          url = new URL(SERVER_URL + QUERY_TOMORROW);
+        case OPTION_CACHED_TOMORROW:
+          url = new URL(BASE_URL + QUERY_TOMORROW);
           break;
-        default :
-          url = new URL(SERVER_URL);
+        default:
+          url = new URL(BASE_URL);
           break;
       }
+    }
+    catch (MalformedURLException e) {
+      e.printStackTrace();
+    }
+
+    return url;
+  }
+
+  public String fetchJsonFromServer(int option) {
+    StringBuilder stringBuilder;
+
+    try {
+      URL url = getFullURL(option, true);
 
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-      connection.setConnectTimeout(10 * 1000);
+      connection.setConnectTimeout(5 * 1000);
       connection.setReadTimeout(10 * 1000);
+
+      stringBuilder = new StringBuilder();
 
       if (connection.getResponseCode() == 200) {
         Log.d("connection", "success");
@@ -99,6 +116,7 @@ public class DownloadingJson extends IntentService {
         }
         is.close();
         br.close();
+        connection.disconnect();
       }
       else {
         Log.d("connection", "fail");
@@ -106,13 +124,39 @@ public class DownloadingJson extends IntentService {
         return null;
       }
     }
-    catch (MalformedURLException e) {
-      e.printStackTrace();
-      return null;
-    }
     catch (IOException e) {
       e.printStackTrace();
-      return null;
+
+      try {
+        HttpURLConnection connection = (HttpURLConnection) getFullURL(option, false).openConnection();
+        connection.setConnectTimeout(5 * 1000);
+        connection.setReadTimeout(10 * 1000);
+
+        stringBuilder = new StringBuilder();
+
+        if (connection.getResponseCode() == 200) {
+          Log.d("re-connection", "success");
+          InputStream is = connection.getInputStream();
+          BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+          String line;
+          while ((line = br.readLine()) != null) {
+            stringBuilder.append(line);
+          }
+          is.close();
+          br.close();
+          connection.disconnect();
+        }
+        else {
+          Log.d("re-connection", "fail");
+          connection.disconnect();
+          return null;
+        }
+      }
+      catch (IOException ioe) {
+        ioe.printStackTrace();
+        return null;
+      }
     }
 
     // Success to fetch json from server
