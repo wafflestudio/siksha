@@ -1,17 +1,17 @@
 package com.wafflestudio.siksha;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,11 +24,12 @@ import com.wafflestudio.siksha.util.NetworkUtil;
 import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 import com.wafflestudio.siksha.util.Sequencer;
 
-public class MainActivity extends Activity implements ViewPager.OnPageChangeListener, View.OnClickListener {
-  private RelativeLayout topBar;
-  private ImageButton bookmarkButton;
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+  private Toolbar toolbar;
+  private MenuItem bookmark;
+  public ViewPager viewPager;
 
-  private DownloadingJsonReceiver downloadingJsonReceiver;
+  public DownloadingJsonReceiver downloadingJsonReceiver;
 
   private boolean isBackPressedTwice;
 
@@ -43,12 +44,14 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     RestaurantInfoUtil.getInstance().initialize(this);
     Sequencer.getInstance().initialize(this);
 
-    setLayout();
+    initialize();
   }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.hidden_menu, menu);
+    getMenuInflater().inflate(R.menu.app_menu, menu);
+    bookmark = menu.findItem(R.id.action_bookmark);
+    setBookmarkButtonImage();
 
     return super.onCreateOptionsMenu(menu);
   }
@@ -56,35 +59,68 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
-      case R.id.maker_menu:
-        Intent intent = new Intent(this, MakerActivity.class);
-        startActivity(intent);
+      case R.id.action_refresh:
+        new InitialLoadingTask(this, downloadingJsonReceiver, viewPager).reInitialize();
+        break;
+      case R.id.action_check_version:
+        startActivity(new Intent(this, AppVersionActivity.class));
+        break;
+      case R.id.action_bookmark:
+        Sequencer sequencer = Sequencer.getInstance();
+
+        if (!sequencer.isBookmarkMode()) {
+          sequencer.setBookmarkMode(true);
+          bookmark.setIcon(R.drawable.ic_check_white);
+
+          sequencer.notifyChangeToAdapters(true);
+          sequencer.collapseAll();
+        }
+        else {
+          sequencer.setBookmarkMode(false);
+          bookmark.setIcon(R.drawable.ic_star_white);
+
+          sequencer.setMenuListOnSequence();
+          sequencer.recordSequence(MainActivity.this);
+          sequencer.recordBookmarkList(MainActivity.this);
+          sequencer.notifyChangeToAdapters(true);
+          sequencer.expandAllBookmark();
+        }
+        break;
+      case R.id.action_developer:
+        startActivity(new Intent(this, DeveloperActivity.class));
         break;
     }
 
     return true;
   }
 
-  private void setLayout() {
-    topBar = (RelativeLayout) findViewById(R.id.activity_main_top_bar);
+  private void initialize() {
+    toolbar = (Toolbar) findViewById(R.id.activity_main_tool_bar);
     TextView title = (TextView) findViewById(R.id.activity_main_title);
     TextView appName = (TextView) findViewById(R.id.activity_main_app_name);
-    bookmarkButton = (ImageButton) findViewById(R.id.bookmark_button);
-    bookmarkButton.setOnClickListener(this);
 
-    ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+    title.setTypeface(FontUtil.fontBMJua);
+    appName.setTypeface(FontUtil.fontBMJua);
+
+    setSupportActionBar(toolbar);
+    getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+    viewPager = (ViewPager) findViewById(R.id.view_pager);
     viewPager.setOffscreenPageLimit(2);
-    viewPager.setOnPageChangeListener(this);
-
-    title.setTypeface(FontUtil.fontAPAritaDotumMedium);
-    appName.setTypeface(FontUtil.fontAPAritaDotumMedium);
-
+    viewPager.addOnPageChangeListener(this);
     Sequencer.getInstance().setViewPager(viewPager);
-    setTopBarBackgroundColor(getPageIndexOnHour());
-    setBookmarkButtonImage();
+
+    int pageIndex = getPageIndexOnHour();
+    setStatusBarBackgroundColor(pageIndex);
+    setToolBarBackgroundColor(pageIndex);
 
     downloadingJsonReceiver = new DownloadingJsonReceiver();
     new InitialLoadingTask(this, downloadingJsonReceiver, viewPager).initialize();
+  }
+
+  @Override
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    return keyCode == KeyEvent.KEYCODE_MENU || super.onKeyDown(keyCode, event);
   }
 
   private void registerReceiver() {
@@ -106,36 +142,6 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
   }
 
   @Override
-  public void onClick(View v) {
-    int id = v.getId();
-
-    switch (id) {
-      case R.id.bookmark_button:
-        Sequencer sequencer = Sequencer.getInstance();
-
-        if (!sequencer.isBookmarkMode()) {
-          sequencer.setBookmarkMode(true);
-          bookmarkButton.setImageResource(R.drawable.ic_action_accept);
-
-          sequencer.notifyChangeToAdapters(true);
-          sequencer.collapseAll();
-        }
-        else {
-          sequencer.setBookmarkMode(false);
-          bookmarkButton.setImageResource(R.drawable.ic_action_star);
-
-          sequencer.setMenuListOnSequence();
-          sequencer.recordRestaurantSequence(MainActivity.this);
-          sequencer.recordBookmarkList(MainActivity.this);
-          sequencer.notifyChangeToAdapters(true);
-          sequencer.expandBookmarkAll();
-        }
-
-        break;
-    }
-  }
-
-  @Override
   public void onBackPressed() {
     Sequencer sequencer = Sequencer.getInstance();
 
@@ -143,10 +149,10 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
       sequencer.setBookmarkMode(false);
       setBookmarkButtonImage();
 
-      sequencer.cancelBookmarkAll(this);
+      sequencer.cancelAllBookmark(this);
       sequencer.setMenuListOnSequence();
       sequencer.notifyChangeToAdapters(true);
-      sequencer.expandBookmarkAll();
+      sequencer.expandAllBookmark();
     }
     else {
       if (isBackPressedTwice) {
@@ -166,7 +172,14 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
     }
   }
 
-  private int getPageIndexOnHour() {
+  private void setBookmarkButtonImage() {
+    if (Sequencer.getInstance().isBookmarkMode())
+      bookmark.setIcon(R.drawable.ic_check_white);
+    else
+      bookmark.setIcon(R.drawable.ic_star_white);
+  }
+
+  public int getPageIndexOnHour() {
     int hour = CalendarUtil.getCurrentHour();
 
     if (hour <= 9 || hour >= 21)
@@ -177,25 +190,34 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
       return 2;
   }
 
-  private void setTopBarBackgroundColor(int position) {
-    switch (position) {
-      case 0:
-        topBar.setBackgroundResource(R.color.main_color_breakfast);
-        break;
-      case 1:
-        topBar.setBackgroundResource(R.color.main_color_lunch);
-        break;
-      case 2:
-        topBar.setBackgroundResource(R.color.main_color_dinner);
-        break;
+  public void setStatusBarBackgroundColor(int position) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      switch (position) {
+        case 0:
+          getWindow().setStatusBarColor(getResources().getColor(R.color.color_primary_dark_breakfast));
+          break;
+        case 1:
+          getWindow().setStatusBarColor(getResources().getColor(R.color.color_primary_dark_lunch));
+          break;
+        case 2:
+          getWindow().setStatusBarColor(getResources().getColor(R.color.color_primary_dark_dinner));
+          break;
+      }
     }
   }
 
-  private void setBookmarkButtonImage() {
-    if (Sequencer.getInstance().isBookmarkMode())
-      bookmarkButton.setImageResource(R.drawable.ic_action_accept);
-    else
-      bookmarkButton.setImageResource(R.drawable.ic_action_star);
+  public void setToolBarBackgroundColor(int position) {
+    switch (position) {
+      case 0:
+        toolbar.setBackgroundResource(R.color.color_primary_breakfast);
+        break;
+      case 1:
+        toolbar.setBackgroundResource(R.color.color_primary_lunch);
+        break;
+      case 2:
+        toolbar.setBackgroundResource(R.color.color_primary_dinner);
+        break;
+    }
   }
 
   @Override
@@ -215,7 +237,8 @@ public class MainActivity extends Activity implements ViewPager.OnPageChangeList
 
   @Override
   public void onPageSelected(int position) {
-    setTopBarBackgroundColor(position);
+    setStatusBarBackgroundColor(position);
+    setToolBarBackgroundColor(position);
   }
 
   @Override

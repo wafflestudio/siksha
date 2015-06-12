@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/sub_color_lunch" >
+        android:background="@color/color_primary_light_lunch" >
 
         <ImageButton
             android:id="@+id/lunch_prev_btn"
@@ -40,11 +40,18 @@
 
     </RelativeLayout>
 
-    <ExpandableListView
-        android:id="@+id/lunch_expandable_list_view"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/lunch_pull_to_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:groupIndicator="@null" />
+        android:layout_height="match_parent" >
+
+        <ExpandableListView
+            android:id="@+id/lunch_expandable_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:groupIndicator="@null" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

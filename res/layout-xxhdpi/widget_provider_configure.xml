@@ -4,47 +4,44 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/config_activity_main_top_bar"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/config_activity_main_tool_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/main_color_lunch" >
+        android:background="@color/color_primary_lunch"
+        android:theme="@style/ToolBar" >
 
-        <TextView
-            android:id="@+id/config_activity_main_title"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_activity_main"
-            android:layout_centerVertical="true"
-            android:gravity="center"
             android:layout_marginLeft="15dp"
-            android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:paddingTop="3dp"
+            android:orientation="horizontal" >
 
-        <TextView
-            android:id="@+id/config_activity_main_app_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:layout_marginTop="2dp"
-            android:textColor="@color/white"
-            android:layout_marginLeft="7dp"
-            android:layout_toRightOf="@id/config_activity_main_title"
-            android:textSize="25sp" />
+            <TextView
+                android:id="@+id/config_activity_main_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_activity_main"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
-        <ImageButton
-            android:id="@+id/widget_config_accept_button"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:scaleType="fitXY"
-            android:padding="15dp"
-            android:src="@drawable/ic_action_accept"
-            android:background="@drawable/top_bar_button_pressed"
-            android:layout_alignParentRight="true" />
+            <TextView
+                android:id="@+id/config_activity_main_app_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="27sp" />
 
-    </RelativeLayout>
+        </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
 
     <ListView
         android:id="@+id/widget_configure_listview"

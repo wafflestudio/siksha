@@ -121,7 +121,7 @@ public class DownloadingJson extends IntentService {
       else {
         Log.d("connection", "fail");
         connection.disconnect();
-        return null;
+        throw new IOException();
       }
     }
     catch (IOException e) {

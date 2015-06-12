@@ -1,14 +1,17 @@
 package com.wafflestudio.siksha.page;
 
 import android.content.Context;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.wafflestudio.siksha.MainActivity;
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.AdapterUtil;
 import com.wafflestudio.siksha.util.FontUtil;
+import com.wafflestudio.siksha.util.InitialLoadingTask;
 import com.wafflestudio.siksha.util.Sequencer;
 import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
@@ -18,6 +21,7 @@ import java.util.List;
 public class DinnerPage extends LinearLayout {
   private Context context;
 
+  private SwipeRefreshLayout swipeRefreshLayout;
   public ExpandableListView expandableListView;
   public AdapterUtil.ExpandableListAdapter expandableListAdapter;
 
@@ -27,10 +31,10 @@ public class DinnerPage extends LinearLayout {
     this.context = context;
     this.expandableListAdapter = expandableListAdapter;
 
-    initSetting();
+    initialize();
   }
 
-  private void initSetting() {
+  private void initialize() {
     inflate(context, R.layout.dinner_page, this);
 
     TextView indicator = (TextView) findViewById(R.id.dinner_indicator);
@@ -50,8 +54,10 @@ public class DinnerPage extends LinearLayout {
       public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long id) {
         Sequencer sequencer = Sequencer.getInstance();
 
-        if (sequencer.isBookmarkMode()) {
-          String name = sequencer.currentSequence.get(groupPosition);
+        if (!sequencer.isBookmarkMode())
+          return false;
+        else {
+          String name = sequencer.sequence.get(groupPosition);
 
           if (!sequencer.isBookMarked(name))
             sequencer.setBookmark(name, true);
@@ -64,12 +70,25 @@ public class DinnerPage extends LinearLayout {
 
           return true;
         }
-        else
-          return false;
+      }
+    });
+
+    swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.dinner_pull_to_refresh);
+    swipeRefreshLayout.setColorSchemeResources(R.color.color_primary_dinner, R.color.color_primary_dark_dinner);
+    swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      @Override
+      public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        refresh();
+        swipeRefreshLayout.setRefreshing(false);
       }
     });
 
     expandBookmarks();
+  }
+
+  private void refresh() {
+    new InitialLoadingTask(context, ((MainActivity) context).downloadingJsonReceiver, ((MainActivity) context).viewPager).reInitialize();
   }
 
   public void expandBookmarks() {
@@ -79,11 +98,11 @@ public class DinnerPage extends LinearLayout {
       return;
 
     for (String name : recordedBookmark.split("/"))
-      expandableListView.expandGroup(Sequencer.getInstance().currentSequence.indexOf(name));
+      expandableListView.expandGroup(Sequencer.getInstance().sequence.indexOf(name));
   }
 
   public void collapseAllGroup() {
-    for(int i = 0; i < Sequencer.getInstance().currentSequence.size(); i++)
+    for(int i = 0; i < Sequencer.getInstance().sequence.size(); i++)
       expandableListView.collapseGroup(i);
   }
 
@@ -92,7 +111,7 @@ public class DinnerPage extends LinearLayout {
     String recordedBookmark = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_BOOKMARK);
 
     if (recordedBookmark.equals("")) {
-      for(int i = 0; i < sequencer.currentSequence.size(); i++) {
+      for(int i = 0; i < sequencer.sequence.size(); i++) {
         if (i != groupPosition)
           expandableListView.collapseGroup(i);
       }
@@ -102,8 +121,8 @@ public class DinnerPage extends LinearLayout {
       for(String bookmark : recordedBookmark.split("/"))
         bookmarkList.add(bookmark);
 
-      for (int i = 0; i < sequencer.currentSequence.size(); i++) {
-        if (!bookmarkList.contains(sequencer.currentSequence.get(i)) && i != groupPosition)
+      for (int i = 0; i < sequencer.sequence.size(); i++) {
+        if (!bookmarkList.contains(sequencer.sequence.get(i)) && i != groupPosition)
           expandableListView.collapseGroup(i);
       }
     }

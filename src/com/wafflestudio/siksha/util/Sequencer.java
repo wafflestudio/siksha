@@ -19,7 +19,7 @@ public class Sequencer {
   public static Sequencer sequencer;
 
   public List<String> originalSequence;
-  public List<String> currentSequence;
+  public List<String> sequence;
 
   public List<MenuArrangedForm> breakfastMenuList;
   public List<MenuArrangedForm> lunchMenuList;
@@ -27,7 +27,7 @@ public class Sequencer {
 
   private ViewPager viewPager;
 
-  private Map<String, Boolean> bookmarkFlagMap;
+  private Map<String, Boolean> bookmarkMap;
   private boolean bookmarkMode;
 
   private Sequencer() { }
@@ -41,25 +41,30 @@ public class Sequencer {
 
   public void initialize(Context context) {
     originalSequence = new ArrayList<String>();
-    currentSequence = new ArrayList<String>();
-    bookmarkFlagMap = new HashMap<String, Boolean>();
+    sequence = new ArrayList<String>();
+    bookmarkMap = new HashMap<String, Boolean>();
 
-    setBookmarkMode(false);
-
+    RestaurantInfoUtil restaurantInfoUtil = RestaurantInfoUtil.getInstance();
+    String recordedOriginalSequence = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_ORIGINAL_SEQUENCE);
     String recordedSequence = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_SEQUENCE);
     String recordedBookmark = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_BOOKMARK);
-    RestaurantInfoUtil restaurantInfoUtil = RestaurantInfoUtil.getInstance();
 
+    setBookmarkMode(false);
+    recordOriginalSequence(context, restaurantInfoUtil.restaurants);
     Collections.addAll(originalSequence, restaurantInfoUtil.restaurants);
 
-    if (!recordedSequence.equals(""))
-      Collections.addAll(currentSequence, recordedSequence.split("/"));
+    if (!recordedSequence.equals("")) {
+      if (!recordedOriginalSequence.equals(getSequenceString(restaurantInfoUtil.restaurants)))
+        Collections.addAll(sequence, restaurantInfoUtil.restaurants);
+      else
+        Collections.addAll(sequence, recordedSequence.split("/"));
+    }
     else
-      Collections.addAll(currentSequence, restaurantInfoUtil.restaurants);
+      Collections.addAll(sequence, restaurantInfoUtil.restaurants);
 
     if (!recordedBookmark.equals("")) {
       for(String bookmark : recordedBookmark.split("/"))
-        bookmarkFlagMap.put(bookmark, true);
+        bookmarkMap.put(bookmark, true);
     }
   }
 
@@ -68,12 +73,12 @@ public class Sequencer {
   }
 
   public void modifySequence(String name) {
-    if (!isBookMarked(name)) {
-      List<String> arrangedList = new ArrayList<String>();
+    List<String> arrangedList = new ArrayList<String>();
 
-      for(int i = 0; i < currentSequence.size(); i++) {
-        if (!isBookMarked(currentSequence.get(i)))
-          arrangedList.add(currentSequence.get(i));
+    if (!isBookMarked(name)) {
+      for(int i = 0; i < sequence.size(); i++) {
+        if (!isBookMarked(sequence.get(i)))
+          arrangedList.add(sequence.get(i));
       }
 
       Collections.sort(arrangedList, new Comparator<String>() {
@@ -83,28 +88,24 @@ public class Sequencer {
         }
       });
 
-      for(int i = currentSequence.size() - 1; i >= 0; i--) {
-        if (isBookMarked(currentSequence.get(i)))
-          arrangedList.add(0, currentSequence.get(i));
+      for(int i = sequence.size() - 1; i >= 0; i--) {
+        if (isBookMarked(sequence.get(i)))
+          arrangedList.add(0, sequence.get(i));
       }
-
-      currentSequence = arrangedList;
     }
     else {
-      List<String> arrangedList = new ArrayList<String>();
-
-      for(int i = 0; i < currentSequence.size(); i++) {
-        if (isBookMarked(currentSequence.get(i)))
-          arrangedList.add(currentSequence.get(i));
+      for(int i = 0; i < sequence.size(); i++) {
+        if (isBookMarked(sequence.get(i)))
+          arrangedList.add(sequence.get(i));
       }
 
-      for(int i = 0; i < currentSequence.size(); i++) {
-        if (!isBookMarked(currentSequence.get(i)))
-          arrangedList.add(currentSequence.get(i));
+      for(int i = 0; i < sequence.size(); i++) {
+        if (!isBookMarked(sequence.get(i)))
+          arrangedList.add(sequence.get(i));
       }
-
-      currentSequence = arrangedList;
     }
+
+    sequence = arrangedList;
   }
 
   public void setMenuListOnSequence() {
@@ -114,7 +115,7 @@ public class Sequencer {
     lunchMenuList = new ArrayList<MenuArrangedForm>();
     dinnerMenuList = new ArrayList<MenuArrangedForm>();
 
-    for(String name : currentSequence) {
+    for(String name : sequence) {
       breakfastMenuList.add(restaurantInfoUtil.breakfastMenuMap.get(name));
       lunchMenuList.add(restaurantInfoUtil.lunchMenuMap.get(name));
       dinnerMenuList.add(restaurantInfoUtil.dinnerMenuMap.get(name));
@@ -139,7 +140,7 @@ public class Sequencer {
     dinnerPage.expandableListAdapter.notifyDataSetChanged();
   }
 
-  public void expandBookmarkAll() {
+  public void expandAllBookmark() {
     BreakfastPage breakfastPage = (BreakfastPage) viewPager.findViewWithTag("page" + 0);
     LunchPage lunchPage = (LunchPage) viewPager.findViewWithTag("page" + 1);
     DinnerPage dinnerPage = (DinnerPage) viewPager.findViewWithTag("page" + 2);
@@ -159,7 +160,7 @@ public class Sequencer {
     dinnerPage.collapseAllGroup();
   }
 
-  public void cancelBookmarkAll(Context context) {
+  public void cancelAllBookmark(Context context) {
     WeakReference<Context> weakReference = new WeakReference<Context>(context);
 
     String recordedSequence = SharedPreferenceUtil.loadValueOfString(weakReference.get(), SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_SEQUENCE);
@@ -168,13 +169,13 @@ public class Sequencer {
     if (!recordedSequence.equals("")) {
       List<String> previousSequence = new ArrayList<String>();
       Collections.addAll(previousSequence, recordedSequence.split("/"));
-      currentSequence = previousSequence;
+      sequence = previousSequence;
     }
     else
-      currentSequence = originalSequence;
+      sequence = originalSequence;
 
-    for(int i = 0; i < currentSequence.size(); i++)
-      setBookmark(currentSequence.get(i), false);
+    for(int i = 0; i < sequence.size(); i++)
+      setBookmark(sequence.get(i), false);
 
     if (!recordedBookmark.equals("")) {
       for(String bookmark : recordedBookmark.split("/"))
@@ -191,20 +192,20 @@ public class Sequencer {
   }
 
   public void setBookmark(String key, boolean value) {
-    if (bookmarkFlagMap.get(key) != null)
-      bookmarkFlagMap.remove(key);
+    if (bookmarkMap.get(key) != null)
+      bookmarkMap.remove(key);
 
-    bookmarkFlagMap.put(key, value);
+    bookmarkMap.put(key, value);
   }
 
   public boolean isBookMarked(String key) {
-    return bookmarkFlagMap.get(key) != null && bookmarkFlagMap.get(key);
+    return bookmarkMap.get(key) != null && bookmarkMap.get(key);
   }
 
   public List<String> getBookmarkList() {
     List<String> bookmarkList = new ArrayList<String>();
 
-    for(String name : currentSequence) {
+    for(String name : sequence) {
       if (isBookMarked(name))
         bookmarkList.add(name);
     }
@@ -212,14 +213,40 @@ public class Sequencer {
     return bookmarkList;
   }
 
-  public void recordRestaurantSequence(Context context) {
+  public String getSequenceString(String[] restaurants) {
     StringBuilder sequence = new StringBuilder();
 
-    for(int i = 0; i < currentSequence.size(); i++) {
-      if (i == currentSequence.size() - 1)
-        sequence.append(currentSequence.get(i));
+    for(int i = 0; i < restaurants.length; i++) {
+      if (i == restaurants.length - 1)
+        sequence.append(restaurants[i]);
       else
-        sequence.append(currentSequence.get(i)).append("/");
+        sequence.append(restaurants[i]).append("/");
+    }
+
+    return sequence.toString();
+  }
+
+  public void recordOriginalSequence(Context context, String[] restaurants) {
+    StringBuilder sequence = new StringBuilder();
+
+    for(int i = 0; i < restaurants.length; i++) {
+      if (i == restaurants.length - 1)
+        sequence.append(restaurants[i]);
+      else
+        sequence.append(restaurants[i]).append("/");
+    }
+
+    SharedPreferenceUtil.save(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_ORIGINAL_SEQUENCE, sequence.toString());
+  }
+
+  public void recordSequence(Context context) {
+    StringBuilder sequence = new StringBuilder();
+
+    for(int i = 0; i < this.sequence.size(); i++) {
+      if (i == this.sequence.size() - 1)
+        sequence.append(this.sequence.get(i));
+      else
+        sequence.append(this.sequence.get(i)).append("/");
     }
 
     SharedPreferenceUtil.save(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_SEQUENCE, sequence.toString());

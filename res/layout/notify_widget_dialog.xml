@@ -18,7 +18,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@color/main_color_lunch" />
+        android:background="@color/color_primary_lunch" />
 
     <TextView
         android:id="@+id/notify_widget_dialog_message"
@@ -34,7 +34,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@color/main_color_lunch" />
+        android:background="@color/color_primary_lunch" />
 
     <Button
         android:id="@+id/notify_widget_dialog_close_button"

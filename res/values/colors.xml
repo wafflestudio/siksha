@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="main_color_breakfast">#5abec6</color>
-    <color name="main_color_lunch">#f48a5b</color>
-    <color name="main_color_dinner">#7171c9</color>
-    <color name="sub_color_breakfast">#bedadd</color>
-    <color name="sub_color_lunch">#fde2b9</color>
-    <color name="sub_color_dinner">#c7d0f3</color>
-    <color name="sub_color_2">#f3f3f3</color>
+    <color name="color_primary_breakfast">#5abec6</color>
+    <color name="color_primary_lunch">#f48a5b</color>
+    <color name="color_primary_dinner">#7171c9</color>
+
+    <color name="color_primary_dark_breakfast">#41adb5</color>
+    <color name="color_primary_dark_lunch">#ec6c34</color>
+    <color name="color_primary_dark_dinner">#5858b9</color>
+
+    <color name="color_primary_light_breakfast">#bedadd</color>
+    <color name="color_primary_light_lunch">#fde2b9</color>
+    <color name="color_primary_light_dinner">#c7d0f3</color>
+
+    <color name="sub_color">#f3f3f3</color>
     <color name="widget_sub_color">#eaeaea</color>
     <color name="dialog_content_color">#f0edec</color>
 
