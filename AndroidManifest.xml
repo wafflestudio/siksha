@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="22" />
 
     <!-- Permission -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,12 +16,12 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:label="@string/app_name" >
 
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:theme="@style/AppTheme"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,13 +30,22 @@
         </activity>
 
         <activity
-            android:name=".MakerActivity"
+            android:name=".DeveloperActivity"
             android:label="@string/app_name"
+            android:theme="@style/AppSubTheme"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <activity
+            android:name=".AppVersionActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppSubTheme"
             android:screenOrientation="portrait" >
         </activity>
 
         <activity
             android:name=".widget.WidgetProviderConfigureActivity"
+            android:theme="@style/AppSubTheme"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />

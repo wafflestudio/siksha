@@ -24,7 +24,17 @@
     <string name="lunch">점심</string>
     <string name="dinner">저녁</string>
 
-    <string name="maker">만든 사람들</string>
+    <string name="bookmark">북마크</string>
+    <string name="overflow_menu">Overflow Menu</string>
+    <string name="refresh">식단 새로고침</string>
+    <string name="app_version">버전 정보</string>
+    <string name="confirm">확인</string>
+
+    <string name="now_latest">최신 버전을 사용하고 있습니다.</string>
+    <string name="no_latest">최신 버전을 사용하고 있지 않습니다.\n업데이트를 하려면 눌러주세요.</string>
+    <string name="get_latest_version_error">최신 버전 정보를 가져오는 데 실패했습니다.\n데이터 네트워크 또는 Wi-Fi를 연결하고, 다시 시도해주세요.</string>
+
+    <string name="developer">만든 사람들</string>
     <string name="wafflestudio">와플스튜디오</string>
     <string name="shaidea">샤이디어</string>
 
@@ -33,7 +43,7 @@
     <string name="breakfast_check_dialog_message">위젯에서 아침 메뉴를 보시겠습니까?</string>
     <string name="breakfast_check_dialog_yes">예</string>
     <string name="breakfast_check_dialog_no">아니오</string>
-    <string name="empty_string">식단 정보가 없습니다.</string>
-    <string name="widget_download_fail_string">식단 다운로드 실패! 데이터 네트워크 또는 Wi-Fi를 연결하고, 새로고침 해주세요.</string>
+    <string name="menu_empty">식단 정보가 없습니다.</string>
+    <string name="widget_download_fail">식단 다운로드 실패! 데이터 네트워크 또는 Wi-Fi를 연결하고, 새로고침 해주세요.</string>
 	
 </resources>

@@ -17,6 +17,7 @@ public class SharedPreferenceUtil {
   public static final String PREF_PREFIX_BREAKFAST_KEY = "widget_breakfast";
   public static final String PREF_WIDGET_ID = "widget_ids";
 
+  public static final String PREF_KEY_ORIGINAL_SEQUENCE = "restaurant_original_sequence";
   public static final String PREF_KEY_SEQUENCE = "restaurant_sequence";
   public static final String PREF_KEY_BOOKMARK = "bookmark_list";
   public static final String PREF_KEY_NOTIFY_WIDGET = "notify_widget";

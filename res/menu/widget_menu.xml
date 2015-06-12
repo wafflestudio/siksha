@@ -4,9 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <item
-        android:id="@+id/maker_menu"
-        android:icon="@drawable/ic_action_person"
-        android:title="@string/maker"
-        app:showAsAction="never" />
+        android:id="@+id/action_confirm"
+        android:icon="@drawable/ic_check_white"
+        android:title="@string/confirm"
+        app:showAsAction="ifRoom" />
 
 </menu>

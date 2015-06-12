@@ -4,7 +4,7 @@
 
     <item android:state_pressed="true" >
         <shape>
-            <solid android:color="@color/main_color_lunch" />
+            <solid android:color="@color/color_primary_lunch" />
         </shape>
     </item>
 

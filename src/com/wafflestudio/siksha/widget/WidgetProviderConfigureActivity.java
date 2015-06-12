@@ -1,17 +1,20 @@
 package com.wafflestudio.siksha.widget;
 
-import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,14 +23,14 @@ import com.wafflestudio.siksha.util.FontUtil;
 import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class WidgetProviderConfigureActivity extends Activity {
+public class WidgetProviderConfigureActivity extends AppCompatActivity {
     private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     String[] restaurants;
 
-    private ImageButton addButton;
     private ListView listView;
     private ListAdapter listAdapter;
 
@@ -37,49 +40,64 @@ public class WidgetProviderConfigureActivity extends Activity {
         setContentView(R.layout.widget_provider_configure);
         setResult(RESULT_CANCELED);
 
+        initialize();
+
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+
+        if (extras != null)
+            appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID)
+            finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.widget_menu, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_confirm:
+                addWidgetId(WidgetProviderConfigureActivity.this, appWidgetId);
+                saveTitlePref(WidgetProviderConfigureActivity.this, appWidgetId, listAdapter.getChecked());
+                startWidget();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void initialize() {
         FontUtil.getInstance().setFontAsset(getAssets());
         restaurants = getResources().getStringArray(R.array.restaurants);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.config_activity_main_tool_bar);
         TextView title = (TextView) findViewById(R.id.config_activity_main_title);
         TextView appName = (TextView) findViewById(R.id.config_activity_main_app_name);
-        title.setTypeface(FontUtil.fontAPAritaDotumMedium);
-        appName.setTypeface(FontUtil.fontAPAritaDotumMedium);
 
-        addButton = (ImageButton) findViewById(R.id.widget_config_accept_button);
+        title.setTypeface(FontUtil.fontBMJua);
+        appName.setTypeface(FontUtil.fontBMJua);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         listView = (ListView) findViewById(R.id.widget_configure_listview);
-
         listAdapter = new ListAdapter(this);
         listView.setAdapter(listAdapter);
 
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
-                  @Override
-                  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                      listAdapter.setChecked(position);
-                      listAdapter.notifyDataSetChanged();
-                  }
-                }
-        );
-
-        addButton.setOnClickListener(
-                new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        addWidgetId(WidgetProviderConfigureActivity.this, appWidgetId);
-                        saveTitlePref(WidgetProviderConfigureActivity.this, appWidgetId, listAdapter.getChecked());
-                        startWidget();
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        listAdapter.setChecked(position);
+                        listAdapter.notifyDataSetChanged();
                     }
                 }
         );
-
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-        }
-        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            finish();
-        }
     }
 
     public boolean isEarlier(String r1, String r2) {
@@ -95,35 +113,42 @@ public class WidgetProviderConfigureActivity extends Activity {
         return i < j;
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return keyCode == KeyEvent.KEYCODE_MENU || super.onKeyDown(keyCode, event);
+    }
+
     class ListAdapter extends BaseAdapter {
         private ViewHolder viewHolder;
         private LayoutInflater inflater;
 
-        ArrayList<String> restaurantSequence;
+        ArrayList<String> sequence;
         int isChecked;
 
         public ListAdapter(Context context) {
             inflater = LayoutInflater.from(context);
-            restaurantSequence = new ArrayList<String>();
-            for (int i = 0; i < restaurants.length; i++)
-                restaurantSequence.add(restaurants[i]);
+            sequence = new ArrayList<String>();
+
+            Collections.addAll(sequence, restaurants);
             isChecked = 0;
         }
 
         public String getChecked() {
             if (isChecked <= 0)
                 return "";
-            String checkedSequence = restaurantSequence.get(0);
+
+            String checkedSequence = sequence.get(0);
             for (int i = 1; i < isChecked; i++) {
                 checkedSequence += "#";
-                checkedSequence += restaurantSequence.get(i);
+                checkedSequence += sequence.get(i);
             }
+
             return checkedSequence;
         }
 
         @Override
         public int getCount() {
-            return restaurantSequence.size();
+            return sequence.size();
         }
 
         public long getItemId(int position) {
@@ -132,7 +157,7 @@ public class WidgetProviderConfigureActivity extends Activity {
 
         @Override
         public String getItem(int position) {
-            return restaurantSequence.get(position);
+            return sequence.get(position);
         }
 
         @Override
@@ -148,7 +173,7 @@ public class WidgetProviderConfigureActivity extends Activity {
             else
                 viewHolder = (ViewHolder) convertView.getTag();
 
-            final String restaurantName = restaurantSequence.get(position);
+            final String restaurantName = sequence.get(position);
             TextView textView = (TextView) convertView.findViewById(R.id.widget_configure_row_restaurant);
             textView.setText(restaurantName);
             textView.setTypeface(FontUtil.fontAPAritaDotumMedium);
@@ -161,20 +186,20 @@ public class WidgetProviderConfigureActivity extends Activity {
         }
 
         public void setChecked(int position) {
-            String checkedRestaurant = restaurantSequence.get(position);
+            String checkedRestaurant = sequence.get(position);
             if (position < isChecked) {
                 int i;
-                for (i = isChecked; i < restaurantSequence.size(); i++) {
-                    if (isEarlier(checkedRestaurant, restaurantSequence.get(i)))
+                for (i = isChecked; i < sequence.size(); i++) {
+                    if (isEarlier(checkedRestaurant, sequence.get(i)))
                         break;
                 }
-                restaurantSequence.add(i, checkedRestaurant);
-                restaurantSequence.remove(position);
+                sequence.add(i, checkedRestaurant);
+                sequence.remove(position);
                 isChecked--;
             }
             else {
-                restaurantSequence.remove(position);
-                restaurantSequence.add(isChecked, checkedRestaurant);
+                sequence.remove(position);
+                sequence.add(isChecked, checkedRestaurant);
                 isChecked++;
             }
         }

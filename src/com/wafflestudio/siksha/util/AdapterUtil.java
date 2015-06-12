@@ -105,7 +105,7 @@ public class AdapterUtil {
           Sequencer sequencer = Sequencer.getInstance();
 
           if (!sequencer.isBookmarkMode()) {
-            RestaurantInfoDialog dialog = new RestaurantInfoDialog(context, sequencer.currentSequence.get(groupPosition), pageIndex);
+            RestaurantInfoDialog dialog = new RestaurantInfoDialog(context, sequencer.sequence.get(groupPosition), pageIndex);
             dialog.setCanceledOnTouchOutside(true);
             dialog.show();
           }
@@ -176,13 +176,13 @@ public class AdapterUtil {
         String recordedBookmark = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_BOOKMARK);
 
         if (recordedBookmark.equals(""))
-          groupButton.setImageResource(R.drawable.ic_action_star);
+          groupButton.setImageResource(R.drawable.ic_star_white);
         else {
           List<String> bookmarkList = new ArrayList<String>();
           Collections.addAll(bookmarkList, recordedBookmark.split("/"));
 
           if (bookmarkList.contains(name))
-            groupButton.setImageResource(R.drawable.ic_action_star_brighted);
+            groupButton.setImageResource(R.drawable.ic_star_yellow);
           else
             modifyGroupButtonAttr(name);
         }
@@ -193,9 +193,9 @@ public class AdapterUtil {
 
     private void modifyGroupButtonAttr(String name) {
       if (Sequencer.getInstance().isBookMarked(name))
-        groupButton.setImageResource(R.drawable.ic_action_star_brighted);
+        groupButton.setImageResource(R.drawable.ic_star_yellow);
       else
-        groupButton.setImageResource(R.drawable.ic_action_star);
+        groupButton.setImageResource(R.drawable.ic_star_white);
     }
   }
 

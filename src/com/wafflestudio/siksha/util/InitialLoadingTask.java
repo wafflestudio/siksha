@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.wafflestudio.siksha.MainActivity;
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.dialog.DownloadingRetryDialog;
 import com.wafflestudio.siksha.dialog.NotifyWidgetDialog;
@@ -64,6 +66,16 @@ public class InitialLoadingTask {
     }
   }
 
+  public void reInitialize() {
+    if (!NetworkUtil.getInstance().isOnline())
+      Toast.makeText(context, context.getString(R.string.downloading_network_state), Toast.LENGTH_SHORT).show();
+    else {
+      int option = DownloadingJson.getDownloadOption();
+      String downloadDate = DownloadingJson.getDownloadDate(option);
+      startDownloadService(context, option, downloadDate);
+    }
+  }
+
   private void setAdapters() {
     Sequencer sequencer = Sequencer.getInstance();
 
@@ -117,14 +129,11 @@ public class InitialLoadingTask {
   }
 
   private void setInitialPage() {
-    int hour = CalendarUtil.getCurrentHour();
+    int index = ((MainActivity) context).getPageIndexOnHour();
 
-    if (hour <= 9 || hour >= 21)
-      viewPager.setCurrentItem(0);
-    else if (hour >= 10 && hour <= 14)
-      viewPager.setCurrentItem(1);
-    else
-      viewPager.setCurrentItem(2);
+    ((MainActivity) context).setStatusBarBackgroundColor(index);
+    ((MainActivity) context).setToolBarBackgroundColor(index);
+    viewPager.setCurrentItem(index);
   }
 
   private void notifyWidget() {

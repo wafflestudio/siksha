@@ -16,11 +16,11 @@ public class AlarmServiceReceiver extends BroadcastReceiver {
     String downloadDate = DownloadingJson.getDownloadDate(option);
 
     if (!DownloadingJson.isJsonUpdated(context, downloadDate)) {
-      Intent jsonDownload = new Intent(context, DownloadingJson.class);
-      jsonDownload.putExtra(DownloadingJson.KEY_OPTION, option);
-      jsonDownload.putExtra(DownloadingJson.KEY_DATE, downloadDate);
-      jsonDownload.setAction(DownloadingJsonReceiver.ACTION_PRE_DOWNLOAD);
-      context.startService(jsonDownload);
+      Intent downloadIntent = new Intent(context, DownloadingJson.class);
+      downloadIntent.putExtra(DownloadingJson.KEY_OPTION, option);
+      downloadIntent.putExtra(DownloadingJson.KEY_DATE, downloadDate);
+      downloadIntent.setAction(DownloadingJsonReceiver.ACTION_PRE_DOWNLOAD);
+      context.startService(downloadIntent);
     }
   }
 }

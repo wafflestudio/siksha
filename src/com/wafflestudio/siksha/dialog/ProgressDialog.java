@@ -19,7 +19,7 @@ public class ProgressDialog extends Dialog {
   private ImageView progress;
 
   public ProgressDialog(Context context, String message) {
-    super(context, R.style.progress_dialog);
+    super(context, R.style.ProgressDialog);
     setContentView(R.layout.progress_dialog);
 
     this.context = context;
