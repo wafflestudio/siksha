@@ -1,29 +1,25 @@
 package com.wafflestudio.siksha.page;
 
 import android.content.Context;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.wafflestudio.siksha.MainActivity;
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.AdapterUtil;
 import com.wafflestudio.siksha.util.FontUtil;
-import com.wafflestudio.siksha.util.InitialLoadingTask;
 import com.wafflestudio.siksha.util.Sequencer;
 import com.wafflestudio.siksha.util.SharedPreferenceUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class LunchPage extends LinearLayout {
-  private Context context;
-
-  private SwipeRefreshLayout swipeRefreshLayout;
   public ExpandableListView expandableListView;
   public AdapterUtil.ExpandableListAdapter expandableListAdapter;
+  private Context context;
 
   public LunchPage(Context context, AdapterUtil.ExpandableListAdapter expandableListAdapter) {
     super(context);
@@ -73,22 +69,7 @@ public class LunchPage extends LinearLayout {
       }
     });
 
-    swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.lunch_pull_to_refresh);
-    swipeRefreshLayout.setColorSchemeResources(R.color.color_primary_lunch, R.color.color_primary_dark_lunch);
-    swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-      @Override
-      public void onRefresh() {
-        swipeRefreshLayout.setRefreshing(true);
-        refresh();
-        swipeRefreshLayout.setRefreshing(false);
-      }
-    });
-
     expandBookmarks();
-  }
-
-  private void refresh() {
-    new InitialLoadingTask(context, ((MainActivity) context).downloadingJsonReceiver, ((MainActivity) context).viewPager).reInitialize();
   }
 
   public void expandBookmarks() {
@@ -102,7 +83,7 @@ public class LunchPage extends LinearLayout {
   }
 
   public void collapseAllGroup() {
-    for(int i = 0; i < Sequencer.getInstance().sequence.size(); i++)
+    for (int i = 0; i < Sequencer.getInstance().sequence.size(); i++)
       expandableListView.collapseGroup(i);
   }
 
@@ -111,15 +92,13 @@ public class LunchPage extends LinearLayout {
     String recordedBookmark = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_BOOKMARK);
 
     if (recordedBookmark.equals("")) {
-      for(int i = 0; i < sequencer.sequence.size(); i++) {
+      for (int i = 0; i < sequencer.sequence.size(); i++) {
         if (i != groupPosition)
           expandableListView.collapseGroup(i);
       }
-    }
-    else {
+    } else {
       List<String> bookmarkList = new ArrayList<String>();
-      for(String bookmark : recordedBookmark.split("/"))
-        bookmarkList.add(bookmark);
+      Collections.addAll(bookmarkList, recordedBookmark.split("/"));
 
       for (int i = 0; i < sequencer.sequence.size(); i++) {
         if (!bookmarkList.contains(sequencer.sequence.get(i)) && i != groupPosition)

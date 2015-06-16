@@ -29,18 +29,11 @@
 
     </RelativeLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/breakfast_pull_to_refresh"
+    <ExpandableListView
+        android:id="@+id/breakfast_expandable_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <ExpandableListView
-            android:id="@+id/breakfast_expandable_list_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:groupIndicator="@null" />
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:groupIndicator="@null" />
 
 </LinearLayout>

@@ -23,15 +23,12 @@ import java.util.List;
 
 public class AdapterUtil {
   public static class ExpandableListAdapter extends BaseExpandableListAdapter {
-    private Context context;
-
-    private int pageIndex;
     public List<MenuArrangedForm> forms;
-
+    public boolean isInitialization;
+    private Context context;
+    private int pageIndex;
     private TextView restaurantNameView;
     private ImageButton groupButton;
-
-    public boolean isInitialization;
 
     public ExpandableListAdapter(Context context, List<MenuArrangedForm> forms, int pageIndex) {
       this.context = context;
@@ -108,8 +105,7 @@ public class AdapterUtil {
             RestaurantInfoDialog dialog = new RestaurantInfoDialog(context, sequencer.sequence.get(groupPosition), pageIndex);
             dialog.setCanceledOnTouchOutside(true);
             dialog.show();
-          }
-          else {
+          } else {
             if (!sequencer.isBookMarked(name))
               sequencer.setBookmark(name, true);
             else
@@ -150,8 +146,7 @@ public class AdapterUtil {
 
         noMenuLayout.setVisibility(View.GONE);
         menuLayout.setVisibility(View.VISIBLE);
-      }
-      else {
+      } else {
         noMenuLayout.setTypeface(FontUtil.fontAPAritaDotumMedium);
 
         noMenuLayout.setVisibility(View.VISIBLE);
@@ -171,8 +166,7 @@ public class AdapterUtil {
           groupButton.setImageResource(R.drawable.ic_action_info_dinner);
 
         groupButton.setBackgroundResource(R.drawable.item_pressed);
-      }
-      else {
+      } else {
         String recordedBookmark = SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_BOOKMARK);
 
         if (recordedBookmark.equals(""))

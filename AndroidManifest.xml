@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.wafflestudio.siksha"
     android:versionCode="6"
-    android:versionName="1.1.0" >
+    android:versionName="1.1.0">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -16,13 +16,13 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" >
+        android:label="@string/app_name">
 
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -32,27 +32,25 @@
         <activity
             android:name=".DeveloperActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppSubTheme"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppSubTheme"></activity>
 
         <activity
             android:name=".AppVersionActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppSubTheme"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppSubTheme"></activity>
 
         <activity
             android:name=".widget.WidgetProviderConfigureActivity"
-            android:theme="@style/AppSubTheme"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@style/AppSubTheme">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
 
-        <receiver android:name=".widget.WidgetProvider" >
+        <receiver android:name=".widget.WidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.wafflestudio.siksha.DATA_FETCHED" />
@@ -64,19 +62,15 @@
                 android:resource="@xml/widget_provider_info" />
         </receiver>
 
-        <receiver
-            android:name=".service.AlarmServiceReceiver" >
-        </receiver>
+        <receiver android:name=".service.AlarmServiceReceiver"></receiver>
 
-        <receiver
-            android:name=".service.BootServiceReceiver" >
+        <receiver android:name=".service.BootServiceReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".service.DownloadingJson" />
+        <service android:name=".service.DownloadingJson" />
 
         <service
             android:name="com.wafflestudio.siksha.WidgetRemoteService"

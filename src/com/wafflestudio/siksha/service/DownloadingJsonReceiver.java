@@ -11,11 +11,6 @@ public class DownloadingJsonReceiver extends BroadcastReceiver {
 
   private OnCompleteDownloadListener onCompleteDownloadListener;
 
-  public interface OnCompleteDownloadListener {
-    void onComplete();
-    void onFail(int option, String downloadingDate);
-  }
-
   public void setOnCompleteDownloadListener(OnCompleteDownloadListener onCompleteDownloadListener) {
     this.onCompleteDownloadListener = onCompleteDownloadListener;
   }
@@ -33,5 +28,11 @@ public class DownloadingJsonReceiver extends BroadcastReceiver {
       else
         onCompleteDownloadListener.onFail(option, downloadingDate);
     }
+  }
+
+  public interface OnCompleteDownloadListener {
+    void onComplete();
+
+    void onFail(int option, String downloadingDate);
   }
 }

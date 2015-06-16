@@ -25,12 +25,10 @@ import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 import com.wafflestudio.siksha.util.Sequencer;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+  public ViewPager viewPager;
+  public DownloadingJsonReceiver downloadingJsonReceiver;
   private Toolbar toolbar;
   private MenuItem bookmark;
-  public ViewPager viewPager;
-
-  public DownloadingJsonReceiver downloadingJsonReceiver;
-
   private boolean isBackPressedTwice;
 
   @Override
@@ -60,6 +58,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.action_refresh:
+        if (Sequencer.getInstance().isBookmarkMode())
+          onBackPressed();
+
         new InitialLoadingTask(this, downloadingJsonReceiver, viewPager).reInitialize();
         break;
       case R.id.action_check_version:
@@ -74,8 +75,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
           sequencer.notifyChangeToAdapters(true);
           sequencer.collapseAll();
-        }
-        else {
+        } else {
           sequencer.setBookmarkMode(false);
           bookmark.setIcon(R.drawable.ic_star_white);
 
@@ -153,8 +153,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
       sequencer.setMenuListOnSequence();
       sequencer.notifyChangeToAdapters(true);
       sequencer.expandAllBookmark();
-    }
-    else {
+    } else {
       if (isBackPressedTwice) {
         super.onBackPressed();
         return;
@@ -233,7 +232,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
   }
 
   @Override
-  public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
+  public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+  }
 
   @Override
   public void onPageSelected(int position) {
@@ -242,5 +242,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
   }
 
   @Override
-  public void onPageScrollStateChanged(int state) { }
+  public void onPageScrollStateChanged(int state) {
+  }
 }

@@ -56,8 +56,7 @@ public class AppVersionActivity extends Activity {
     try {
       versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
       appVersionMessage.setText("현재 버전 : " + versionName);
-    }
-    catch (PackageManager.NameNotFoundException e) {
+    } catch (PackageManager.NameNotFoundException e) {
       e.printStackTrace();
     }
 
@@ -84,13 +83,11 @@ public class AppVersionActivity extends Activity {
             }
             is.close();
             br.close();
-          }
-          else {
+          } else {
             connection.disconnect();
             data = null;
           }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
           e.printStackTrace();
           data = null;
         }

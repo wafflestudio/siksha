@@ -85,8 +85,7 @@ public class DownloadingJson extends IntentService {
           url = new URL(BASE_URL);
           break;
       }
-    }
-    catch (MalformedURLException e) {
+    } catch (MalformedURLException e) {
       e.printStackTrace();
     }
 
@@ -117,14 +116,12 @@ public class DownloadingJson extends IntentService {
         is.close();
         br.close();
         connection.disconnect();
-      }
-      else {
+      } else {
         Log.d("connection", "fail");
         connection.disconnect();
         throw new IOException();
       }
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       e.printStackTrace();
 
       try {
@@ -146,14 +143,12 @@ public class DownloadingJson extends IntentService {
           is.close();
           br.close();
           connection.disconnect();
-        }
-        else {
+        } else {
           Log.d("re-connection", "fail");
           connection.disconnect();
           return null;
         }
-      }
-      catch (IOException ioe) {
+      } catch (IOException ioe) {
         ioe.printStackTrace();
         return null;
       }
@@ -174,8 +169,7 @@ public class DownloadingJson extends IntentService {
       FileOutputStream fos = context.openFileOutput("restaurants.json", Context.MODE_PRIVATE);
       fos.write(data.getBytes("euc-kr"));
       fos.close();
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       e.printStackTrace();
       return false;
     }
