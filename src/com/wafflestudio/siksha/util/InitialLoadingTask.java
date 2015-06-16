@@ -18,13 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InitialLoadingTask {
+  public MenuCrawlingForm[] forms;
   private Context context;
   private DownloadingJsonReceiver downloadingJsonReceiver;
-
   private ViewPager viewPager;
   private ProgressDialog progressDialog;
-
-  public MenuCrawlingForm[] forms;
 
   public InitialLoadingTask(Context context, DownloadingJsonReceiver downloadingJsonReceiver, ViewPager viewPager) {
     this.context = context;
@@ -44,8 +42,7 @@ public class InitialLoadingTask {
           new DownloadingRetryDialog(context, this, option, downloadDate).show();
         else
           startDownloadService(context, option, downloadDate);
-      }
-      else {
+      } else {
         forms = new ParsingJson(context).getParsedForms();
         RestaurantInfoUtil.getInstance().setMenuMap(forms);
         Sequencer.getInstance().setMenuListOnSequence();
@@ -55,8 +52,7 @@ public class InitialLoadingTask {
 
         notifyWidget();
       }
-    }
-    else {
+    } else {
       Log.d("is_json_updated", "false");
 
       if (!NetworkUtil.getInstance().isOnline())

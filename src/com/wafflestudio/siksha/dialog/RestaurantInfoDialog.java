@@ -12,7 +12,7 @@ import com.wafflestudio.siksha.util.RestaurantInfoUtil;
 
 public class RestaurantInfoDialog extends Dialog {
   public RestaurantInfoDialog(Context context, String restaurantName, int pageIndex) {
-		super(context, R.style.RestaurantInfoDialog);
+    super(context, R.style.RestaurantInfoDialog);
     setContentView(R.layout.restaurant_info_dialog);
 
     TextView restaurantView = (TextView) findViewById(R.id.restaurant_info_dialog_title);
@@ -28,13 +28,11 @@ public class RestaurantInfoDialog extends Dialog {
       topBar.setBackgroundResource(R.drawable.rounded_dialog_roof_breakfast);
       dialogIcon.setImageResource(R.drawable.ic_launcher_breakfast);
       restaurantView.setTextColor(context.getResources().getColor(R.color.color_primary_breakfast));
-    }
-    else if (pageIndex == 1) {
+    } else if (pageIndex == 1) {
       topBar.setBackgroundResource(R.drawable.rounded_dialog_roof_lunch);
       dialogIcon.setImageResource(R.drawable.ic_launcher);
       restaurantView.setTextColor(context.getResources().getColor(R.color.color_primary_lunch));
-    }
-    else {
+    } else {
       topBar.setBackgroundResource(R.drawable.rounded_dialog_roof_dinner);
       dialogIcon.setImageResource(R.drawable.ic_launcher_dinner);
       restaurantView.setTextColor(context.getResources().getColor(R.color.color_primary_dinner));
@@ -48,6 +46,6 @@ public class RestaurantInfoDialog extends Dialog {
 
     restaurantView.setText(restaurantName);
     operatingHoursDetails.setText(RestaurantInfoUtil.getInstance().operatingHourMap.get(restaurantName));
-		locationDetails.setText(RestaurantInfoUtil.getInstance().locationMap.get(restaurantName));
-	}
+    locationDetails.setText(RestaurantInfoUtil.getInstance().locationMap.get(restaurantName));
+  }
 }

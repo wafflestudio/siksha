@@ -23,7 +23,8 @@ public class RestaurantInfoUtil {
   public Map<String, MenuArrangedForm> lunchMenuMap;
   public Map<String, MenuArrangedForm> dinnerMenuMap;
 
-  private RestaurantInfoUtil() { }
+  private RestaurantInfoUtil() {
+  }
 
   public static RestaurantInfoUtil getInstance() {
     if (restaurantInfoUtil == null)

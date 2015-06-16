@@ -33,8 +33,7 @@ public class DownloadingRetryDialog extends Dialog {
         if (NetworkUtil.getInstance().isOnline()) {
           dismiss();
           initialLoadingTask.startDownloadService(context, option, downloadDate);
-        }
-        else
+        } else
           Toast.makeText(context, R.string.downloading_network_state, Toast.LENGTH_SHORT).show();
       }
     });

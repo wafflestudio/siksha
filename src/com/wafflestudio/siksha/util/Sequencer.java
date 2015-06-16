@@ -30,7 +30,8 @@ public class Sequencer {
   private Map<String, Boolean> bookmarkMap;
   private boolean bookmarkMode;
 
-  private Sequencer() { }
+  private Sequencer() {
+  }
 
   public static Sequencer getInstance() {
     if (sequencer == null)
@@ -58,12 +59,11 @@ public class Sequencer {
         Collections.addAll(sequence, restaurantInfoUtil.restaurants);
       else
         Collections.addAll(sequence, recordedSequence.split("/"));
-    }
-    else
+    } else
       Collections.addAll(sequence, restaurantInfoUtil.restaurants);
 
     if (!recordedBookmark.equals("")) {
-      for(String bookmark : recordedBookmark.split("/"))
+      for (String bookmark : recordedBookmark.split("/"))
         bookmarkMap.put(bookmark, true);
     }
   }
@@ -76,7 +76,7 @@ public class Sequencer {
     List<String> arrangedList = new ArrayList<String>();
 
     if (!isBookMarked(name)) {
-      for(int i = 0; i < sequence.size(); i++) {
+      for (int i = 0; i < sequence.size(); i++) {
         if (!isBookMarked(sequence.get(i)))
           arrangedList.add(sequence.get(i));
       }
@@ -88,18 +88,17 @@ public class Sequencer {
         }
       });
 
-      for(int i = sequence.size() - 1; i >= 0; i--) {
+      for (int i = sequence.size() - 1; i >= 0; i--) {
         if (isBookMarked(sequence.get(i)))
           arrangedList.add(0, sequence.get(i));
       }
-    }
-    else {
-      for(int i = 0; i < sequence.size(); i++) {
+    } else {
+      for (int i = 0; i < sequence.size(); i++) {
         if (isBookMarked(sequence.get(i)))
           arrangedList.add(sequence.get(i));
       }
 
-      for(int i = 0; i < sequence.size(); i++) {
+      for (int i = 0; i < sequence.size(); i++) {
         if (!isBookMarked(sequence.get(i)))
           arrangedList.add(sequence.get(i));
       }
@@ -115,7 +114,7 @@ public class Sequencer {
     lunchMenuList = new ArrayList<MenuArrangedForm>();
     dinnerMenuList = new ArrayList<MenuArrangedForm>();
 
-    for(String name : sequence) {
+    for (String name : sequence) {
       breakfastMenuList.add(restaurantInfoUtil.breakfastMenuMap.get(name));
       lunchMenuList.add(restaurantInfoUtil.lunchMenuMap.get(name));
       dinnerMenuList.add(restaurantInfoUtil.dinnerMenuMap.get(name));
@@ -170,15 +169,14 @@ public class Sequencer {
       List<String> previousSequence = new ArrayList<String>();
       Collections.addAll(previousSequence, recordedSequence.split("/"));
       sequence = previousSequence;
-    }
-    else
+    } else
       sequence = originalSequence;
 
-    for(int i = 0; i < sequence.size(); i++)
+    for (int i = 0; i < sequence.size(); i++)
       setBookmark(sequence.get(i), false);
 
     if (!recordedBookmark.equals("")) {
-      for(String bookmark : recordedBookmark.split("/"))
+      for (String bookmark : recordedBookmark.split("/"))
         setBookmark(bookmark, true);
     }
   }
@@ -205,7 +203,7 @@ public class Sequencer {
   public List<String> getBookmarkList() {
     List<String> bookmarkList = new ArrayList<String>();
 
-    for(String name : sequence) {
+    for (String name : sequence) {
       if (isBookMarked(name))
         bookmarkList.add(name);
     }
@@ -216,7 +214,7 @@ public class Sequencer {
   public String getSequenceString(String[] restaurants) {
     StringBuilder sequence = new StringBuilder();
 
-    for(int i = 0; i < restaurants.length; i++) {
+    for (int i = 0; i < restaurants.length; i++) {
       if (i == restaurants.length - 1)
         sequence.append(restaurants[i]);
       else
@@ -229,7 +227,7 @@ public class Sequencer {
   public void recordOriginalSequence(Context context, String[] restaurants) {
     StringBuilder sequence = new StringBuilder();
 
-    for(int i = 0; i < restaurants.length; i++) {
+    for (int i = 0; i < restaurants.length; i++) {
       if (i == restaurants.length - 1)
         sequence.append(restaurants[i]);
       else
@@ -242,7 +240,7 @@ public class Sequencer {
   public void recordSequence(Context context) {
     StringBuilder sequence = new StringBuilder();
 
-    for(int i = 0; i < this.sequence.size(); i++) {
+    for (int i = 0; i < this.sequence.size(); i++) {
       if (i == this.sequence.size() - 1)
         sequence.append(this.sequence.get(i));
       else
@@ -261,7 +259,7 @@ public class Sequencer {
       return;
     }
 
-    for(int i = 0; i < bookmarkList.size(); i++) {
+    for (int i = 0; i < bookmarkList.size(); i++) {
       if (i == bookmarkList.size() - 1)
         stringBuilder.append(bookmarkList.get(i));
       else
