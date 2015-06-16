@@ -100,7 +100,9 @@ public class AppVersionActivity extends Activity {
             @Override
             public void handleMessage(Message msg) {
               if (appVersion != null) {
-                if (currentAppVersion.compareTo(appVersion.latest) == 0)
+                if (currentAppVersion.compareTo(appVersion.latest) > 0)
+                  feedbackMessage.setText(R.string.abnormal_version);
+                else if (currentAppVersion.compareTo(appVersion.latest) == 0)
                   feedbackMessage.setText(R.string.now_latest);
                 else if (currentAppVersion.compareTo(appVersion.latest) < 0) {
                   feedbackMessage.setText(R.string.no_latest);
