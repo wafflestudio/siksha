@@ -31,21 +31,20 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         int option = DownloadingJson.getDownloadOption();
         String downloadingDate = DownloadingJson.getDownloadDate(option);
+
         if (DownloadingJson.isJsonUpdated(context, downloadingDate)) {
-            final int N = appWidgetIds.length;
-            for (int i = 0; i < N; i++) {
-                if (WidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])) {
-                    RemoteViews remoteViews = updateWidgetListView(context, appWidgetIds[i], true);
-                    appWidgetManager.updateAppWidget(appWidgetIds[i], null);
-                    appWidgetManager.updateAppWidget(appWidgetIds[i], remoteViews);
-                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds[i], R.id.widget_list_view);
+            for (int appWidgetId : appWidgetIds) {
+                if (WidgetProviderConfigureActivity.isValidId(context, appWidgetId)) {
+                    RemoteViews remoteViews = updateWidgetListView(context, appWidgetId, true);
+                    appWidgetManager.updateAppWidget(appWidgetId, null);
+                    appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list_view);
                 }
             }
         }
         else {
-            final int N = appWidgetIds.length;
-            for (int i = 0; i < N; i++) {
-                if (WidgetProviderConfigureActivity.isValidId(context, appWidgetIds[i])) {
+            for (int appWidgetId : appWidgetIds) {
+                if (WidgetProviderConfigureActivity.isValidId(context, appWidgetId)) {
                     Intent downloadIntent = new Intent(context, DownloadingJson.class);
                     downloadIntent.putExtra(DownloadingJson.KEY_OPTION, option);
                     downloadIntent.putExtra(DownloadingJson.KEY_DATE, downloadingDate);
@@ -55,6 +54,7 @@ public class WidgetProvider extends AppWidgetProvider {
                 }
             }
         }
+
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
@@ -110,6 +110,7 @@ public class WidgetProvider extends AppWidgetProvider {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             int option = DownloadingJson.getDownloadOption();
             String downloadingDate = DownloadingJson.getDownloadDate(option);
+
             if (DownloadingJson.isJsonUpdated(context, downloadingDate)) {
                 RemoteViews remoteViews = updateWidgetListView(context, appWidgetId, true);
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
@@ -185,11 +186,9 @@ public class WidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
-        final int N = appWidgetIds.length;
-
-        for (int i = 0; i < N; i++) {
-            WidgetProviderConfigureActivity.removeWidgetId(context, appWidgetIds[i]);
-            WidgetProviderConfigureActivity.deleteTitlePref(context, appWidgetIds[i]);
+        for (int appWidgetId : appWidgetIds) {
+            WidgetProviderConfigureActivity.removeWidgetId(context, appWidgetId);
+            WidgetProviderConfigureActivity.deleteTitlePref(context, appWidgetId);
         }
     }
 }

@@ -30,8 +30,9 @@
     <string name="app_version">버전 정보</string>
     <string name="confirm">확인</string>
 
-    <string name="now_latest">최신 버전을 사용하고 있습니다.</string>
-    <string name="no_latest">최신 버전을 사용하고 있지 않습니다.\n업데이트를 하려면 눌러주세요.</string>
+    <string name="abnormal_version">정상적이지 않은 버전을 이용하고 있습니다.</string>
+    <string name="now_latest">최신 버전을 이용하고 있습니다.</string>
+    <string name="no_latest">최신 버전을 이용하고 있지 않습니다.\n업데이트를 하려면 눌러주세요.</string>
     <string name="get_latest_version_error">최신 버전 정보를 가져오는 데 실패했습니다.\n데이터 네트워크 또는 Wi-Fi를 연결하고, 다시 시도해주세요.</string>
 
     <string name="developer">만든 사람들</string>
