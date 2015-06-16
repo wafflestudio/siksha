@@ -30,8 +30,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="19dp" >
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="15dp" >
 
         <TextView
             android:id="@+id/restaurant_info_dialog_title"
@@ -45,38 +45,38 @@
             android:id="@+id/operating_hour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="17sp"
             android:textStyle="bold"
             android:text="@string/operating_hour"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:layout_marginTop="20dp" />
-    
+            android:layout_marginTop="15dp" />
+
         <TextView
             android:id="@+id/operating_hour_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
+            android:textSize="14sp"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp" />
-    
+
         <TextView
             android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textSize="18sp"
+            android:textSize="17sp"
             android:text="@string/location"
             android:layout_gravity="center_horizontal"
             android:gravity="center" />
-    
+
         <TextView
             android:id="@+id/location_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
+            android:textSize="14sp"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:layout_marginTop="10dp" />
