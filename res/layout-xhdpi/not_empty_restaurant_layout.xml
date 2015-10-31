@@ -7,14 +7,15 @@
     android:layout_margin="10dp"
     android:alpha="0.87"
     card_view:cardBackgroundColor="@color/color_primary"
-    card_view:cardCornerRadius="5dp">
+    card_view:cardCornerRadius="5dp"
+    card_view:cardElevation="2dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <RelativeLayout
-            android:id="@+id/card_view_holder_header_view"
+            android:id="@+id/not_empty_restaurant_layout_header_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="7dp"
@@ -35,17 +36,17 @@
         </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/card_view_holder_recycler_view"
+            android:id="@+id/not_empty_restaurant_layout_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/card_view_holder_header_view"
+            android:layout_below="@id/not_empty_restaurant_layout_header_view"
             android:background="@color/white" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/widget_provider_refresh_button"
+            android:id="@+id/not_empty_restaurant_layout_drawer_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/card_view_holder_header_view"
+            android:layout_alignBottom="@id/not_empty_restaurant_layout_header_view"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="-20dp"
             android:layout_marginRight="10dp"
@@ -58,8 +59,8 @@
         <io.codetail.widget.RevealFrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/card_view_holder_recycler_view"
-            android:layout_centerInParent="true"
+            android:layout_below="@id/not_empty_restaurant_layout_recycler_view"
+            android:layout_centerHorizontal="true"
             android:background="@color/white">
 
             <LinearLayout
@@ -81,6 +82,7 @@
                         android:id="@+id/group_info_popup_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:layout_margin="5dp"
                         android:src="@drawable/ic_info_popup"
                         app:backgroundTint="@color/color_primary"
@@ -109,6 +111,7 @@
                         android:id="@+id/group_bookmark_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:layout_margin="5dp"
                         android:src="@drawable/ic_star"
                         app:backgroundTint="@color/color_primary"
@@ -137,6 +140,7 @@
                         android:id="@+id/group_kakaotalk_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:layout_margin="5dp"
                         android:src="@drawable/ic_talk"
                         app:backgroundTint="@color/color_primary"

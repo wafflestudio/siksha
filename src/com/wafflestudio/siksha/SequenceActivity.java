@@ -102,12 +102,12 @@ public class SequenceActivity extends AppCompatActivity implements View.OnClickL
                 if (editMode) {
                     actionButton.setImageResource(R.drawable.ic_confirm);
                     messageView.setText(R.string.message_to_touch_confirm_button);
-                    Animations.reveal(recyclerView);
+                    Animations.fade(recyclerView, 0.25f, 1.0f);
                 } else {
                     updateCurrentSequence();
                     actionButton.setImageResource(R.drawable.ic_edit);
                     messageView.setText(R.string.message_to_touch_edit_button);
-                    Animations.conceal(recyclerView);
+                    Animations.fade(recyclerView, 1.0f, 0.25f);
                 }
                 break;
         }

@@ -12,9 +12,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:textSize="17sp"
-            android:gravity="center"
-            android:layout_centerHorizontal="true"
+            android:textSize="16sp"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_alignParentLeft="true"
             android:background="@color/color_primary" />
 
         <ListView
@@ -56,9 +60,9 @@
             android:layout_alignBottom="@id/widget_provider_date_view"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="-15dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="7dp"
             android:background="@color/transparent"
-            android:src="@drawable/ic_refresh" />
+            android:src="@drawable/ic_widget_refresh" />
 
     </RelativeLayout>
 

@@ -43,7 +43,7 @@ public class AppData {
         return informationDictionary;
     }
 
-    public void setSequences(Context context) {
+    public void setDefaultSequence(Context context) {
         String[] restaurants = {"학생회관 식당", "농생대 3식당", "919동 기숙사 식당", "자하연 식당", "302동 식당",
                 "솔밭 간이 식당", "동원관 식당", "감골 식당", "사범대 4식당", "두레미담",
                 "301동 식당", "예술계복합연구동 식당", "공대 간이 식당", "상아회관 식당", "220동 식당",

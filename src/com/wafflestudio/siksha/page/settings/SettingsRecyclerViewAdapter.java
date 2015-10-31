@@ -3,11 +3,11 @@ package com.wafflestudio.siksha.page.settings;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,12 +86,12 @@ public class SettingsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     private class SwitchTypeViewHolder extends RecyclerView.ViewHolder implements CompoundButton.OnCheckedChangeListener {
         private TextView optionView;
-        private Switch optionSwitch;
+        private SwitchCompat optionSwitch;
 
         public SwitchTypeViewHolder(View itemView) {
             super(itemView);
             optionView = (TextView) itemView.findViewById(R.id.switch_type_option_view);
-            optionSwitch = (Switch) itemView.findViewById(R.id.option_switch);
+            optionSwitch = (SwitchCompat) itemView.findViewById(R.id.option_switch);
             optionView.setTypeface(Fonts.fontBMJua);
 
             optionSwitch.setChecked(Preference.loadBooleanValue(context, Preference.PREF_APP_NAME, Preference.PREF_KEY_EMPTY_MENU_INVISIBLE));
@@ -126,7 +126,7 @@ public class SettingsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     intent.putExtra("is_about_bookmark", true);
                     context.startActivity(intent);
                     break;
-                case 9:
+                case 8:
                     context.startActivity(new Intent(context, SequenceActivity.class));
                     break;
                 case 11:
@@ -183,9 +183,9 @@ public class SettingsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             case 7:
                 return TYPE_HEADER;
             case 8:
-                return TYPE_SWITCH;
-            case 9:
                 return TYPE_NORMAL;
+            case 9:
+                return TYPE_SWITCH;
             case 10:
                 return TYPE_EMPTY;
             case 11:
@@ -238,7 +238,7 @@ public class SettingsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             case TYPE_SWITCH:
                 SwitchTypeViewHolder switchTypeViewHolder = (SwitchTypeViewHolder) viewHolder;
 
-                if (position == 8) {
+                if (position == 9) {
                     switchTypeViewHolder.optionView.setText(R.string.settings_option_empty_menu_invisible);
                 }
 
@@ -246,7 +246,7 @@ public class SettingsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             case TYPE_NORMAL:
                 NormalTypeViewHolder normalTypeViewHolder = (NormalTypeViewHolder) viewHolder;
 
-                if (position == 5 || position == 9) {
+                if (position == 5 || position == 8) {
                     normalTypeViewHolder.optionView.setText(R.string.settings_option_sequence);
                 }
                 else if (position == 11) {

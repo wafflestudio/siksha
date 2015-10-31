@@ -2,21 +2,16 @@ package com.wafflestudio.siksha.util;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.os.Build;
-import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-
-import com.wafflestudio.siksha.R;
 
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
@@ -27,6 +22,7 @@ import io.codetail.animation.ViewAnimationUtils;
 public class Animations {
     public static ValueAnimator makeSlideAnimator(final View view, int start, int end) {
         ValueAnimator animator = ValueAnimator.ofInt(start, end);
+        animator.setDuration(150);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -47,7 +43,7 @@ public class Animations {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             SupportAnimator supportAnimator = ViewAnimationUtils.createCircularReveal(view, x, y, 0, radius);
             supportAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-            supportAnimator.setDuration(500);
+            supportAnimator.setDuration(300);
 
             return isReverse ? supportAnimator.reverse() : supportAnimator;
         } else {
@@ -55,7 +51,7 @@ public class Animations {
                     android.view.ViewAnimationUtils.createCircularReveal(view, x, y, radius, 0) :
                     android.view.ViewAnimationUtils.createCircularReveal(view, x, y, 0, radius);
             animator.setInterpolator(new AccelerateDecelerateInterpolator());
-            animator.setDuration(500);
+            animator.setDuration(300);
 
             return animator;
         }
@@ -206,11 +202,23 @@ public class Animations {
         conceal(view, slideAnimator);
     }
 
-    public static void rotate(final View view, float startDegrees, float endDegrees) {
-        RotateAnimation rotateAnimation = new RotateAnimation(startDegrees, endDegrees, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        rotateAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
-        rotateAnimation.setDuration(750);
-        rotateAnimation.setFillAfter(true);
-        view.startAnimation(rotateAnimation);
+    public static void rotate(final View view, float startDegrees, float endDegrees, boolean infinite) {
+        // RotateAnimation animation = new RotateAnimation(startDegrees, endDegrees, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(view, View.ROTATION, startDegrees, endDegrees);
+        rotateAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        rotateAnimator.setDuration(500);
+
+        if (infinite)
+            rotateAnimator.setRepeatCount(Animation.INFINITE);
+
+        rotateAnimator.start();
+    }
+
+    public static void fade(final View view, final float startAlpha, final float endAlpha) {
+        ObjectAnimator fadeAnimator = ObjectAnimator.ofFloat(view, View.ALPHA, startAlpha, endAlpha);
+        fadeAnimator.setInterpolator(new AccelerateInterpolator());
+        fadeAnimator.setDuration(300);
+
+        fadeAnimator.start();
     }
 }

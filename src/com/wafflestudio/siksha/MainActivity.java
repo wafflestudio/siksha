@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements com.wafflestudio.
         DownloadAlarm.registerAlarm(this);
         DeviceNetwork.getInstance().initialize(this);
         Fonts.getInstance().initialize(this);
-        AppData.getInstance().setSequences(this);
+        AppData.getInstance().setDefaultSequence(this);
         AppData.getInstance().setInformationDictionary(JSONParser.parseJSONFile(this, InformationJSON.class).data);
 
         JSONDownloadReceiver = new JSONDownloadReceiver();

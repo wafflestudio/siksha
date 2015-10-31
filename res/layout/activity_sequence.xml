@@ -45,7 +45,7 @@
             android:layout_gravity="center_horizontal"
             android:background="@color/sub_color"
             android:scrollbars="vertical"
-            android:visibility="invisible" />
+            android:alpha="0.25" />
 
     </io.codetail.widget.RevealFrameLayout>
 

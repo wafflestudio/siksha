@@ -1,5 +1,6 @@
 package com.wafflestudio.siksha.widget;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -9,9 +10,11 @@ import android.widget.RemoteViewsService;
 
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.form.Menu;
+import com.wafflestudio.siksha.form.MenuJSON;
 import com.wafflestudio.siksha.form.Restaurant;
 import com.wafflestudio.siksha.util.AppData;
 import com.wafflestudio.siksha.util.Date;
+import com.wafflestudio.siksha.util.JSONParser;
 
 import java.util.List;
 
@@ -23,12 +26,29 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
 
     public WidgetListViewFactory(Context context, Intent intent) {
         this.context = context;
-        appWidgetID = Integer.valueOf(intent.getData().getSchemeSpecificPart()) - WidgetProvider.randomNumber;
+        appWidgetID = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+    }
+
+    @Override
+    public void onCreate() {
+        populateItems();
+
+        Log.d("size", items.size() + "");
+        for (int i = 0; i < items.size(); i++) {
+            Log.d("name", items.get(i).name);
+            for (int j = 0; j < items.get(i).menus.size(); j++)
+                Log.d("menu", items.get(i).menus.get(j).name);
+        }
+    }
+
+    @Override
+    public void onDataSetChanged() {
+        AppData.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(context, MenuJSON.class).data);
 
         populateItems();
     }
 
-    public void populateItems() {
+    private void populateItems() {
         int index = Date.getTimeSlotIndexForWidget(context, appWidgetID);
 
         switch (index) {
@@ -42,21 +62,6 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
                 items = AppData.getInstance().getWidgetMenuList(context, AppData.getInstance().dinnerMenuDictionary, appWidgetID);
                 break;
         }
-
-        Log.d("size", items.size() + "");
-        for (int i = 0; i < items.size(); i++) {
-            Log.d("name", items.get(i).name);
-            for (int j = 0; j < items.get(i).menus.size(); j++)
-                Log.d("menu", items.get(i).menus.get(j).name);
-        }
-    }
-
-    @Override
-    public void onCreate() {
-    }
-
-    @Override
-    public void onDataSetChanged() {
     }
 
     @Override

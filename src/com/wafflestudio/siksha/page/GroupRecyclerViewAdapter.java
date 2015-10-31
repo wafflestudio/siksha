@@ -102,7 +102,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                         notEmptyRestaurantViewHolder.actionContainer.setVisibility(View.GONE);
                     else {
                         notEmptyRestaurantViewHolder.actionContainer.setVisibility(View.VISIBLE);
-                        Animations.rotate(notEmptyRestaurantViewHolder.drawerButton, 0, -180f);
+                        Animations.rotate(notEmptyRestaurantViewHolder.drawerButton, 0, -180f, false);
                     }
                 }
                 break;
@@ -134,14 +134,14 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
             nameView = (TextView) itemView.findViewById(R.id.group_name_view);
             actionContainer = (LinearLayout) itemView.findViewById(R.id.group_action_button_container);
-            drawerButton = (FloatingActionButton) itemView.findViewById(R.id.widget_provider_refresh_button);
+            drawerButton = (FloatingActionButton) itemView.findViewById(R.id.not_empty_restaurant_layout_drawer_button);
             infoPopupButton = (FloatingActionButton) itemView.findViewById(R.id.group_info_popup_button);
             bookmarkButton = (FloatingActionButton) itemView.findViewById(R.id.group_bookmark_button);
             kakaotalkButton = (FloatingActionButton) itemView.findViewById(R.id.group_kakaotalk_button);
             infoPopupTextView = (TextView) itemView.findViewById(R.id.group_info_popup_text_view);
             bookmarkTextView = (TextView) itemView.findViewById(R.id.group_bookmark_text_view);
             kakaotalkTextView = (TextView) itemView.findViewById(R.id.group_kakaotalk_text_view);
-            recyclerView = (RecyclerView) itemView.findViewById(R.id.card_view_holder_recycler_view);
+            recyclerView = (RecyclerView) itemView.findViewById(R.id.not_empty_restaurant_layout_recycler_view);
 
             nameView.setTypeface(Fonts.fontBMJua);
             kakaotalkTextView.setTypeface(Fonts.fontAPAritaDotumMedium);
@@ -163,14 +163,14 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             final String name = data.get(position).name;
 
             switch (view.getId()) {
-                case R.id.widget_provider_refresh_button:
+                case R.id.not_empty_restaurant_layout_drawer_button:
                     if (!drawerExpandedList.contains(name)) {
                         drawerExpandedList.add(name);
-                        Animations.rotate(drawerButton, 0f, -180f);
+                        Animations.rotate(drawerButton, 0f, -180f, false);
                         Animations.expand(actionContainer, true);
                     } else {
                         drawerExpandedList.remove(name);
-                        Animations.rotate(drawerButton, -180f, -360f);
+                        Animations.rotate(drawerButton, -180f, -360f, false);
                         Animations.collapse(actionContainer, true);
                     }
                     break;
@@ -180,11 +180,18 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                         final KakaoTalkLinkMessageBuilder kakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder();
 
                         StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append(Date.getDate() + " " + Date.getTimeSlot(index) + "\n");
-                        stringBuilder.append("[" + name + "]" + "\n");
-                        for (int i = 0; i < data.get(position).menus.size(); i++) {
-                            Menu menu = data.get(position).menus.get(i);
-                            stringBuilder.append("\n" + menu.price + "원 " + menu.name);
+                        stringBuilder.append(Date.getDate() + " " + Date.getTimeSlot(index)).append("\n");
+                        stringBuilder.append("[" + name + "]").append("\n");
+
+                        int size = data.get(position).menus.size();
+
+                        if (size == 0)
+                            stringBuilder.append("\n").append(R.string.empty_menu);
+                        else {
+                            for (int i = 0; i < size; i++) {
+                                Menu menu = data.get(position).menus.get(i);
+                                stringBuilder.append("\n").append(menu.price + "원 " + menu.name);
+                            }
                         }
                         /*
                          * 10월 29일 (목) 저녁
@@ -196,14 +203,15 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                          */
 
                         kakaoTalkLinkMessageBuilder.addText(stringBuilder.toString());
-                        kakaoTalkLinkMessageBuilder.addAppLink(context.getString(R.string.app_name),
+                        kakaoTalkLinkMessageBuilder.addAppButton("지금 바로 식샤하세요!",
                                 new AppActionBuilder()
                                         .addActionInfo(AppActionInfoBuilder
                                                 .createAndroidActionInfoBuilder()
                                                 .setExecuteParam("execparamkey1=1111")
                                                 .setMarketParam("referrer=kakaotalklink")
                                                 .build())
-                                        .addActionInfo(AppActionInfoBuilder.createiOSActionInfoBuilder()
+                                        .addActionInfo(AppActionInfoBuilder
+                                                .createiOSActionInfoBuilder()
                                                 .setExecuteParam("execparamkey1=1111")
                                                 .build())
                                         .build());

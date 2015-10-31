@@ -244,7 +244,7 @@ public class JSONDownloader {
 
                 @Override
                 public void onFailure() {
-                    sendSignalToWidget(WidgetProvider.STATE_DATA_ALREADY_UPDATED);
+                    sendSignalToWidget(WidgetProvider.STATE_UPDATE_FAILURE);
                     sendSignalToApp(action, JSONDownloadReceiver.TYPE_ON_FAILURE);
                 }
             }, REQUEST_TYPE_DOWNLOAD);

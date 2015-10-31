@@ -13,7 +13,8 @@
         android:singleLine="true"
         android:textStyle="bold"
         android:textColor="@color/black"
-        android:textSize="15sp" />
+        android:padding="5dp"
+        android:textSize="14sp" />
 
     <LinearLayout
         android:id="@+id/widget_not_empty_menu_view"

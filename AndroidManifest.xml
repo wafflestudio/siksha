@@ -78,6 +78,7 @@
                 <action android:name="com.wafflestudio.siksha.widget.STATE_CONFIGURATION_FINISHED" />
                 <action android:name="com.wafflestudio.siksha.widget.STATE_DATA_ALREADY_UPDATED" />
                 <action android:name="com.wafflestudio.siksha.widget.STATE_NEW_DATA_FETCHED" />
+                <action android:name="com.wafflestudio.siksha.widget.STATE_UPDATE_FAILURE" />
                 <action android:name="com.wafflestudio.siksha.widget.STATE_WIDGET_REFRESHED" />
             </intent-filter>
 

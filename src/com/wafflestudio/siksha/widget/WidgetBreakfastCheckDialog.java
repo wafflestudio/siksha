@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -14,6 +15,8 @@ import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.Fonts;
 import com.wafflestudio.siksha.util.Preference;
 
+import java.util.List;
+
 /**
  * Created by Gyeongin on 2015-03-26.
  */
@@ -21,8 +24,9 @@ import com.wafflestudio.siksha.util.Preference;
 public class WidgetBreakfastCheckDialog extends Dialog implements View.OnClickListener {
     private Context context;
     private int appWidgetID;
+    private List<String> checkedList;
 
-    public WidgetBreakfastCheckDialog (Context context, int appWidgetID) {
+    public WidgetBreakfastCheckDialog (Context context, int appWidgetID, List<String> checkedList) {
         super(context);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.widget_breakfast_check_dialog);
@@ -30,6 +34,7 @@ public class WidgetBreakfastCheckDialog extends Dialog implements View.OnClickLi
 
         this.context = context;
         this.appWidgetID = appWidgetID;
+        this.checkedList = checkedList;
 
         TextView messageView = (TextView) findViewById(R.id.widget_breakfast_check_dialog_message_view);
         Button positiveButton = (Button) findViewById(R.id.widget_breakfast_check_dialog_positive_button);
@@ -57,9 +62,25 @@ public class WidgetBreakfastCheckDialog extends Dialog implements View.OnClickLi
         Intent intent = new Intent();
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetID);
         intent.setAction(WidgetProvider.STATE_CONFIGURATION_FINISHED);
+
+        saveCheckedList();
+        WidgetConfigureActivity.addAppWidgetID(context, appWidgetID);
+        ((Activity) context).setResult(Activity.RESULT_OK, intent);
         context.sendBroadcast(intent);
 
-        ((Activity) context).setResult(Activity.RESULT_OK, intent);
         ((Activity) context).finish();
+    }
+
+    private void saveCheckedList() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < checkedList.size(); i++) {
+            if (i == 0)
+                stringBuilder.append(checkedList.get(i));
+            else
+                stringBuilder.append("/").append(checkedList.get(i));
+        }
+
+        Log.d("saveCheckedList()", stringBuilder.toString());
+        Preference.save(context, Preference.PREF_WIDGET_NAME, Preference.PREF_KEY_WIDGET_RESTAURANTS_PREFIX + appWidgetID, stringBuilder.toString());
     }
 }
