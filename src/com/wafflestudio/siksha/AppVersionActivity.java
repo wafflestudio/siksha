@@ -2,132 +2,70 @@ package com.wafflestudio.siksha;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Looper;
-import android.os.Message;
+import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.wafflestudio.siksha.util.AppVersion;
-import com.wafflestudio.siksha.util.FontUtil;
-import com.wafflestudio.siksha.util.NetworkUtil;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import com.wafflestudio.siksha.util.Fonts;
+import com.wafflestudio.siksha.util.Preference;
 
 public class AppVersionActivity extends Activity {
-  private LinearLayout updateFeedback;
+    private CardView feedbackWrapper;
 
-  private TextView appVersionMessage;
-  private TextView feedbackMessage;
-  private ImageView feedbackIcon;
+    private TextView messageView;
+    private TextView feedbackMessageView;
+    private ImageView feedbackImageView;
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_app_version);
+    private String currentAppVersion;
 
-    TextView title = (TextView) findViewById(R.id.app_version);
-    appVersionMessage = (TextView) findViewById(R.id.app_version_message);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_app_version);
 
-    updateFeedback = (LinearLayout) findViewById(R.id.update_feedback_wrapper);
-    feedbackMessage = (TextView) findViewById(R.id.feedback_message);
-    feedbackIcon = (ImageView) findViewById(R.id.feedback_icon);
+        TextView titleView = (TextView) findViewById(R.id.app_version_activity_title_view);
+        messageView = (TextView) findViewById(R.id.app_version_activity_message_view);
 
-    title.setTypeface(FontUtil.fontBMJua);
-    appVersionMessage.setTypeface(FontUtil.fontAPAritaDotumMedium);
-    feedbackMessage.setTypeface(FontUtil.fontAPAritaDotumMedium);
+        feedbackWrapper = (CardView) findViewById(R.id.feedback_wrapper);
+        feedbackMessageView = (TextView) findViewById(R.id.feedback_message_view);
+        feedbackImageView = (ImageView) findViewById(R.id.feedback_image_view);
 
-    checkAppVersion();
-  }
+        titleView.setTypeface(Fonts.fontBMJua);
+        messageView.setTypeface(Fonts.fontAPAritaDotumMedium);
+        feedbackMessageView.setTypeface(Fonts.fontAPAritaDotumMedium);
 
-  private void checkAppVersion() {
-    String versionName = "";
-
-    try {
-      versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-      appVersionMessage.setText("현재 버전 : " + versionName);
-    } catch (PackageManager.NameNotFoundException e) {
-      e.printStackTrace();
+        currentAppVersion = Preference.loadStringValue(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_CURRENT_APP_VERSION);
+        messageView.setText("현재 버전 : " + currentAppVersion);
+        showFeedback();
     }
 
-    final String currentAppVersion = versionName;
+    private void showFeedback() {
+        String latestAppVersion = Preference.loadStringValue(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_LATEST_APP_VERSION);
 
-    Thread thread = new Thread() {
-      StringBuilder data = new StringBuilder();
-
-      @Override
-      public void run() {
-        try {
-          URL url = new URL("http://siksha.kr:3280/version");
-          HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-          connection.setConnectTimeout(5 * 1000);
-          connection.setReadTimeout(5 * 1000);
-
-          if (connection.getResponseCode() == 200) {
-            InputStream is = connection.getInputStream();
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-
-            String line;
-            while ((line = br.readLine()) != null) {
-              data.append(line);
-            }
-            is.close();
-            br.close();
-          } else {
-            connection.disconnect();
-            data = null;
-          }
-        } catch (Exception e) {
-          e.printStackTrace();
-          data = null;
-        }
-
-        if (data != null) {
-          Gson gson = new Gson();
-          final AppVersion appVersion = gson.fromJson(data.toString(), AppVersion.class);
-
-          new android.os.Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(Message msg) {
-              if (appVersion != null) {
-                if (currentAppVersion.compareTo(appVersion.latest) > 0)
-                  feedbackMessage.setText(R.string.abnormal_version);
-                else if (currentAppVersion.compareTo(appVersion.latest) == 0)
-                  feedbackMessage.setText(R.string.now_latest);
-                else if (currentAppVersion.compareTo(appVersion.latest) < 0) {
-                  feedbackMessage.setText(R.string.no_latest);
-                  feedbackIcon.setImageResource(R.drawable.ic_link_black);
-                  updateFeedback.setOnClickListener(new View.OnClickListener() {
+        if (latestAppVersion != null) {
+            if (currentAppVersion.compareTo(latestAppVersion) > 0)
+                feedbackMessageView.setText(R.string.development_version);
+            else if (currentAppVersion.compareTo(latestAppVersion) == 0)
+                feedbackMessageView.setText(R.string.now_latest);
+            else if (currentAppVersion.compareTo(latestAppVersion) < 0) {
+                feedbackMessageView.setText(R.string.not_latest);
+                feedbackImageView.setImageResource(R.drawable.ic_link);
+                feedbackWrapper.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                      Intent intent = new Intent(Intent.ACTION_VIEW);
-                      intent.setData(Uri.parse("market://details?id=com.wafflestudio.siksha"));
-                      startActivity(intent);
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse("market://details?id=com.wafflestudio.siksha"));
+                        startActivity(intent);
                     }
-                  });
-                }
-
-                updateFeedback.setVisibility(View.VISIBLE);
-              }
+                });
             }
-          }.sendEmptyMessage(0);
-        }
-      }
-    };
 
-    if (NetworkUtil.getInstance().isOnline())
-      thread.start();
-    else
-      Toast.makeText(this, R.string.get_latest_version_error, Toast.LENGTH_LONG).show();
-  }
+            feedbackWrapper.setVisibility(View.VISIBLE);
+        }
+    }
 }

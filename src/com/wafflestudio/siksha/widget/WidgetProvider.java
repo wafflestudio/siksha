@@ -6,98 +6,64 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.wafflestudio.siksha.R;
-import com.wafflestudio.siksha.service.DownloadingJson;
-import com.wafflestudio.siksha.util.CalendarUtil;
-import com.wafflestudio.siksha.util.SharedPreferenceUtil;
+import com.wafflestudio.siksha.form.MenuJSON;
+import com.wafflestudio.siksha.service.JSONDownloadReceiver;
+import com.wafflestudio.siksha.service.JSONDownloader;
+import com.wafflestudio.siksha.util.AppData;
+import com.wafflestudio.siksha.util.Date;
+import com.wafflestudio.siksha.util.JSONParser;
 
 import java.util.Iterator;
 import java.util.Set;
 
-/**
- * Implementation of App Widget functionality.
- * App Widget Configuration implemented in {@link WidgetProviderConfigureActivity WidgetProviderConfigureActivity}
- */
-
 public class WidgetProvider extends AppWidgetProvider {
-    public static final String CONFIGURATION_FINISHED = "com.wafflestudio.siksha.CONFIGURATION_FINISHED";
-    public static final String DATA_FETCHED = "com.wafflestudio.siksha.DATA_FETCHED";
-    public static final String WIDGET_REFRESH = "com.wafflestudio.siksha.WIDGET_REFRESH";
+    public static final String STATE_CONFIGURATION_FINISHED = "com.wafflestudio.siksha.widget.STATE_CONFIGURATION_FINISHED";
+    public static final String STATE_DATA_ALREADY_UPDATED = "com.wafflestudio.siksha.widget.STATE_DATA_ALREADY_UPDATED";
+    public static final String STATE_NEW_DATA_FETCHED = "com.wafflestudio.siksha.widget.STATE_NEW_DATA_FETCHED";
+    public static final String STATE_WIDGET_REFRESHED = "com.wafflestudio.siksha.widget.STATE_WIDGET_REFRESHED";
+
     public static final int randomNumber = 50;
 
     @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        int option = DownloadingJson.getDownloadOption();
-        String downloadingDate = DownloadingJson.getDownloadDate(option);
-
-        if (DownloadingJson.isJsonUpdated(context, downloadingDate)) {
-            for (int appWidgetId : appWidgetIds) {
-                if (WidgetProviderConfigureActivity.isValidId(context, appWidgetId)) {
-                    RemoteViews remoteViews = updateWidgetListView(context, appWidgetId, true);
-                    appWidgetManager.updateAppWidget(appWidgetId, null);
-                    appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list_view);
-                }
-            }
-        }
-        else {
-            for (int appWidgetId : appWidgetIds) {
-                if (WidgetProviderConfigureActivity.isValidId(context, appWidgetId)) {
-                    Intent downloadIntent = new Intent(context, DownloadingJson.class);
-                    downloadIntent.putExtra(DownloadingJson.KEY_OPTION, option);
-                    downloadIntent.putExtra(DownloadingJson.KEY_DATE, downloadingDate);
-                    downloadIntent.putExtra("from_widget_user", false);
-                    context.startService(downloadIntent);
-                    break;
-                }
-            }
+    public void onUpdate(final Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        if (!JSONDownloader.isJSONUpdated(context)) {
+            new JSONDownloader(context, JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD).start();
+            return;
         }
 
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
+        for (int appWidgetID : appWidgetIds) {
+            if (WidgetConfigureActivity.isValidAppWidgetID(context, appWidgetID)) {
+                RemoteViews remoteViews = updateWidgetListView(context, appWidgetID, true);
+                appWidgetManager.updateAppWidget(appWidgetID, remoteViews);
+                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetID, R.id.widget_provider_list_view);
+            }
+        }
     }
 
-    private RemoteViews updateWidgetListView(Context context, int appWidgetId, boolean isSuccess) {
+    private RemoteViews updateWidgetListView(Context context, int appWidgetID, boolean success) {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_provider);
         Intent remoteIntent = new Intent(context, WidgetRemoteService.class);
-        remoteIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        remoteIntent.setData(Uri.fromParts("content", String.valueOf(appWidgetId + randomNumber), null));
+        remoteIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetID);
+        remoteIntent.setData(Uri.fromParts("content", String.valueOf(appWidgetID + randomNumber), null));
 
-        int hour = CalendarUtil.getCurrentHour();
-        String time;
-
-        if (hour <= 9 || hour >= 21) {
-            if (SharedPreferenceUtil.loadValueOfBoolean(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_PREFIX_BREAKFAST_KEY + appWidgetId))
-                time = "아침";
-            else
-                time = "점심";
-        }
-        else if (hour >= 10 && hour <= 14)
-            time = "점심";
-        else
-            time = "저녁";
-
-        if (isSuccess) {
-            remoteViews.setRemoteAdapter(R.id.widget_list_view, remoteIntent);
-            remoteViews.setEmptyView(R.id.widget_list_view, R.id.widget_empty_view);
-            remoteViews.setTextViewText(R.id.date_view_widget, SharedPreferenceUtil.loadValueOfString(context, SharedPreferenceUtil.PREF_APP_NAME, SharedPreferenceUtil.PREF_KEY_JSON).substring(5) + " " + time);
-        }
-        else {
-            remoteViews.setEmptyView(R.id.widget_list_view, R.id.widget_download_fail_view);
-            String date;
-            if (DownloadingJson.getDownloadOption() != 2)
-                date = CalendarUtil.getTodayDate();
-            else
-                date = CalendarUtil.getTomorrowDate();
-            remoteViews.setTextViewText(R.id.date_view_widget, date.substring(5) + " " + time);
+        if (success) {
+            remoteViews.setRemoteAdapter(R.id.widget_provider_list_view, remoteIntent);
+            remoteViews.setEmptyView(R.id.widget_provider_list_view, R.id.widget_provider_empty_view);
+            remoteViews.setTextViewText(R.id.widget_provider_date_view, Date.getDate() + Date.getTimeSlot(Date.getTimeSlotIndex()));
+        } else {
+            remoteViews.setEmptyView(R.id.widget_provider_list_view, R.id.widget_provider_fetch_failure_view);
+            remoteViews.setTextViewText(R.id.widget_provider_date_view, Date.getDate() + Date.getTimeSlot(Date.getTimeSlotIndex()));
         }
 
         Intent refreshIntent = new Intent(context, WidgetProvider.class);
-        refreshIntent.setAction(WIDGET_REFRESH);
-        refreshIntent.setData(Uri.fromParts("content", String.valueOf(appWidgetId + randomNumber), null));
+        refreshIntent.setAction(STATE_WIDGET_REFRESHED);
+        refreshIntent.setData(Uri.fromParts("content", String.valueOf(appWidgetID + randomNumber), null));
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, refreshIntent, 0);
-        remoteViews.setOnClickPendingIntent(R.id.widget_title_bar, pendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.widget_provider_refresh_button, pendingIntent);
 
         return remoteViews;
     }
@@ -106,89 +72,71 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
 
-        if (intent.getAction().equals(CONFIGURATION_FINISHED)) {
-            int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-            int option = DownloadingJson.getDownloadOption();
-            String downloadingDate = DownloadingJson.getDownloadDate(option);
+        if (intent.getAction().equals(STATE_CONFIGURATION_FINISHED)) {
+            Log.d(intent.getAction(), "Hi");
+            int appWidgetID = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 
-            if (DownloadingJson.isJsonUpdated(context, downloadingDate)) {
-                RemoteViews remoteViews = updateWidgetListView(context, appWidgetId, true);
+            if (!JSONDownloader.isJSONUpdated(context)) {
+                new JSONDownloader(context, JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD).start();
+                return;
+            }
+
+            if (WidgetConfigureActivity.isValidAppWidgetID(context, appWidgetID)) {
+                RemoteViews remoteViews = updateWidgetListView(context, appWidgetID, true);
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-                appWidgetManager.updateAppWidget(appWidgetId, null);
-                appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+                appWidgetManager.updateAppWidget(appWidgetID, remoteViews);
+                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetID, R.id.widget_provider_list_view);
             }
-            else {
-                Intent downloadIntent = new Intent(context, DownloadingJson.class);
-                downloadIntent.putExtra(DownloadingJson.KEY_OPTION, option);
-                downloadIntent.putExtra(DownloadingJson.KEY_DATE, downloadingDate);
-                downloadIntent.putExtra("from_widget_user", true);
-                context.startService(downloadIntent);
-            }
-        }
+        } else if (intent.getAction().equals(STATE_DATA_ALREADY_UPDATED)) {
+            AppData.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(context, MenuJSON.class).data);
 
-        if (intent.getAction().equals(DATA_FETCHED)) {
-            boolean isSuccess = intent.getBooleanExtra("is_success", false);
-            boolean fromWidgetUser = intent.getBooleanExtra("from_widget_user", false);
+            Set<String> appWidgetIDSet = WidgetConfigureActivity.getAllAppWidgetIDs(context);
+            Iterator<String> iterator = appWidgetIDSet.iterator();
 
-            if (isSuccess) {
-                Set<String> idSet = WidgetProviderConfigureActivity.getAllWidgetIds(context);
-                Iterator<String> iterator = idSet.iterator();
-
-                while (iterator.hasNext()) {
-                    int appWidgetId = Integer.valueOf(iterator.next());
-                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-
-                    RemoteViews remoteViews = updateWidgetListView(context, appWidgetId, isSuccess);
-                    appWidgetManager.updateAppWidget(appWidgetId, null);
-                    appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list_view);
-                }
-            }
-            else {
-                if (fromWidgetUser) {
-                    Set<String> idSet = WidgetProviderConfigureActivity.getAllWidgetIds(context);
-                    Iterator<String> iterator = idSet.iterator();
-
-                    while (iterator.hasNext()) {
-                        int appWidgetId = Integer.valueOf(iterator.next());
-                        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-
-                        RemoteViews remoteViews = updateWidgetListView(context, appWidgetId, isSuccess);
-                        appWidgetManager.updateAppWidget(appWidgetId, null);
-                        appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-                        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list_view);
-                    }
-                }
-            }
-        }
-
-        if (intent.getAction().equals(WIDGET_REFRESH)) {
-            int appWidgetId = Integer.valueOf(intent.getData().getSchemeSpecificPart()) - WidgetProvider.randomNumber;
-            int option = DownloadingJson.getDownloadOption();
-            String downloadingDate = DownloadingJson.getDownloadDate(option);
-            if (DownloadingJson.isJsonUpdated(context, downloadingDate)) {
+            while (iterator.hasNext()) {
+                int appWidgetID = Integer.valueOf(iterator.next());
+                RemoteViews remoteViews = updateWidgetListView(context, appWidgetID, false);
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                appWidgetManager.updateAppWidget(appWidgetID, remoteViews);
+            }
+            Log.d(intent.getAction(), "Hi");
+        } else if (intent.getAction().equals(STATE_NEW_DATA_FETCHED)) {
+            AppData.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(context, MenuJSON.class).data);
 
-                RemoteViews remoteViews = updateWidgetListView(context, appWidgetId, true);
-                appWidgetManager.updateAppWidget(appWidgetId, null);
-                appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list_view);
+            Set<String> appWidgetIDSet = WidgetConfigureActivity.getAllAppWidgetIDs(context);
+            Iterator<String> iterator = appWidgetIDSet.iterator();
+
+            while (iterator.hasNext()) {
+                int appWidgetID = Integer.valueOf(iterator.next());
+
+                RemoteViews remoteViews = updateWidgetListView(context, appWidgetID, true);
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                appWidgetManager.updateAppWidget(appWidgetID, remoteViews);
+                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetID, R.id.widget_provider_list_view);
             }
-            else {
-                Intent downloadIntent = new Intent(context, DownloadingJson.class);
-                downloadIntent.putExtra(DownloadingJson.KEY_OPTION, option);
-                downloadIntent.putExtra(DownloadingJson.KEY_DATE, downloadingDate);
-                downloadIntent.putExtra("from_widget_user", true);
-                context.startService(downloadIntent);
-            }
+            Log.d(intent.getAction(), "Hi");
+        } else if (intent.getAction().equals(STATE_WIDGET_REFRESHED)) {
+            new JSONDownloader(context, JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD).start();
+            Log.d(intent.getAction(), "Hi");
         }
     }
 
     @Override
-    public void onDeleted(Context context, int[] appWidgetIds) {
-        for (int appWidgetId : appWidgetIds) {
-            WidgetProviderConfigureActivity.removeWidgetId(context, appWidgetId);
-            WidgetProviderConfigureActivity.deleteTitlePref(context, appWidgetId);
+    public void onEnabled(Context context) {
+        super.onEnabled(context);
+    }
+
+    @Override
+    public void onDisabled(Context context) {
+        super.onDisabled(context);
+    }
+
+    @Override
+    public void onDeleted(Context context, int[] appWidgetIDs) {
+        super.onDeleted(context, appWidgetIDs);
+
+        for (int appWidgetID : appWidgetIDs) {
+            WidgetConfigureActivity.removeAppWidgetID(context, appWidgetID);
         }
     }
 }

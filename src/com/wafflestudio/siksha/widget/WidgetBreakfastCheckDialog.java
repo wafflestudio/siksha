@@ -11,65 +11,55 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.wafflestudio.siksha.R;
-import com.wafflestudio.siksha.util.FontUtil;
-import com.wafflestudio.siksha.util.SharedPreferenceUtil;
+import com.wafflestudio.siksha.util.Fonts;
+import com.wafflestudio.siksha.util.Preference;
 
 /**
  * Created by Gyeongin on 2015-03-26.
  */
 
-public class WidgetBreakfastCheckDialog extends Dialog {
-    private TextView message;
-    private Button positiveButton;
-    private Button negativeButton;
+public class WidgetBreakfastCheckDialog extends Dialog implements View.OnClickListener {
+    private Context context;
+    private int appWidgetID;
 
-    public WidgetBreakfastCheckDialog (final Context context, final int appWidgetId) {
+    public WidgetBreakfastCheckDialog (Context context, int appWidgetID) {
         super(context);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.widget_breakfast_check_dialog);
-
         setCanceledOnTouchOutside(false);
-        setUIComponents();
 
-        positiveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
+        this.context = context;
+        this.appWidgetID = appWidgetID;
 
-                SharedPreferenceUtil.save(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_PREFIX_BREAKFAST_KEY + appWidgetId, true);
-                Intent intent = new Intent();
-                intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-                ((Activity) context).setResult(Activity.RESULT_OK, intent);
-                intent.setAction(WidgetProvider.CONFIGURATION_FINISHED);
-                context.sendBroadcast(intent);
+        TextView messageView = (TextView) findViewById(R.id.widget_breakfast_check_dialog_message_view);
+        Button positiveButton = (Button) findViewById(R.id.widget_breakfast_check_dialog_positive_button);
+        Button negativeButton = (Button) findViewById(R.id.widget_breakfast_check_dialog_negative_button);
 
-                ((Activity) context).finish();
-            }
-        });
-        negativeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
+        messageView.setTypeface(Fonts.fontAPAritaDotumMedium);
+        positiveButton.setTypeface(Fonts.fontAPAritaDotumMedium);
+        negativeButton.setTypeface(Fonts.fontAPAritaDotumMedium);
 
-                SharedPreferenceUtil.save(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_PREFIX_BREAKFAST_KEY + appWidgetId, false);
-                Intent intent = new Intent();
-                intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-                ((Activity) context).setResult(Activity.RESULT_OK, intent);
-                intent.setAction(WidgetProvider.CONFIGURATION_FINISHED);
-                context.sendBroadcast(intent);
-
-                ((Activity) context).finish();
-            }
-        });
+        positiveButton.setOnClickListener(this);
+        negativeButton.setOnClickListener(this);
     }
 
-    private void setUIComponents() {
-        message = (TextView) findViewById(R.id.breakfast_check_dialog_message);
-        positiveButton = (Button) findViewById(R.id.breakfast_check_dialog_positive_button);
-        negativeButton = (Button) findViewById(R.id.breakfast_check_dialog_negative_button);
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.widget_breakfast_check_dialog_positive_button:
+                Preference.save(context, Preference.PREF_WIDGET_NAME, Preference.PREF_KEY_BREAKFAST_PREFIX + appWidgetID, true);
+                break;
+            case R.id.widget_breakfast_check_dialog_negative_button:
+                Preference.save(context, Preference.PREF_WIDGET_NAME, Preference.PREF_KEY_BREAKFAST_PREFIX + appWidgetID, false);
+                break;
+        }
 
-        message.setTypeface(FontUtil.fontAPAritaDotumMedium);
-        positiveButton.setTypeface(FontUtil.fontAPAritaDotumMedium);
-        negativeButton.setTypeface(FontUtil.fontAPAritaDotumMedium);
+        Intent intent = new Intent();
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetID);
+        intent.setAction(WidgetProvider.STATE_CONFIGURATION_FINISHED);
+        context.sendBroadcast(intent);
+
+        ((Activity) context).setResult(Activity.RESULT_OK, intent);
+        ((Activity) context).finish();
     }
 }

@@ -2,49 +2,64 @@
 <resources>
 
     <string name="app_name">식샤</string>
-    <string name="title_activity_main">서울대학교 식단 어플</string>
+    <string name="app_explanation">서울대학교 식단 위젯 &amp; 앱</string>
         
    	<string name="operating_hour">운영 시간</string>
    	<string name="location">식당 위치</string>
 
-    <string name="downloading_error">식단 다운로드 실패!</string>
-    <string name="downloading_network_state">데이터 네트워크 또는 Wi-Fi를 연결하고, 다시 시도해주세요.</string>
-    <string name="downloading_retry">다시 하기</string>
-    <string name="downloading_cancel">취소</string>
+    <string name="download_error">식단 다운로드 실패!</string>
+    <string name="download_retry">다시 하기</string>
+    <string name="download_cancel">취소</string>
+    <string name="check_network_state">데이터 네트워크 또는 Wi-Fi를 연결하고, 다시 시도해주세요.</string>
 
-    <string name="notify_widget_dialog_title">식샤 위젯을 아시나요?</string>
-    <string name="notify_widget_dialog_message">홈 화면에 식샤 위젯을 추가하시면\n 식단 정보를 더욱 간편하게\n 보실 수 있습니다.</string>
-    <string name="notify_widget_dialog_close">닫기</string>
+    <string name="widget_alert_dialog_title">식샤 위젯을 아시나요?</string>
+    <string name="widget_alert_dialog_message">홈 화면에 식샤 위젯을 추가하시면\n식단 정보를 더욱 간편하게\n보실 수 있습니다.</string>
+    <string name="widget_alert_dialog_close">닫기</string>
 
-	<string name="restaurant_no_menu">메뉴가 없습니다.</string>
-    <string name="downloading_message">식단을 다운로드하고 있습니다...</string>
-    <string name="quit_back_pressed_twice">\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.</string>
+	<string name="empty_menu">메뉴가 없습니다.</string>
+    <string name="now_downloading">식단을 다운로드하고 있습니다...</string>
+    <string name="back_pressed_twice_quit">\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.</string>
 
-    <string name="breakfast">아침</string>
-    <string name="lunch">점심</string>
-    <string name="dinner">저녁</string>
+    <string name="empty_bookmark">즐겨찾는 식당이 없습니다.</string>
+    <string name="alert_how_to_bookmark">식단 탭에서 별 모양 아이콘을 눌러 즐겨찾는 식당을 추가해보세요.</string>
 
-    <string name="bookmark">북마크</string>
-    <string name="overflow_menu">Overflow Menu</string>
-    <string name="refresh">식단 새로고침</string>
-    <string name="app_version">버전 정보</string>
-    <string name="confirm">확인</string>
+    <string name="message_to_touch_edit_button">하단의 편집 버튼을 눌러 순서를 바꿔보세요.</string>
+    <string name="message_to_touch_confirm_button">식당을 길게 누른 상태에서 상하로 움직여보세요.\n그리고 확인 버튼을 눌러 저장하세요.</string>
 
-    <string name="abnormal_version">정상적이지 않은 버전을 이용하고 있습니다.</string>
+    <string name="restaurant_information">식당 정보</string>
+    <string name="bookmark">즐겨찾기</string>
+    <string name="sharing">식단 공유</string>
+
+    <string name="action_confirm">확인</string>
+    <string name="action_edit">편집</string>
+
+    <string name="development_version">개발용 버전을 이용하고 있습니다.</string>
     <string name="now_latest">최신 버전을 이용하고 있습니다.</string>
-    <string name="no_latest">최신 버전을 이용하고 있지 않습니다.\n업데이트를 하려면 눌러주세요.</string>
-    <string name="get_latest_version_error">최신 버전 정보를 가져오는 데 실패했습니다.\n데이터 네트워크 또는 Wi-Fi를 연결하고, 다시 시도해주세요.</string>
+    <string name="not_latest">최신 버전을 이용하고 있지 않습니다.\n업데이트를 하려면 눌러주세요.</string>
 
-    <string name="developer">만든 사람들</string>
+    <string name="development_version_short">개발용 버전 이용 중</string>
+    <string name="now_latest_short">최신 버전 이용 중</string>
+    <string name="not_latest_short">최신 버전 이용 중이지 않음</string>
+
+    <string name="settings_option_app_version">버전 정보</string>
+    <string name="settings_option_refresh">식단 새로고침</string>
+    <string name="settings_option_bookmark">즐겨찾기</string>
+    <string name="settings_option_sequence">식당 순서 변경</string>
+    <string name="settings_option_menu">식단</string>
+    <string name="settings_option_empty_menu_invisible">메뉴 없는 식당 안 보기</string>
+    <string name="settings_option_open_source_library">오픈 소스 라이브러리</string>
+    <string name="settings_option_developer">만든 사람들</string>
+
     <string name="wafflestudio">와플스튜디오</string>
-    <string name="shaidea">샤이디어</string>
+
+    <string name="reply_yes">예</string>
+    <string name="reply_no">아니오</string>
 
     <!-- Widget -->
-    <string name="breakfast_check_dialog_title">아침 메뉴 설정</string>
+    <string name="message_to_select_restaurant">위젯에 넣을 식당을 고르세요.\n그리고 확인 버튼을 눌러 저장하세요.</string>
+    <string name="breakfast_check_dialog_title">아침 메뉴 보기 설정</string>
     <string name="breakfast_check_dialog_message">위젯에서 아침 메뉴를 보시겠습니까?</string>
-    <string name="breakfast_check_dialog_yes">예</string>
-    <string name="breakfast_check_dialog_no">아니오</string>
-    <string name="menu_empty">식단 정보가 없습니다.</string>
-    <string name="widget_download_fail">식단 다운로드 실패! 데이터 네트워크 또는 Wi-Fi를 연결하고, 새로고침 해주세요.</string>
-	
+    <string name="message_to_refresh">식단을 가져오지 못했습니다.\n새로고침 버튼을 눌러 다시 시도해주세요.</string>
+	<string name="empty_restaurant">식단 정보가 없습니다.</string>
+
 </resources>

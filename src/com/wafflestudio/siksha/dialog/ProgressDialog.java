@@ -8,45 +8,37 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wafflestudio.siksha.R;
-import com.wafflestudio.siksha.util.FontUtil;
+import com.wafflestudio.siksha.util.Fonts;
 
 public class ProgressDialog extends Dialog {
-  private Context context;
+    private ImageView progressView;
 
-  private Animation animation;
-  private String message;
+    private Animation loadingAnimation;
 
-  private ImageView progress;
+    public ProgressDialog(Context context) {
+        super(context, R.style.ProgressDialog);
+        setContentView(R.layout.progress_dialog);
+        setCanceledOnTouchOutside(false);
 
-  public ProgressDialog(Context context, String message) {
-    super(context, R.style.ProgressDialog);
-    setContentView(R.layout.progress_dialog);
+        progressView = (ImageView) findViewById(R.id.progress_view);
+        TextView explanationView = (TextView) findViewById(R.id.progress_dialog_explanation_view);
+        TextView titleView = (TextView) findViewById(R.id.progress_dialog_title_view);
+        TextView messageView = (TextView) findViewById(R.id.progress_dialog_message_view);
 
-    this.context = context;
-    this.message = message;
+        loadingAnimation = AnimationUtils.loadAnimation(context, R.anim.rotate_infinite);
 
-    initSetting();
-  }
+        explanationView.setTypeface(Fonts.fontBMJua);
+        titleView.setTypeface(Fonts.fontBMJua);
+        messageView.setTypeface(Fonts.fontAPAritaDotumMedium);
+    }
 
-  private void initSetting() {
-    setCanceledOnTouchOutside(false);
+    public void start() {
+        progressView.startAnimation(loadingAnimation);
+        show();
+    }
 
-    progress = (ImageView) findViewById(R.id.progress_image);
-    TextView title = (TextView) findViewById(R.id.progress_dialog_title);
-
-    title.setText(message);
-    title.setTypeface(FontUtil.fontAPAritaDotumMedium);
-
-    animation = AnimationUtils.loadAnimation(context, R.anim.loading);
-  }
-
-  public void startShowing() {
-    progress.startAnimation(animation);
-    show();
-  }
-
-  public void quitShowing() {
-    progress.clearAnimation();
-    dismiss();
-  }
+    public void quit() {
+        progressView.clearAnimation();
+        dismiss();
+    }
 }

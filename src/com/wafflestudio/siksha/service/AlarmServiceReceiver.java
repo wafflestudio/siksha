@@ -5,22 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.wafflestudio.siksha.util.CalendarUtil;
+import com.wafflestudio.siksha.util.Date;
 
 public class AlarmServiceReceiver extends BroadcastReceiver {
-  @Override
-  public void onReceive(Context context, Intent intent) {
-    Log.d("alarm_time", CalendarUtil.getTodayDate() + " " + CalendarUtil.getCurrentHour() + "h " + CalendarUtil.getCurrentMinute() + "m");
+    @Override
+    public void onReceive(Context context, Intent alarmIntent) {
+        Log.d("alarm_firing_time", Date.getDate() + " " + Date.getHour() + "시 " + Date.getMinute() + "분");
 
-    int option = DownloadingJson.getDownloadOption();
-    String downloadDate = DownloadingJson.getDownloadDate(option);
-
-    if (!DownloadingJson.isJsonUpdated(context, downloadDate)) {
-      Intent downloadIntent = new Intent(context, DownloadingJson.class);
-      downloadIntent.putExtra(DownloadingJson.KEY_OPTION, option);
-      downloadIntent.putExtra(DownloadingJson.KEY_DATE, downloadDate);
-      downloadIntent.setAction(DownloadingJsonReceiver.ACTION_PRE_DOWNLOAD);
-      context.startService(downloadIntent);
+        new JSONDownloader(context, com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD).start();
     }
-  }
 }

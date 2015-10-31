@@ -2,53 +2,66 @@ package com.wafflestudio.siksha.widget;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.TypedValue;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.wafflestudio.siksha.R;
-import com.wafflestudio.siksha.util.CalendarUtil;
-import com.wafflestudio.siksha.util.ParsingJson;
-import com.wafflestudio.siksha.util.MenuCrawlingForm;
-import com.wafflestudio.siksha.util.SharedPreferenceUtil;
+import com.wafflestudio.siksha.form.Menu;
+import com.wafflestudio.siksha.form.Restaurant;
+import com.wafflestudio.siksha.util.AppData;
+import com.wafflestudio.siksha.util.Date;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFactory {
-    private Context context = null;
+    private Context context;
+    private int appWidgetID;
 
-    private String[] restaurantList;
-    private ArrayList<MenuCrawlingForm> restaurantMenuList;
-
-    private int appWidgetId;
-    private int hour;
+    private List<Restaurant> items;
 
     public WidgetListViewFactory(Context context, Intent intent) {
         this.context = context;
+        appWidgetID = Integer.valueOf(intent.getData().getSchemeSpecificPart()) - WidgetProvider.randomNumber;
 
-        appWidgetId = Integer.valueOf(intent.getData().getSchemeSpecificPart()) - WidgetProvider.randomNumber;
-        String input = WidgetProviderConfigureActivity.loadTitlePref(context, appWidgetId);
-        restaurantList = input.split("#");
+        populateItems();
+    }
 
-        restaurantMenuList = new ArrayList<MenuCrawlingForm>();
-        MenuCrawlingForm[] forms = new ParsingJson(context).getParsedForms();
+    public void populateItems() {
+        int index = Date.getTimeSlotIndexForWidget(context, appWidgetID);
 
-        if (forms != null) {
-            for (int i = 0; i < restaurantList.length; i++) {
-                for (int j = 0; j < forms.length; j++) {
-                    if (restaurantList[i].equals(forms[j].restaurant)) {
-                        restaurantMenuList.add(forms[j]);
-                        break;
-                    }
-                }
-            }
+        switch (index) {
+            case 0:
+                items = AppData.getInstance().getWidgetMenuList(context, AppData.getInstance().breakfastMenuDictionary, appWidgetID);
+                break;
+            case 1:
+                items = AppData.getInstance().getWidgetMenuList(context, AppData.getInstance().lunchMenuDictionary, appWidgetID);
+                break;
+            case 2:
+                items = AppData.getInstance().getWidgetMenuList(context, AppData.getInstance().dinnerMenuDictionary, appWidgetID);
+                break;
+        }
+
+        Log.d("size", items.size() + "");
+        for (int i = 0; i < items.size(); i++) {
+            Log.d("name", items.get(i).name);
+            for (int j = 0; j < items.get(i).menus.size(); j++)
+                Log.d("menu", items.get(i).menus.get(j).name);
         }
     }
 
     @Override
+    public void onCreate() {
+    }
+
+    @Override
+    public void onDataSetChanged() {
+    }
+
+    @Override
     public int getCount() {
-        return restaurantMenuList.size();
+        return items.size();
     }
 
     @Override
@@ -58,41 +71,29 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
 
     @Override
     public RemoteViews getViewAt(int position) {
-        final RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.widget_restaurant_list_row);
-        MenuCrawlingForm item = restaurantMenuList.get(position);
-        boolean isEmpty = true;
+        Restaurant item = items.get(position);
 
-        remoteView.setTextViewText(R.id.restaurant_view_widget, item.restaurant);
-        remoteView.removeAllViews(R.id.menu_list_widget);
-        remoteView.setViewVisibility(R.id.widget_restaurant_empty_view, View.GONE);
+        final RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_list_view_item);
+        remoteViews.setTextViewText(R.id.widget_list_view_name_view, item.name);
 
-        String time;
-
-        if (hour <= 9 || hour >= 21) {
-            if (SharedPreferenceUtil.loadValueOfBoolean(context, SharedPreferenceUtil.PREF_WIDGET_NAME, SharedPreferenceUtil.PREF_PREFIX_BREAKFAST_KEY + appWidgetId))
-                time = "breakfast";
-            else
-                time = "lunch";
-        }
-        else if (hour >= 10 && hour <= 14)
-            time = "lunch";
-        else
-            time = "dinner";
-
-        for (int i = 0; i < item.menus.length; i++) {
-            if (item.menus[i].time.equals(time)) {
-                RemoteViews child = new RemoteViews(context.getPackageName(), R.layout.widget_menu_list_row);
-                child.setTextViewText(R.id.menu_price_widget, item.menus[i].price);
-                child.setTextViewText(R.id.menu_name_widget, item.menus[i].name);
-                remoteView.addView(R.id.menu_list_widget, child);
-                isEmpty = false;
+        if (item.menus.size() != 0) {
+            for (int i = 0; i < item.menus.size(); i++) {
+                Menu menu = item.menus.get(i);
+                RemoteViews nestedView = new RemoteViews(context.getPackageName(), R.layout.widget_menu_item);
+                nestedView.setTextViewText(R.id.widget_menu_price_view, menu.price);
+                nestedView.setTextViewText(R.id.widget_menu_name_view, menu.name);
+                remoteViews.addView(R.id.widget_not_empty_menu_view, nestedView);
             }
+
+            remoteViews.setViewVisibility(R.id.widget_empty_menu_view, View.GONE);
+            remoteViews.setViewVisibility(R.id.widget_not_empty_menu_view, View.VISIBLE);
+        }
+        else {
+            remoteViews.setViewVisibility(R.id.widget_empty_menu_view, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.widget_not_empty_menu_view, View.GONE);
         }
 
-        if (isEmpty)
-            remoteView.setViewVisibility(R.id.widget_restaurant_empty_view, View.VISIBLE);
-
-        return remoteView;
+        return remoteViews;
     }
 
     @Override
@@ -111,26 +112,6 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
     }
 
     @Override
-    public void onCreate() { }
-
-    @Override
-    public void onDataSetChanged() {
-        hour = CalendarUtil.getCurrentHour();
-        MenuCrawlingForm[] forms = new ParsingJson(context).getParsedForms();
-
-        if (forms != null) {
-            restaurantMenuList = new ArrayList<MenuCrawlingForm>();
-            for (int i = 0; i < restaurantList.length; i++) {
-                for (int j = 0; j < forms.length; j++) {
-                    if (restaurantList[i].equals(forms[j].restaurant)) {
-                        restaurantMenuList.add(forms[j]);
-                        break;
-                    }
-                }
-            }
-        }
+    public void onDestroy() {
     }
-
-    @Override
-    public void onDestroy() { }
 }

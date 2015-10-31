@@ -1,51 +1,27 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" >
-  
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/activity_main_tool_bar"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-     	android:background="@color/color_primary_lunch"
-        android:theme="@style/ToolBar" >
+        android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:paddingTop="3dp"
-            android:orientation="horizontal" >
+        <android.support.design.widget.TabLayout
+            android:id="@+id/activity_main_tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:scrollbars="horizontal"
+            app:tabGravity="fill"
+            app:tabMode="fixed" />
 
-            <TextView
-                android:id="@+id/activity_main_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title_activity_main"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                android:layout_gravity="center_vertical"
-                android:gravity="center" />
+    </android.support.design.widget.AppBarLayout>
 
-            <TextView
-                android:id="@+id/activity_main_app_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:textColor="@color/white"
-                android:textSize="27sp"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center_vertical"
-                android:gravity="center" />
-
-        </LinearLayout>
-
-    </android.support.v7.widget.Toolbar>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/view_pager"
+    <com.wafflestudio.siksha.page.SwipeDisabledViewPager
+        android:id="@+id/swipe_disabled_view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -4,75 +4,45 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/sub_activity_background" >
+    android:background="@color/color_primary" >
 
     <LinearLayout
-        android:id="@+id/activity_developer_content_wrapper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:orientation="vertical" >
 
+        <ImageView
+            android:layout_width="192dp"
+            android:layout_height="192dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_launcher_big"
+            android:scaleType="fitXY" />
+
         <TextView
-            android:id="@+id/developer"
+            android:id="@+id/activity_developer_title_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="27sp"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:layout_margin="10dp"
             android:textColor="@color/white"
-            android:text="@string/developer" />
+            android:text="@string/settings_option_developer" />
 
         <LinearLayout
             android:id="@+id/wafflestudio_wrapper"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_gravity="center_horizontal" >
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="60dp" >
 
             <ImageView
                 android:id="@+id/wafflestudio_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/logo_wafflestudio" />
-
-            <TextView
-                android:id="@+id/wafflestudio_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/wafflestudio"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:layout_marginLeft="7dp"
-                android:textSize="17sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/shaidea_wrapper"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_horizontal" >
-
-            <ImageView
-                android:id="@+id/shaidea_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/logo_shaidea" />
-
-            <TextView
-                android:id="@+id/shaidea_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/shaidea"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:layout_marginLeft="7dp"
-                android:textSize="17sp" />
 
         </LinearLayout>
 

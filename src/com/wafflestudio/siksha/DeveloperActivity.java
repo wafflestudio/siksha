@@ -4,20 +4,15 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.wafflestudio.siksha.util.FontUtil;
+import com.wafflestudio.siksha.util.Fonts;
 
 public class DeveloperActivity extends Activity {
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_developer);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_developer);
 
-    TextView developer = (TextView) findViewById(R.id.developer);
-    TextView wafflestudio = (TextView) findViewById(R.id.wafflestudio_name);
-    TextView shaidea = (TextView) findViewById(R.id.shaidea_name);
-
-    developer.setTypeface(FontUtil.fontBMJua);
-    wafflestudio.setTypeface(FontUtil.fontAPAritaDotumMedium);
-    shaidea.setTypeface(FontUtil.fontAPAritaDotumMedium);
-  }
+        TextView titleView = (TextView) findViewById(R.id.activity_developer_title_view);
+        titleView.setTypeface(Fonts.fontBMJua);
+    }
 }
