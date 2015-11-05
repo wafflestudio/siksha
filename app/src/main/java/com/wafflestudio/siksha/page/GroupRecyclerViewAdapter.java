@@ -1,17 +1,21 @@
 package com.wafflestudio.siksha.page;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.kakao.kakaolink.AppActionBuilder;
 import com.kakao.kakaolink.AppActionInfoBuilder;
 import com.kakao.kakaolink.KakaoLink;
@@ -32,6 +36,8 @@ import com.wafflestudio.siksha.util.Preference;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.codetail.animation.SupportAnimator;
 
 /**
  * Created by Gyu Kang on 2015-10-13.
@@ -101,11 +107,15 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
                     if (!drawerExpandedList.contains(name)) {
                         notEmptyRestaurantViewHolder.actionContainer.setVisibility(View.GONE);
-                        Animations.rotate(notEmptyRestaurantViewHolder.drawerButton, 0.0f, 0.0f, 500, false);
+                        ObjectAnimator animator = Animations.makeRotateAnimator(notEmptyRestaurantViewHolder.drawerButton, 0.0f, 0.0f, 500, false);
+                        animator.setInterpolator(new LinearInterpolator());
+                        animator.start();
                     }
                     else {
                         notEmptyRestaurantViewHolder.actionContainer.setVisibility(View.VISIBLE);
-                        Animations.rotate(notEmptyRestaurantViewHolder.drawerButton, 0.0f, -180.0f, 500, false);
+                        ObjectAnimator animator = Animations.makeRotateAnimator(notEmptyRestaurantViewHolder.drawerButton, 0.0f, -180.0f, 500, false);
+                        animator.setInterpolator(new LinearInterpolator());
+                        animator.start();
                     }
                 }
                 break;
@@ -169,12 +179,95 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 case R.id.not_empty_restaurant_layout_drawer_button:
                     if (!drawerExpandedList.contains(name)) {
                         drawerExpandedList.add(name);
-                        Animations.rotate(drawerButton, 0.0f, -180.0f, 500, false);
-                        Animations.expand(actionContainer, true);
+
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                            AnimatorSet animatorSet = new AnimatorSet();
+                            ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, 0.0f, -180.0f, 450, false);
+                            rotateAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+                            Animator expandAnimator = Animations.makeExpandAnimator(actionContainer, 150);
+                            final SupportAnimator revealAnimator = (SupportAnimator) Animations.makeRevealAnimator(actionContainer, 300);
+
+                            animatorSet.play(expandAnimator);
+                            animatorSet.addListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animator) {
+                                    revealAnimator.start();
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animator) {
+
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animator) {
+
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animator animator) {
+
+                                }
+                            });
+
+                            rotateAnimator.start();
+                            animatorSet.start();
+                        }
+                        else {
+                            AnimatorSet animatorSet = new AnimatorSet();
+                            Animator expandAnimator = Animations.makeExpandAnimator(actionContainer, 150);
+                            Animator revealAnimator = (Animator) Animations.makeRevealAnimator(actionContainer, 300);
+                            ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, 0.0f, -180.0f, 450, false);
+                            rotateAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+
+                            animatorSet.play(rotateAnimator).with(expandAnimator);
+                            animatorSet.play(expandAnimator).before(revealAnimator);
+                            animatorSet.start();
+                        }
                     } else {
                         drawerExpandedList.remove(name);
-                        Animations.rotate(drawerButton, -180.0f, -360.0f, 500, false);
-                        Animations.collapse(actionContainer, true);
+
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                            com.nineoldandroids.animation.AnimatorSet animatorSet = new com.nineoldandroids.animation.AnimatorSet();
+                            ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, -180.0f, -360.0f, 450, false);
+                            rotateAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+                            com.nineoldandroids.animation.Animator concealAnimator = (com.nineoldandroids.animation.Animator) ((SupportAnimator) Animations.makeConcealAnimator(actionContainer, 300)).get();
+                            final Animator collapseAnimator = Animations.makeCollapseAnimator(actionContainer, 150);
+
+                            animatorSet.play(concealAnimator);
+                            animatorSet.addListener(new com.nineoldandroids.animation.Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(com.nineoldandroids.animation.Animator animation) {
+                                }
+
+                                @Override
+                                public void onAnimationEnd(com.nineoldandroids.animation.Animator animation) {
+                                    collapseAnimator.start();
+                                }
+
+                                @Override
+                                public void onAnimationCancel(com.nineoldandroids.animation.Animator animation) {
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(com.nineoldandroids.animation.Animator animation) {
+                                }
+                            });
+
+                            rotateAnimator.start();
+                            animatorSet.start();
+                        }
+                        else {
+                            AnimatorSet animatorSet = new AnimatorSet();
+                            Animator collapseAnimator = Animations.makeCollapseAnimator(actionContainer, 150);
+                            Animator concealAnimator = (Animator) Animations.makeConcealAnimator(actionContainer, 300);
+                            ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, -180.0f, -360.0f, 450, false);
+                            rotateAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+
+                            animatorSet.play(rotateAnimator).with(concealAnimator);
+                            animatorSet.play(concealAnimator).before(collapseAnimator);
+                            animatorSet.start();
+                        }
                     }
                     break;
                 case R.id.group_kakaotalk_button:
@@ -187,7 +280,6 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                         stringBuilder.append("[" + name + "]").append("\n");
 
                         int size = data.get(position).foods.size();
-
                         if (size == 0)
                             stringBuilder.append("\n").append(R.string.empty_menu);
                         else {
@@ -196,6 +288,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                                 stringBuilder.append("\n").append(food.price + "원 " + food.name);
                             }
                         }
+
                         /*
                          * 10월 29일 (목) 저녁
                          * [학생회관 식당]

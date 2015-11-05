@@ -1,5 +1,6 @@
 package com.wafflestudio.siksha;
 
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.TextView;
 
 import com.wafflestudio.siksha.page.settings.SequenceItemTouchHelperCallback;
@@ -107,12 +109,16 @@ public class SequenceActivity extends AppCompatActivity implements View.OnClickL
                 if (editMode) {
                     actionButton.setImageResource(R.drawable.ic_confirm);
                     messageView.setText(R.string.message_to_touch_confirm_button);
-                    Animations.fade(recyclerView, 0.25f, 1.0f, 300);
+                    ObjectAnimator fadeInAnimator = Animations.makeFadeAnimator(recyclerView, 0.25f, 1.0f, 300);
+                    fadeInAnimator.setInterpolator(new AccelerateInterpolator());
+                    fadeInAnimator.start();
                 } else {
                     updateCurrentSequence();
                     actionButton.setImageResource(R.drawable.ic_edit);
                     messageView.setText(R.string.message_to_touch_edit_button);
-                    Animations.fade(recyclerView, 1.0f, 0.25f, 300);
+                    ObjectAnimator fadeOutAnimator = Animations.makeFadeAnimator(recyclerView, 1.0f, 0.25f, 300);
+                    fadeOutAnimator.setInterpolator(new AccelerateInterpolator());
+                    fadeOutAnimator.start();
                 }
                 break;
         }

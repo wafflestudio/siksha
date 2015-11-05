@@ -1,7 +1,9 @@
 package com.wafflestudio.siksha.dialog;
 
+import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.content.Context;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,7 +31,9 @@ public class ProgressDialog extends Dialog {
     }
 
     public void start() {
-        Animations.rotate(progressView, 0.0f, 360.0f, 1000, true);
+        ObjectAnimator animator = Animations.makeRotateAnimator(progressView, 0.0f, 360.0f, 1000, true);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.start();
         show();
     }
 

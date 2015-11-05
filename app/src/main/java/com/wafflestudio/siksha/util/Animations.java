@@ -8,7 +8,6 @@ import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 
 import io.codetail.animation.SupportAnimator;
@@ -18,9 +17,9 @@ import io.codetail.animation.ViewAnimationUtils;
  * Created by Gyu Kang on 2015-10-23.
  */
 public class Animations {
-    public static ValueAnimator makeSlideAnimator(final View view, int start, int end) {
+    private static ValueAnimator makeSlideAnimator(final View view, int start, int end, int duration) {
         ValueAnimator animator = ValueAnimator.ofInt(start, end);
-        animator.setDuration(150);
+        animator.setDuration(duration);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -33,46 +32,80 @@ public class Animations {
         return animator;
     }
 
-    public static Object makeCircularRevealAnimator(final View view, boolean isReverse) {
-        int x = (view.getLeft() + view.getRight());
+    private static Object makeCircularRevealAnimator(final View view, int duration, boolean reverse) {
+        int x = view.getLeft() + view.getRight();
         int y = view.getTop();
         int radius = Math.max(view.getWidth(), view.getHeight());
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             SupportAnimator supportAnimator = ViewAnimationUtils.createCircularReveal(view, x, y, 0, radius);
             supportAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-            supportAnimator.setDuration(300);
+            supportAnimator.setDuration(duration);
 
-            return isReverse ? supportAnimator.reverse() : supportAnimator;
+            return reverse ? supportAnimator.reverse() : supportAnimator;
         } else {
-            Animator animator = isReverse ?
+            Animator animator = reverse ?
                     android.view.ViewAnimationUtils.createCircularReveal(view, x, y, radius, 0) :
                     android.view.ViewAnimationUtils.createCircularReveal(view, x, y, 0, radius);
             animator.setInterpolator(new AccelerateDecelerateInterpolator());
-            animator.setDuration(300);
+            animator.setDuration(duration);
 
             return animator;
         }
     }
 
-    public static void reveal(final View view) {
-        view.setVisibility(View.VISIBLE);
-
+    public static Object makeRevealAnimator(final View view, int duration) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            SupportAnimator supportRevealAnimator = (SupportAnimator) makeCircularRevealAnimator(view, false);
-            supportRevealAnimator.start();
+            SupportAnimator supportRevealAnimator = (SupportAnimator) makeCircularRevealAnimator(view, duration, false);
+            supportRevealAnimator.addListener(new SupportAnimator.AnimatorListener() {
+                @Override
+                public void onAnimationStart() {
+                }
+
+                @Override
+                public void onAnimationEnd() {
+                    view.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationCancel() {
+                }
+
+                @Override
+                public void onAnimationRepeat() {
+                }
+            });
+            return supportRevealAnimator;
         } else {
-            Animator revealAnimator = (Animator) makeCircularRevealAnimator(view, false);
-            revealAnimator.start();
+            Animator revealAnimator = (Animator) makeCircularRevealAnimator(view, duration, false);
+            revealAnimator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animator) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    view.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animator) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animator) {
+                }
+            });
+            return revealAnimator;
         }
     }
 
-    public static void expand(final View view, final boolean willRevealAfter) {
+    public static ValueAnimator makeExpandAnimator(final View view, int duration) {
         view.setVisibility(View.INVISIBLE);
         view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
-        ValueAnimator slideAnimator = makeSlideAnimator(view, 0, view.getMeasuredHeight());
+        ValueAnimator slideAnimator = makeSlideAnimator(view, 0, view.getMeasuredHeight(), duration);
         slideAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
@@ -80,10 +113,7 @@ public class Animations {
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                if (!willRevealAfter)
-                    view.setVisibility(View.VISIBLE);
-                else
-                    reveal(view);
+                view.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -94,50 +124,12 @@ public class Animations {
             public void onAnimationRepeat(Animator animator) {
             }
         });
-        slideAnimator.start();
+        return slideAnimator;
     }
 
-    public static void conceal(final View view, final ValueAnimator nextAnimator) {
+    public static Object makeConcealAnimator(final View view, int duration) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            SupportAnimator supportAnimator = (SupportAnimator) makeCircularRevealAnimator(view, true);
-            supportAnimator.addListener(new SupportAnimator.AnimatorListener() {
-                @Override
-                public void onAnimationStart() {
-                }
-
-                @Override
-                public void onAnimationEnd() {
-                    view.setVisibility(View.INVISIBLE);
-                    nextAnimator.start();
-                }
-
-                @Override
-                public void onAnimationCancel() {
-                }
-
-                @Override
-                public void onAnimationRepeat() {
-                }
-            });
-            supportAnimator.start();
-        }
-        else {
-            Animator animator = (Animator) makeCircularRevealAnimator(view, true);
-            animator.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    view.setVisibility(View.INVISIBLE);
-                    nextAnimator.start();
-                }
-            });
-            animator.start();
-        }
-    }
-
-    public static void conceal(final View view) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            SupportAnimator supportAnimator = (SupportAnimator) makeCircularRevealAnimator(view, true);
+            SupportAnimator supportAnimator = (SupportAnimator) makeCircularRevealAnimator(view, duration, true);
             supportAnimator.addListener(new SupportAnimator.AnimatorListener() {
                 @Override
                 public void onAnimationStart() {
@@ -156,10 +148,10 @@ public class Animations {
                 public void onAnimationRepeat() {
                 }
             });
-            supportAnimator.start();
+            return supportAnimator;
         }
         else {
-            Animator animator = (Animator) makeCircularRevealAnimator(view, true);
+            Animator animator = (Animator) makeCircularRevealAnimator(view, duration, true);
             animator.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
@@ -167,12 +159,14 @@ public class Animations {
                     view.setVisibility(View.INVISIBLE);
                 }
             });
-            animator.start();
+            return animator;
         }
     }
 
-    public static void collapse(final View view, final boolean willConcealBefore) {
-        final ValueAnimator slideAnimator = makeSlideAnimator(view, view.getHeight(), 0);
+    public static ValueAnimator makeCollapseAnimator(final View view, int duration) {
+        view.setVisibility(View.VISIBLE);
+
+        final ValueAnimator slideAnimator = makeSlideAnimator(view, view.getHeight(), 0, duration);
         slideAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
@@ -191,32 +185,24 @@ public class Animations {
             public void onAnimationRepeat(Animator animator) {
             }
         });
-
-        if (!willConcealBefore) {
-            slideAnimator.start();
-            return;
-        }
-
-        conceal(view, slideAnimator);
+        return slideAnimator;
     }
 
-    public static void rotate(final View view, float startDegrees, float endDegrees, int duration, boolean infinite) {
+    public static ObjectAnimator makeRotateAnimator(final View view, float startDegrees, float endDegrees, int duration, boolean infinite) {
         ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(view, View.ROTATION, startDegrees, endDegrees);
-        rotateAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         rotateAnimator.setDuration(duration);
 
         if (infinite)
             rotateAnimator.setRepeatCount(Animation.INFINITE);
 
-        rotateAnimator.start();
+        return rotateAnimator;
     }
 
-    public static void fade(final View view, float startAlpha, float endAlpha, int duration) {
+    public static ObjectAnimator makeFadeAnimator(final View view, float startAlpha, float endAlpha, int duration) {
         ObjectAnimator fadeAnimator = ObjectAnimator.ofFloat(view, View.ALPHA, startAlpha, endAlpha);
-        fadeAnimator.setInterpolator(new AccelerateInterpolator());
         fadeAnimator.setDuration(duration);
 
-        fadeAnimator.start();
+        return fadeAnimator;
     }
 
     public static void clear(final View view) {

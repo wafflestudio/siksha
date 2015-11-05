@@ -15,7 +15,7 @@
         android:textStyle="bold"
         android:textColor="@color/black"
         android:padding="5dp"
-        android:textSize="14sp" />
+        android:textSize="13sp" />
 
     <LinearLayout
         android:id="@+id/widget_not_empty_menu_view"
