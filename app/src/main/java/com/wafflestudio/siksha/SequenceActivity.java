@@ -38,8 +38,13 @@ public class SequenceActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sequence);
 
-        aboutBookmark = getIntent().getBooleanExtra("is_about_bookmark", false);
+        aboutBookmark = getIntent().getBooleanExtra("about_bookmark", false);
         editMode = false;
+
+        if (aboutBookmark)
+            AnalyticsTrackers.getInstance().trackScreenView("BookmarkSequenceActivity");
+        else
+            AnalyticsTrackers.getInstance().trackScreenView("SequenceActivity");
 
         messageView = (TextView) findViewById(R.id.activity_sequence_message_view);
         recyclerView = (RecyclerView) findViewById(R.id.activity_sequence_recycler_view);
@@ -102,12 +107,12 @@ public class SequenceActivity extends AppCompatActivity implements View.OnClickL
                 if (editMode) {
                     actionButton.setImageResource(R.drawable.ic_confirm);
                     messageView.setText(R.string.message_to_touch_confirm_button);
-                    Animations.fade(recyclerView, 0.25f, 1.0f);
+                    Animations.fade(recyclerView, 0.25f, 1.0f, 300);
                 } else {
                     updateCurrentSequence();
                     actionButton.setImageResource(R.drawable.ic_edit);
                     messageView.setText(R.string.message_to_touch_edit_button);
-                    Animations.fade(recyclerView, 1.0f, 0.25f);
+                    Animations.fade(recyclerView, 1.0f, 0.25f, 300);
                 }
                 break;
         }

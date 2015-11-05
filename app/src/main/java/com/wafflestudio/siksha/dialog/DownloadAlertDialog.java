@@ -37,7 +37,7 @@ public class DownloadAlertDialog extends Dialog {
             public void onClick(View v) {
                 if (DeviceNetwork.getInstance().isOnline()) {
                     dismiss();
-                    ((MainActivity) context).downloadMenuData();
+                    ((MainActivity) context).downloadMenuData(true);
                 }
                 else {
                     Toast.makeText(context, R.string.check_network_state, Toast.LENGTH_SHORT).show();

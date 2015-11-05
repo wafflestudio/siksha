@@ -28,6 +28,7 @@ import java.util.List;
 public class MenuFragment extends Fragment {
     private TextView dateView;
     private ArrayList<ImageView> pageIndicatorDots;
+    private ViewPager viewPager;
 
     private Context context;
     private AppData appData;
@@ -39,6 +40,15 @@ public class MenuFragment extends Fragment {
 
         context = getContext();
         appData = AppData.getInstance();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        setPageIndicators(Date.getTimeSlotIndex());
+        viewPager.setCurrentItem(Date.getTimeSlotIndex());
+        notifyToAdapters();
     }
 
     @Nullable
@@ -55,7 +65,7 @@ public class MenuFragment extends Fragment {
         pageIndicatorDots.add((ImageView) view.findViewById(R.id.menu_page_indicator_dot_3));
         setPageIndicators(Date.getTimeSlotIndex());
 
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.menu_view_pager);
+        viewPager = (ViewPager) view.findViewById(R.id.menu_view_pager);
         adapters = new ArrayList<>();
         adapters.add(new GroupRecyclerViewAdapter(context, appData.getMenuList(context, appData.breakfastMenuDictionary), false, 0));
         adapters.add(new GroupRecyclerViewAdapter(context, appData.getMenuList(context, appData.lunchMenuDictionary), false, 1));

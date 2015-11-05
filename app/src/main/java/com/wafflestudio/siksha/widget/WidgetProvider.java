@@ -30,6 +30,8 @@ public class WidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(final Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        Log.d("widget", "onUpdate()");
+
         if (!JSONDownloader.isJSONUpdated(context)) {
             if (DeviceNetwork.getInstance().isOnline())
                 new JSONDownloader(context, JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD).start();

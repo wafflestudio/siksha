@@ -17,6 +17,7 @@ public class Preference {
     public static final String PREF_KEY_ALARM_ALREADY_SET = "alarm_already_set";
     public static final String PREF_KEY_WIDGET_FEATURE_ALERTED = "widget_feature_alerted";
     public static final String PREF_KEY_EMPTY_MENU_INVISIBLE = "empty_menu_invisible";
+    public static final String PREF_KEY_UPDATE_ON_RESUME = "update_on_resume";
 
     public static final String PREF_KEY_CURRENT_APP_VERSION = "current_app_version";
     public static final String PREF_KEY_LATEST_APP_VERSION = "latest_app_version";

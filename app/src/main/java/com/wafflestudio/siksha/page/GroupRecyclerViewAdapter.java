@@ -101,11 +101,11 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
                     if (!drawerExpandedList.contains(name)) {
                         notEmptyRestaurantViewHolder.actionContainer.setVisibility(View.GONE);
-                        Animations.rotate(notEmptyRestaurantViewHolder.drawerButton, 0.0f, 0.0f, false);
+                        Animations.rotate(notEmptyRestaurantViewHolder.drawerButton, 0.0f, 0.0f, 500, false);
                     }
                     else {
                         notEmptyRestaurantViewHolder.actionContainer.setVisibility(View.VISIBLE);
-                        Animations.rotate(notEmptyRestaurantViewHolder.drawerButton, 0.0f, -180.0f, false);
+                        Animations.rotate(notEmptyRestaurantViewHolder.drawerButton, 0.0f, -180.0f, 500, false);
                     }
                 }
                 break;
@@ -169,11 +169,11 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 case R.id.not_empty_restaurant_layout_drawer_button:
                     if (!drawerExpandedList.contains(name)) {
                         drawerExpandedList.add(name);
-                        Animations.rotate(drawerButton, 0.0f, -180.0f, false);
+                        Animations.rotate(drawerButton, 0.0f, -180.0f, 500, false);
                         Animations.expand(actionContainer, true);
                     } else {
                         drawerExpandedList.remove(name);
-                        Animations.rotate(drawerButton, -180.0f, -360.0f, false);
+                        Animations.rotate(drawerButton, -180.0f, -360.0f, 500, false);
                         Animations.collapse(actionContainer, true);
                     }
                     break;

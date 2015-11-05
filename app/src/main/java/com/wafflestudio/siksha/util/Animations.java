@@ -200,10 +200,10 @@ public class Animations {
         conceal(view, slideAnimator);
     }
 
-    public static void rotate(final View view, float startDegrees, float endDegrees, boolean infinite) {
+    public static void rotate(final View view, float startDegrees, float endDegrees, int duration, boolean infinite) {
         ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(view, View.ROTATION, startDegrees, endDegrees);
         rotateAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-        rotateAnimator.setDuration(500);
+        rotateAnimator.setDuration(duration);
 
         if (infinite)
             rotateAnimator.setRepeatCount(Animation.INFINITE);
@@ -211,10 +211,10 @@ public class Animations {
         rotateAnimator.start();
     }
 
-    public static void fade(final View view, float startAlpha, float endAlpha) {
+    public static void fade(final View view, float startAlpha, float endAlpha, int duration) {
         ObjectAnimator fadeAnimator = ObjectAnimator.ofFloat(view, View.ALPHA, startAlpha, endAlpha);
         fadeAnimator.setInterpolator(new AccelerateInterpolator());
-        fadeAnimator.setDuration(300);
+        fadeAnimator.setDuration(duration);
 
         fadeAnimator.start();
     }

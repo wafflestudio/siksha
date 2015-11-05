@@ -5,7 +5,10 @@
     <string name="ga_logLevel">verbose</string>
 
     <!-- Enable automatic Activity measurement -->
-    <bool name="ga_autoActivityTracking">false</bool>
+    <bool name="ga_autoActivityTracking">true</bool>
+
+    <!-- The screen names that will appear in reports -->
+    <screenName name="com.wafflestudio.siksha.MainActivity">MainActivity</screenName>
 
     <!--  The following value should be replaced with correct property id. -->
     <string name="ga_trackingId">UA-69639124-1</string>

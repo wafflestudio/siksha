@@ -11,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wafflestudio.siksha.AnalyticsTrackers;
 import com.wafflestudio.siksha.AppVersionActivity;
 import com.wafflestudio.siksha.DeveloperActivity;
 import com.wafflestudio.siksha.LicenseActivity;
@@ -76,7 +77,7 @@ public class SettingsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     break;
                 case 2:
                     if (DeviceNetwork.getInstance().isOnline())
-                        ((MainActivity) context).downloadMenuData();
+                        ((MainActivity) context).downloadMenuData(false);
                     else
                         Toast.makeText(context, R.string.check_network_state, Toast.LENGTH_SHORT).show();
                     break;
@@ -98,11 +99,15 @@ public class SettingsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         }
 
         @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            if (isChecked)
+        public void onCheckedChanged(CompoundButton buttonView, boolean checked) {
+            if (checked) {
                 Preference.save(context, Preference.PREF_APP_NAME, Preference.PREF_KEY_EMPTY_MENU_INVISIBLE, true);
-            else
+                AnalyticsTrackers.getInstance().trackEvent("Settings", "메뉴 없는 식당 안 보기", "true");
+            }
+            else {
                 Preference.save(context, Preference.PREF_APP_NAME, Preference.PREF_KEY_EMPTY_MENU_INVISIBLE, false);
+                AnalyticsTrackers.getInstance().trackEvent("Settings", "메뉴 없는 식당 안 보기", "false");
+            }
         }
     }
 
@@ -122,7 +127,7 @@ public class SettingsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             switch (getAdapterPosition()) {
                 case 5:
                     Intent intent = new Intent(context, SequenceActivity.class);
-                    intent.putExtra("is_about_bookmark", true);
+                    intent.putExtra("about_bookmark", true);
                     context.startActivity(intent);
                     break;
                 case 8:

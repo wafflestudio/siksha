@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 
 public class JSONDownloadReceiver extends BroadcastReceiver {
-    public static final String ACTION_MENU_FOREGROUND_DOWNLOAD = "com.wafflestudio.siksha.JSONDownloader.ACTION_MENU_FOREGROUND_DOWNLOAD";
     public static final String ACTION_MENU_BACKGROUND_DOWNLOAD = "com.wafflestudio.siksha.JSONDownloader.ACTION_MENU_BACKGROUND_DOWNLOAD";
+    public static final String ACTION_MENU_FOREGROUND_DOWNLOAD = "com.wafflestudio.siksha.JSONDownloader.ACTION_MENU_FOREGROUND_DOWNLOAD";
     public static final String ACTION_INFORMATION_DOWNLOAD = "com.wafflestudio.siksha.JSONDownloader.INFORMATION_DOWNLOAD";
     public static final String ACTION_LATEST_APP_VERSION_CHECK = "com.wafflestudio.siksha.JSONDownloader.LATEST_APP_VERSION_CHECK";
 

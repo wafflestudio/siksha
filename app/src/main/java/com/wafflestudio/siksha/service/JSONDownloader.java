@@ -236,6 +236,10 @@ public class JSONDownloader {
                     writeJSONOnInternalStorage(response);
                     updateLatestDownloadTime(Preference.PREF_KEY_LATEST_MENU_DATA, Date.getDate(Date.TYPE_NORMAL));
                     updateRefreshTimestamp();
+
+                    if (action.equals(JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD))
+                        Preference.save(context, Preference.PREF_APP_NAME, Preference.PREF_KEY_UPDATE_ON_RESUME, true);
+
                     sendSignalToWidget(WidgetProvider.STATE_NEW_DATA_FETCHED);
                     sendSignalToApp(action, JSONDownloadReceiver.TYPE_ON_SUCCESS);
                 }
