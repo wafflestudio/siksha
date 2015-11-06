@@ -23,10 +23,10 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (!data.empty) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.menu_layout, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.menu_item, parent, false);
             return new MenuViewHolder(view);
         } else {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.empty_menu_layout, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.empty_menu_item, parent, false);
             return new EmptyMenuViewHolder(view);
         }
     }

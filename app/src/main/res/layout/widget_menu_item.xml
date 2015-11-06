@@ -15,7 +15,7 @@
         android:gravity="center"
         android:textColor="@color/black"
         android:textSize="13sp"
-        android:background="@drawable/price_style" />
+        android:background="@drawable/widget_price_view_background" />
 
     <TextView
         android:id="@+id/widget_menu_name_view"

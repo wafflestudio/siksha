@@ -31,7 +31,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/dialog_button_style"
+            android:background="@drawable/dialog_reply_button_background"
             android:text="@string/reply_yes"
             android:textSize="19sp" />
 
@@ -45,7 +45,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/dialog_button_style"
+            android:background="@drawable/dialog_reply_button_background"
             android:text="@string/reply_no"
             android:textSize="19sp" />
 

@@ -110,12 +110,12 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
                     if (!drawerExpandedList.contains(name)) {
                         notEmptyRestaurantViewHolder.actionContainer.setVisibility(View.GONE);
-                        ObjectAnimator animator = Animations.makeRotateAnimator(notEmptyRestaurantViewHolder.drawerButton, 0.0f, 0.0f, 500, false);
+                        ObjectAnimator animator = Animations.makeRotateAnimator(notEmptyRestaurantViewHolder.drawerButton, 0.0f, 0.0f, 400, false);
                         animator.setInterpolator(new LinearInterpolator());
                         animator.start();
                     } else {
                         notEmptyRestaurantViewHolder.actionContainer.setVisibility(View.VISIBLE);
-                        ObjectAnimator animator = Animations.makeRotateAnimator(notEmptyRestaurantViewHolder.drawerButton, 0.0f, -180.0f, 500, false);
+                        ObjectAnimator animator = Animations.makeRotateAnimator(notEmptyRestaurantViewHolder.drawerButton, 0.0f, -180.0f, 400, false);
                         animator.setInterpolator(new LinearInterpolator());
                         animator.start();
                     }
@@ -394,10 +394,25 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         public EmptyBookmarkViewHolder(View itemView) {
             super(itemView);
-            titleView = (TextView) itemView.findViewById(R.id.empty_bookmark_card_view_holder_title_view);
-            messageView = (TextView) itemView.findViewById(R.id.empty_bookmark_card_view_holder_message_view);
+            titleView = (TextView) itemView.findViewById(R.id.empty_bookmark_layout_title_view);
+            messageView = (TextView) itemView.findViewById(R.id.empty_bookmark_layout_message_view);
             titleView.setTypeface(Fonts.fontBMJua);
             messageView.setTypeface(Fonts.fontAPAritaDotumMedium);
+
+            float radius = UnitConverter.convertDpToPx(5.0f);
+            float[] radii = {0.0f, 0.0f, 0.0f, 0.0f, radius, radius, radius, radius};
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                LinearLayout messageViewWrapper = (LinearLayout) itemView.findViewById(R.id.empty_bookmark_layout_message_view_wrapper);
+                changeBackgroundDrawable(messageViewWrapper, R.color.white, radii);
+            }
+        }
+
+        private void changeBackgroundDrawable(View view, int colorResourceID, float[] radii) {
+            GradientDrawable gradientDrawable = new GradientDrawable();
+            gradientDrawable.setColor(context.getResources().getColor(colorResourceID));
+            gradientDrawable.setCornerRadii(radii);
+
+            view.setBackgroundDrawable(gradientDrawable);
         }
     }
 }

@@ -13,7 +13,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/empty_bookmark_card_view_holder_title_view"
+            android:id="@+id/empty_bookmark_layout_title_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -25,16 +25,17 @@
             android:textSize="18sp" />
 
         <LinearLayout
+            android:id="@+id/empty_bookmark_layout_message_view_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/empty_bookmark_card_view_holder_title_view"
+            android:layout_below="@id/empty_bookmark_layout_title_view"
             android:layout_centerHorizontal="true"
             android:background="@color/white"
             android:orientation="vertical"
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/empty_bookmark_card_view_holder_message_view"
+                android:id="@+id/empty_bookmark_layout_message_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

@@ -16,7 +16,7 @@
             android:layout_width="192dp"
             android:layout_height="192dp"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_launcher_big"
+            android:src="@drawable/ic_launcher_with_shadow"
             android:scaleType="fitXY" />
 
         <TextView
