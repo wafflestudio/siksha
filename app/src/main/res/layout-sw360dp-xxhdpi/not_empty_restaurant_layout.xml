@@ -4,8 +4,9 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="7dp"
+    android:layout_margin="10dp"
     android:alpha="0.87"
+    card_view:cardPreventCornerOverlap="false"
     card_view:cardBackgroundColor="@color/color_primary"
     card_view:cardCornerRadius="5dp"
     card_view:cardElevation="2dp">
@@ -29,7 +30,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
                 android:gravity="center"
-                android:paddingTop="1.5dp"
+                android:paddingTop="2.5dp"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -48,7 +49,8 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/not_empty_restaurant_layout_header_view"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="-40dp"
+            android:layout_marginBottom="-20dp"
+            android:layout_marginRight="10dp"
             android:src="@drawable/ic_expand"
             android:alpha="0.99"
             app:backgroundTint="@color/color_primary"
@@ -75,14 +77,15 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="-5dp">
+                    android:layout_margin="5dp"
+                    android:orientation="vertical">
 
                     <android.support.design.widget.FloatingActionButton
                         android:id="@+id/group_info_popup_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
+                        android:layout_margin="5dp"
                         android:src="@drawable/ic_info_popup"
                         app:backgroundTint="@color/color_primary"
                         app:borderWidth="0dp"
@@ -94,7 +97,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="-10dp"
                         android:text="@string/restaurant_information"
                         android:textColor="@color/white"
                         android:textSize="12sp" />
@@ -104,14 +106,15 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="-5dp">
+                    android:layout_margin="5dp"
+                    android:orientation="vertical">
 
                     <android.support.design.widget.FloatingActionButton
                         android:id="@+id/group_bookmark_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
+                        android:layout_margin="5dp"
                         android:src="@drawable/ic_star"
                         app:backgroundTint="@color/color_primary"
                         app:borderWidth="0dp"
@@ -123,7 +126,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="-10dp"
                         android:text="@string/bookmark"
                         android:textColor="@color/white"
                         android:textSize="12sp" />
@@ -133,14 +135,15 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="-5dp">
+                    android:layout_margin="5dp"
+                    android:orientation="vertical">
 
                     <android.support.design.widget.FloatingActionButton
                         android:id="@+id/group_kakaotalk_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
+                        android:layout_margin="5dp"
                         android:src="@drawable/ic_talk"
                         app:backgroundTint="@color/color_primary"
                         app:borderWidth="0dp"
@@ -152,7 +155,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="-10dp"
                         android:text="@string/sharing"
                         android:textColor="@color/white"
                         android:textSize="12sp" />

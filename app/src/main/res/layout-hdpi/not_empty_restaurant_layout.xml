@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="7dp"
     android:alpha="0.87"
+    card_view:cardPreventCornerOverlap="false"
     card_view:cardBackgroundColor="@color/color_primary"
     card_view:cardCornerRadius="5dp"
     card_view:cardElevation="2dp">
@@ -76,7 +77,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginTop="-5dp">
+                    android:layout_marginTop="-5dp"
+                    android:layout_marginBottom="2dp">
 
                     <android.support.design.widget.FloatingActionButton
                         android:id="@+id/group_info_popup_button"
@@ -105,7 +107,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginTop="-5dp">
+                    android:layout_marginTop="-5dp"
+                    android:layout_marginBottom="2dp">
 
                     <android.support.design.widget.FloatingActionButton
                         android:id="@+id/group_bookmark_button"
@@ -134,7 +137,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginTop="-5dp">
+                    android:layout_marginTop="-5dp"
+                    android:layout_marginBottom="2dp">
 
                     <android.support.design.widget.FloatingActionButton
                         android:id="@+id/group_kakaotalk_button"
