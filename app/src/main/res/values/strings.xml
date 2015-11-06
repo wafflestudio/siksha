@@ -20,8 +20,8 @@
     <string name="now_downloading">식단을 다운로드하고 있습니다...</string>
     <string name="back_pressed_twice_quit">\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.</string>
 
-    <string name="empty_bookmark">즐겨찾는 식당이 없습니다.</string>
-    <string name="alert_how_to_bookmark">식단 탭에서 즐겨찾는 식당을 추가해보세요.</string>
+    <string name="empty_bookmark">즐겨 찾는 식당이 없습니다.</string>
+    <string name="alert_how_to_bookmark">식단 탭에서 즐겨 찾는 식당을 추가해보세요.</string>
 
     <string name="message_to_touch_edit_button">하단의 편집 버튼을 눌러 순서를 바꿔보세요.</string>
     <string name="message_to_touch_confirm_button">식당을 길게 누른 상태에서 상하로 움직여보세요.\n그리고 확인 버튼을 눌러 저장하세요.</string>

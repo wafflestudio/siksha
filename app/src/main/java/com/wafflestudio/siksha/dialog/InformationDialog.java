@@ -2,11 +2,7 @@ package com.wafflestudio.siksha.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.Shape;
 import android.os.Build;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -33,8 +29,8 @@ public class InformationDialog extends Dialog {
         TextView locationMessageView = (TextView) findViewById(R.id.location_message_view);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            float[] radii = {15.0f, 15.0f, 15.0f, 15.0f, 0.0f, 0.0f, 0.0f, 0.0f};
-            setBackgroundForPreLollipop(headerView, R.color.color_primary, radii);
+            float[] radii = {40.0f, 40.0f, 40.0f, 40.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+            changeBackgroundDrawable(headerView, R.color.color_primary, radii);
         }
         nameView.setTextColor(context.getResources().getColor(R.color.color_primary));
 
@@ -49,7 +45,7 @@ public class InformationDialog extends Dialog {
         locationMessageView.setText(AppData.getInstance().getInformationDictionary().get(name).location);
     }
 
-    private void setBackgroundForPreLollipop(View view, int colorResourceID, float[] radii) {
+    private void changeBackgroundDrawable(View view, int colorResourceID, float[] radii) {
         GradientDrawable gradientDrawable = new GradientDrawable();
         gradientDrawable.setColor(context.getResources().getColor(colorResourceID));
         gradientDrawable.setCornerRadii(radii);

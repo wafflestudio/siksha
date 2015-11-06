@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:alpha="0.87"
-    card_view:cardPreventCornerOverlap="false"
     card_view:cardBackgroundColor="@color/color_primary"
     card_view:cardCornerRadius="5dp"
     card_view:cardElevation="2dp">
@@ -59,6 +58,7 @@
             app:rippleColor="@color/color_accent" />
 
         <io.codetail.widget.RevealFrameLayout
+            android:id="@+id/group_reveal_frame_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/not_empty_restaurant_layout_recycler_view"

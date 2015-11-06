@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.codetail.animation.SupportAnimator;
+import io.codetail.widget.RevealFrameLayout;
 
 /**
  * Created by Gyu Kang on 2015-10-13.
@@ -111,8 +112,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                         ObjectAnimator animator = Animations.makeRotateAnimator(notEmptyRestaurantViewHolder.drawerButton, 0.0f, 0.0f, 500, false);
                         animator.setInterpolator(new LinearInterpolator());
                         animator.start();
-                    }
-                    else {
+                    } else {
                         notEmptyRestaurantViewHolder.actionContainer.setVisibility(View.VISIBLE);
                         ObjectAnimator animator = Animations.makeRotateAnimator(notEmptyRestaurantViewHolder.drawerButton, 0.0f, -180.0f, 500, false);
                         animator.setInterpolator(new LinearInterpolator());
@@ -165,10 +165,13 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             recyclerView.setNestedScrollingEnabled(false);
             recyclerView.setLayoutManager(new NestedLinearLayoutManager(context));
 
+            float[] radii = {0.0f, 0.0f, 0.0f, 0.0f, 15.0f, 15.0f, 15.0f, 15.0f};
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                float[] radii = {0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 5.0f, 5.0f, 5.0f};
-                setBackgroundForPreLollipop(recyclerView, R.color.white, radii);
+                RevealFrameLayout revealFrameLayout = (RevealFrameLayout) itemView.findViewById(R.id.group_reveal_frame_layout);
+                changeBackgroundDrawable(revealFrameLayout, R.color.white, radii);
+                changeBackgroundDrawable(recyclerView, R.color.white, radii);
             }
+            changeBackgroundDrawable(actionContainer, R.color.color_primary, radii);
 
             drawerButton.setOnClickListener(this);
             kakaotalkButton.setOnClickListener(this);
@@ -176,7 +179,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             bookmarkButton.setOnClickListener(this);
         }
 
-        private void setBackgroundForPreLollipop(View view, int colorResourceID, float[] radii) {
+        private void changeBackgroundDrawable(View view, int colorResourceID, float[] radii) {
             GradientDrawable gradientDrawable = new GradientDrawable();
             gradientDrawable.setColor(context.getResources().getColor(colorResourceID));
             gradientDrawable.setCornerRadii(radii);
@@ -196,17 +199,19 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                             AnimatorSet animatorSet = new AnimatorSet();
-                            ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, 0.0f, -180.0f, 400, false);
+                            final ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, 0.0f, -180.0f, 400, false);
                             rotateAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
                             Animator expandAnimator = Animations.makeExpandAnimator(actionContainer, 150);
-                            final SupportAnimator revealAnimator = (SupportAnimator) Animations.makeRevealAnimator(actionContainer, 250);
+                            final com.nineoldandroids.animation.Animator revealAnimator = (com.nineoldandroids.animation.Animator) ((SupportAnimator) Animations.makeRevealAnimator(actionContainer, 250)).get();
 
                             animatorSet.play(expandAnimator);
                             animatorSet.addListener(new Animator.AnimatorListener() {
                                 @Override
                                 public void onAnimationStart(Animator animator) {
+                                    rotateAnimator.start();
+
                                     float[] radii = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
-                                    setBackgroundForPreLollipop(recyclerView, R.color.white, radii);
+                                    changeBackgroundDrawable(recyclerView, R.color.white, radii);
                                 }
 
                                 @Override
@@ -216,19 +221,15 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
                                 @Override
                                 public void onAnimationCancel(Animator animator) {
-
                                 }
 
                                 @Override
                                 public void onAnimationRepeat(Animator animator) {
-
                                 }
                             });
 
-                            rotateAnimator.start();
                             animatorSet.start();
-                        }
-                        else {
+                        } else {
                             AnimatorSet animatorSet = new AnimatorSet();
                             Animator expandAnimator = Animations.makeExpandAnimator(actionContainer, 150);
                             Animator revealAnimator = (Animator) Animations.makeRevealAnimator(actionContainer, 250);
@@ -237,6 +238,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
                             animatorSet.play(rotateAnimator).with(expandAnimator);
                             animatorSet.play(expandAnimator).before(revealAnimator);
+
                             animatorSet.start();
                         }
                     } else {
@@ -245,7 +247,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                             final AnimatorSet animatorSet = new AnimatorSet();
                             com.nineoldandroids.animation.AnimatorSet supportAnimatorSet = new com.nineoldandroids.animation.AnimatorSet();
-                            ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, -180.0f, -360.0f, 400, false);
+                            final ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, -180.0f, -360.0f, 400, false);
                             rotateAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
                             com.nineoldandroids.animation.Animator concealAnimator = (com.nineoldandroids.animation.Animator) ((SupportAnimator) Animations.makeConcealAnimator(actionContainer, 250)).get();
                             final Animator collapseAnimator = Animations.makeCollapseAnimator(actionContainer, 150);
@@ -258,8 +260,8 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
                                 @Override
                                 public void onAnimationEnd(Animator animator) {
-                                    float[] radii = {0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 5.0f, 5.0f, 5.0f};
-                                    setBackgroundForPreLollipop(recyclerView, R.color.white, radii);
+                                    float[] radii = {0.0f, 0.0f, 0.0f, 0.0f, 15.0f, 15.0f, 15.0f, 15.0f};
+                                    changeBackgroundDrawable(recyclerView, R.color.white, radii);
                                 }
 
                                 @Override
@@ -275,6 +277,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                             supportAnimatorSet.addListener(new com.nineoldandroids.animation.Animator.AnimatorListener() {
                                 @Override
                                 public void onAnimationStart(com.nineoldandroids.animation.Animator animation) {
+                                    rotateAnimator.start();
                                 }
 
                                 @Override
@@ -291,10 +294,8 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                                 }
                             });
 
-                            rotateAnimator.start();
                             supportAnimatorSet.start();
-                        }
-                        else {
+                        } else {
                             AnimatorSet animatorSet = new AnimatorSet();
                             Animator collapseAnimator = Animations.makeCollapseAnimator(actionContainer, 150);
                             Animator concealAnimator = (Animator) Animations.makeConcealAnimator(actionContainer, 250);
@@ -303,6 +304,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
                             animatorSet.play(rotateAnimator).with(concealAnimator);
                             animatorSet.play(concealAnimator).before(collapseAnimator);
+
                             animatorSet.start();
                         }
                     }
