@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
     private SwipeDisabledViewPagerAdapter adapter;
     private JSONDownloadReceiver JSONDownloadReceiver;
 
+    private boolean defaultTabSelect;
     private boolean backPressedTwice;
 
     @Override
@@ -72,27 +73,26 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
         if (JSONDownloader.isJSONUpdated(this)) {
             AppData.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(getApplicationContext(), Menu.class).data);
             setupViewPager();
-            selectInitialTab();
+            selectDefaultTab();
             alertWidgetFeature();
         } else {
             if (!DeviceNetwork.getInstance().isOnline())
                 new DownloadAlertDialog(this).show();
             else
-                downloadMenuData(true);
+                downloadMenuData(JSONDownloadReceiver.ACTION_MENU_DOWNLOAD, true);
         }
     }
 
-    public void downloadMenuData(boolean splash) {
+    public void downloadMenuData(String action, boolean splash) {
         if (splash) {
             loadingDialog = new SplashDialog(this);
             ((SplashDialog) loadingDialog).start();
-        }
-        else {
+        } else {
             loadingDialog = new ProgressDialog(this);
             ((ProgressDialog) loadingDialog).start();
         }
 
-        new JSONDownloader(this, JSONDownloadReceiver.ACTION_MENU_FOREGROUND_DOWNLOAD).start();
+        new JSONDownloader(this, action).start();
     }
 
     private void checkInformationData() {
@@ -133,13 +133,25 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
 
             @Override
             public void onPageSelected(int position) {
-                if (position == 0) {
-                    ((BookmarkFragment) adapter.getItem(position)).notifyToAdapters();
-                } else if (position == 1) {
-                    ((MenuFragment) adapter.getItem(position)).notifyToAdapters();
-                } else if (position == 2) {
-                    ((SettingsFragment) adapter.getItem(position)).notifyToAdapter();
+                if (!defaultTabSelect) {
+                    switch (position) {
+                        case 0:
+                            BookmarkFragment bookmarkFragment = (BookmarkFragment) adapter.getItem(position);
+                            bookmarkFragment.notifyToAdapters();
+                            bookmarkFragment.refreshPageIndicators(bookmarkFragment.getSelectedPosition());
+                            break;
+                        case 1:
+                            MenuFragment menuFragment = (MenuFragment) adapter.getItem(position);
+                            menuFragment.notifyToAdapters();
+                            menuFragment.refreshPageIndicators(menuFragment.getSelectedPosition());
+                            break;
+                        case 2:
+                            ((SettingsFragment) adapter.getItem(position)).notifyToAdapter();
+                            break;
+                    }
                 }
+
+                defaultTabSelect = false;
             }
 
             @Override
@@ -229,7 +241,9 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
         tabLayout.getTabAt(tabIndex).setCustomView(view);
     }
 
-    private void selectInitialTab() {
+    private void selectDefaultTab() {
+        defaultTabSelect = true;
+
         if (Preference.loadStringValue(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_BOOKMARKS).equals(""))
             tabLayout.getTabAt(1).select();
         else
@@ -249,9 +263,11 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
         Log.d("register_receiver", "JSONDownloadReceiver");
 
         IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(JSONDownloadReceiver.ACTION_MENU_REFRESH);
+        intentFilter.addAction(JSONDownloadReceiver.ACTION_MENU_DOWNLOAD);
         intentFilter.addAction(JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD);
-        intentFilter.addAction(JSONDownloadReceiver.ACTION_MENU_FOREGROUND_DOWNLOAD);
         intentFilter.addAction(JSONDownloadReceiver.ACTION_INFORMATION_DOWNLOAD);
+        intentFilter.addAction(JSONDownloadReceiver.ACTION_LATEST_APP_VERSION_CHECK);
         intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
 
         registerReceiver(JSONDownloadReceiver, intentFilter);
@@ -291,13 +307,17 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
     @Override
     protected void onResume() {
         registerReceiver();
+        super.onResume();
 
         if (Preference.loadBooleanValue(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_UPDATE_ON_RESUME)) {
             AppData.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(getApplicationContext(), Menu.class).data);
+
+            ((BookmarkFragment) adapter.getItem(0)).notifyToAdapters();
+            ((MenuFragment) adapter.getItem(1)).notifyToAdapters();
+            ((SettingsFragment) adapter.getItem(2)).notifyToAdapter();
+
             Preference.save(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_UPDATE_ON_RESUME, false);
         }
-
-        super.onResume();
     }
 
     @Override
@@ -309,15 +329,23 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
                 ((ProgressDialog) loadingDialog).quit();
         }
 
-        if (action.equals(JSONDownloadReceiver.ACTION_INFORMATION_DOWNLOAD)) {
-            AppData.getInstance().setInformationDictionary(JSONParser.parseJSONFile(this, Information.class).data);
-        } else if (action.equals(JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD)) {
-            AppData.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(getApplicationContext(), Menu.class).data);
+        if (action.equals(JSONDownloadReceiver.ACTION_LATEST_APP_VERSION_CHECK)) {
         }
-        else if (action.equals(JSONDownloadReceiver.ACTION_MENU_FOREGROUND_DOWNLOAD)) {
+        else if (action.equals(JSONDownloadReceiver.ACTION_INFORMATION_DOWNLOAD)) {
+            AppData.getInstance().setInformationDictionary(JSONParser.parseJSONFile(this, Information.class).data);
+        }
+        else if (action.equals(JSONDownloadReceiver.ACTION_MENU_REFRESH)) {
+            AppData.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(getApplicationContext(), Menu.class).data);
+            ((SettingsFragment) adapter.getItem(2)).notifyToAdapter();
+        }
+        else if (action.equals(JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD)) {
+            AppData.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(getApplicationContext(), Menu.class).data);
+            Preference.save(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_UPDATE_ON_RESUME, false);
+            ((SettingsFragment) adapter.getItem(2)).notifyToAdapter();
+        } else if (action.equals(JSONDownloadReceiver.ACTION_MENU_DOWNLOAD)) {
             AppData.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(getApplicationContext(), Menu.class).data);
             setupViewPager();
-            selectInitialTab();
+            selectDefaultTab();
             alertWidgetFeature();
         }
     }
@@ -331,7 +359,7 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
                 ((ProgressDialog) loadingDialog).quit();
         }
 
-        if (action.equals(JSONDownloadReceiver.ACTION_MENU_FOREGROUND_DOWNLOAD))
+        if (action.equals(JSONDownloadReceiver.ACTION_MENU_DOWNLOAD))
             new DownloadAlertDialog(getApplicationContext()).show();
     }
 }

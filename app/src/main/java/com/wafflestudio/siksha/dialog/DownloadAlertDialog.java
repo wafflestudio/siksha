@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.wafflestudio.siksha.MainActivity;
 import com.wafflestudio.siksha.R;
+import com.wafflestudio.siksha.service.JSONDownloadReceiver;
 import com.wafflestudio.siksha.util.Fonts;
 import com.wafflestudio.siksha.util.DeviceNetwork;
 
@@ -37,7 +38,7 @@ public class DownloadAlertDialog extends Dialog {
             public void onClick(View v) {
                 if (DeviceNetwork.getInstance().isOnline()) {
                     dismiss();
-                    ((MainActivity) context).downloadMenuData(true);
+                    ((MainActivity) context).downloadMenuData(JSONDownloadReceiver.ACTION_MENU_DOWNLOAD, true);
                 }
                 else {
                     Toast.makeText(context, R.string.check_network_state, Toast.LENGTH_SHORT).show();

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.page.GroupRecyclerViewAdapter;
+import com.wafflestudio.siksha.page.TimeSlotPage;
 import com.wafflestudio.siksha.page.ViewPagerAdapter;
 import com.wafflestudio.siksha.util.AppData;
 import com.wafflestudio.siksha.util.Date;
@@ -30,23 +31,20 @@ public class BookmarkFragment extends Fragment {
     private ViewPager viewPager;
 
     private Context context;
-    private AppData appData;
-    private List<GroupRecyclerViewAdapter> adapters;
+    private ViewPagerAdapter viewPagerAdapter;
+
+    private int selectedPosition;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        context = getContext();
-        appData = AppData.getInstance();
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        setPageIndicators(Date.getTimeSlotIndex());
         viewPager.setCurrentItem(Date.getTimeSlotIndex());
-        notifyToAdapters();
     }
 
     @Nullable
@@ -61,14 +59,11 @@ public class BookmarkFragment extends Fragment {
         pageIndicatorDots.add((ImageView) view.findViewById(R.id.bookmark_page_indicator_dot_1));
         pageIndicatorDots.add((ImageView) view.findViewById(R.id.bookmark_page_indicator_dot_2));
         pageIndicatorDots.add((ImageView) view.findViewById(R.id.bookmark_page_indicator_dot_3));
-        setPageIndicators(Date.getTimeSlotIndex());
+        refreshPageIndicators(Date.getTimeSlotIndex());
 
         viewPager = (ViewPager) view.findViewById(R.id.bookmark_view_pager);
-        adapters = new ArrayList<>();
-        adapters.add(new GroupRecyclerViewAdapter(context, appData.getBookmarkMenuList(context, appData.breakfastMenuDictionary), true, 0));
-        adapters.add(new GroupRecyclerViewAdapter(context, appData.getBookmarkMenuList(context, appData.lunchMenuDictionary), true, 1));
-        adapters.add(new GroupRecyclerViewAdapter(context, appData.getBookmarkMenuList(context, appData.dinnerMenuDictionary), true, 2));
-        viewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager(), adapters));
+        viewPagerAdapter = new ViewPagerAdapter(context, getChildFragmentManager(), true);
+        viewPager.setAdapter(viewPagerAdapter);
         viewPager.setOffscreenPageLimit(2);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -77,7 +72,8 @@ public class BookmarkFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                setPageIndicators(position);
+                refreshPageIndicators(position);
+                setSelectedPosition(position);
             }
 
             @Override
@@ -89,7 +85,7 @@ public class BookmarkFragment extends Fragment {
         return view;
     }
 
-    private void setPageIndicators(int position) {
+    public void refreshPageIndicators(int position) {
         dateView.setText(new StringBuilder().append(Date.getPrimaryTimestamp(Date.TYPE_NORMAL)).append(" ").append(Date.getTimeSlot(position)).toString());
 
         for (int i = 0; i < pageIndicatorDots.size(); i++) {
@@ -100,14 +96,28 @@ public class BookmarkFragment extends Fragment {
         }
     }
 
+    private void setSelectedPosition(int position) {
+        this.selectedPosition = position;
+    }
+
+    public int getSelectedPosition() {
+        return selectedPosition;
+    }
+
     public void notifyToAdapters() {
-        if (adapters != null && adapters.size() == 3) {
+        AppData appData = AppData.getInstance();
+        List<GroupRecyclerViewAdapter> adapters = new ArrayList<>();
+
+        for (int i = 0; i < viewPagerAdapter.getCount(); i++)
+            adapters.add(((TimeSlotPage) viewPagerAdapter.getItem(i)).getAdapter());
+
+        if (adapters.size() == viewPagerAdapter.getCount()) {
             adapters.get(0).replaceData(appData.getBookmarkMenuList(context, appData.breakfastMenuDictionary));
             adapters.get(1).replaceData(appData.getBookmarkMenuList(context, appData.lunchMenuDictionary));
             adapters.get(2).replaceData(appData.getBookmarkMenuList(context, appData.dinnerMenuDictionary));
-
-            for (int i = 0; i < adapters.size(); i++)
-                adapters.get(i).notifyDataSetChanged();
         }
+
+        for (int i = 0; i < viewPagerAdapter.getCount(); i++)
+            adapters.get(i).notifyDataSetChanged();
     }
 }

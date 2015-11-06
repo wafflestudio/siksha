@@ -12,6 +12,6 @@ public class AlarmServiceReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent alarmIntent) {
         Log.d("alarm_firing_time", Date.getRefreshTimestamp());
 
-        new JSONDownloader(context, com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD).start();
+        new JSONDownloader(context, JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD).start();
     }
 }

@@ -18,6 +18,7 @@ import com.wafflestudio.siksha.LicenseActivity;
 import com.wafflestudio.siksha.MainActivity;
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.SequenceActivity;
+import com.wafflestudio.siksha.service.JSONDownloadReceiver;
 import com.wafflestudio.siksha.util.DeviceNetwork;
 import com.wafflestudio.siksha.util.Fonts;
 import com.wafflestudio.siksha.util.Preference;
@@ -77,7 +78,7 @@ public class SettingsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     break;
                 case 2:
                     if (DeviceNetwork.getInstance().isOnline())
-                        ((MainActivity) context).downloadMenuData(false);
+                        ((MainActivity) context).downloadMenuData(JSONDownloadReceiver.ACTION_MENU_REFRESH, false);
                     else
                         Toast.makeText(context, R.string.check_network_state, Toast.LENGTH_SHORT).show();
                     break;

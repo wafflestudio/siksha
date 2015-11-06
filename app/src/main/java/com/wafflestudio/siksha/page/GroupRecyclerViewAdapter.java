@@ -36,6 +36,7 @@ import com.wafflestudio.siksha.util.Fonts;
 import com.wafflestudio.siksha.util.Preference;
 import com.wafflestudio.siksha.util.UnitConverter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,18 +111,40 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
                     if (!drawerExpandedList.contains(name)) {
                         notEmptyRestaurantViewHolder.actionContainer.setVisibility(View.GONE);
-                        ObjectAnimator animator = Animations.makeRotateAnimator(notEmptyRestaurantViewHolder.drawerButton, 0.0f, 0.0f, 400, false);
+
+                        float radius = UnitConverter.convertDpToPx(5.0f);
+                        float[] radii = {0.0f, 0.0f, 0.0f, 0.0f, radius, radius, radius, radius};
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                            changeBackgroundDrawable(notEmptyRestaurantViewHolder.revealFrameLayout, R.color.white, radii);
+                            changeBackgroundDrawable(notEmptyRestaurantViewHolder.recyclerView, R.color.white, radii);
+                        }
+                        changeBackgroundDrawable(notEmptyRestaurantViewHolder.actionContainer, R.color.color_primary, radii);
+
+                        ObjectAnimator animator = Animations.makeRotateAnimator(notEmptyRestaurantViewHolder.drawerButton, 0.0f, 0.0f, 200, false);
                         animator.setInterpolator(new LinearInterpolator());
                         animator.start();
                     } else {
                         notEmptyRestaurantViewHolder.actionContainer.setVisibility(View.VISIBLE);
-                        ObjectAnimator animator = Animations.makeRotateAnimator(notEmptyRestaurantViewHolder.drawerButton, 0.0f, -180.0f, 400, false);
+
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                            float[] radii = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+                            changeBackgroundDrawable(notEmptyRestaurantViewHolder.recyclerView, R.color.white, radii);
+                        }
+
+                        ObjectAnimator animator = Animations.makeRotateAnimator(notEmptyRestaurantViewHolder.drawerButton, 0.0f, -180.0f, 200, false);
                         animator.setInterpolator(new LinearInterpolator());
                         animator.start();
                     }
                 }
                 break;
             case TYPE_EMPTY:
+                EmptyBookmarkViewHolder emptyBookmarkViewHolder = (EmptyBookmarkViewHolder) viewHolder;
+
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    float radius = UnitConverter.convertDpToPx(5.0f);
+                    float[] radii = {0.0f, 0.0f, 0.0f, 0.0f, radius, radius, radius, radius};
+                    changeBackgroundDrawable(emptyBookmarkViewHolder.messageViewWrapper, R.color.white, radii);
+                }
                 break;
         }
     }
@@ -132,9 +155,18 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         return size == 0 ? 1 : size;
     }
 
+    private void changeBackgroundDrawable(View view, int colorResourceID, float[] radii) {
+        GradientDrawable gradientDrawable = new GradientDrawable();
+        gradientDrawable.setColor(context.getResources().getColor(colorResourceID));
+        gradientDrawable.setCornerRadii(radii);
+
+        view.setBackgroundDrawable(gradientDrawable);
+    }
+
     private class NotEmptyRestaurantViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView nameView;
         private RecyclerView recyclerView;
+        private RevealFrameLayout revealFrameLayout;
         private LinearLayout actionContainer;
         private FloatingActionButton drawerButton;
         private FloatingActionButton infoPopupButton;
@@ -148,6 +180,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             super(itemView);
 
             nameView = (TextView) itemView.findViewById(R.id.group_name_view);
+            revealFrameLayout = (RevealFrameLayout) itemView.findViewById(R.id.group_reveal_frame_layout);
             actionContainer = (LinearLayout) itemView.findViewById(R.id.group_action_button_container);
             drawerButton = (FloatingActionButton) itemView.findViewById(R.id.not_empty_restaurant_layout_drawer_button);
             infoPopupButton = (FloatingActionButton) itemView.findViewById(R.id.group_info_popup_button);
@@ -166,27 +199,10 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             recyclerView.setNestedScrollingEnabled(false);
             recyclerView.setLayoutManager(new NestedLinearLayoutManager(context));
 
-            float radius = UnitConverter.convertDpToPx(5.0f);
-            float[] radii = {0.0f, 0.0f, 0.0f, 0.0f, radius, radius, radius, radius};
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                RevealFrameLayout revealFrameLayout = (RevealFrameLayout) itemView.findViewById(R.id.group_reveal_frame_layout);
-                changeBackgroundDrawable(revealFrameLayout, R.color.white, radii);
-                changeBackgroundDrawable(recyclerView, R.color.white, radii);
-            }
-            changeBackgroundDrawable(actionContainer, R.color.color_primary, radii);
-
             drawerButton.setOnClickListener(this);
             kakaotalkButton.setOnClickListener(this);
             infoPopupButton.setOnClickListener(this);
             bookmarkButton.setOnClickListener(this);
-        }
-
-        private void changeBackgroundDrawable(View view, int colorResourceID, float[] radii) {
-            GradientDrawable gradientDrawable = new GradientDrawable();
-            gradientDrawable.setColor(context.getResources().getColor(colorResourceID));
-            gradientDrawable.setCornerRadii(radii);
-
-            view.setBackgroundDrawable(gradientDrawable);
         }
 
         @Override
@@ -390,29 +406,17 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private class EmptyBookmarkViewHolder extends RecyclerView.ViewHolder {
         private TextView titleView;
+        private LinearLayout messageViewWrapper;
         private TextView messageView;
 
         public EmptyBookmarkViewHolder(View itemView) {
             super(itemView);
+
             titleView = (TextView) itemView.findViewById(R.id.empty_bookmark_layout_title_view);
+            messageViewWrapper = (LinearLayout) itemView.findViewById(R.id.empty_bookmark_layout_message_view_wrapper);
             messageView = (TextView) itemView.findViewById(R.id.empty_bookmark_layout_message_view);
             titleView.setTypeface(Fonts.fontBMJua);
             messageView.setTypeface(Fonts.fontAPAritaDotumMedium);
-
-            float radius = UnitConverter.convertDpToPx(5.0f);
-            float[] radii = {0.0f, 0.0f, 0.0f, 0.0f, radius, radius, radius, radius};
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                LinearLayout messageViewWrapper = (LinearLayout) itemView.findViewById(R.id.empty_bookmark_layout_message_view_wrapper);
-                changeBackgroundDrawable(messageViewWrapper, R.color.white, radii);
-            }
-        }
-
-        private void changeBackgroundDrawable(View view, int colorResourceID, float[] radii) {
-            GradientDrawable gradientDrawable = new GradientDrawable();
-            gradientDrawable.setColor(context.getResources().getColor(colorResourceID));
-            gradientDrawable.setCornerRadii(radii);
-
-            view.setBackgroundDrawable(gradientDrawable);
         }
     }
 }
