@@ -34,6 +34,7 @@ import com.wafflestudio.siksha.util.Bookmark;
 import com.wafflestudio.siksha.util.Date;
 import com.wafflestudio.siksha.util.Fonts;
 import com.wafflestudio.siksha.util.Preference;
+import com.wafflestudio.siksha.util.UnitConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -165,7 +166,8 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             recyclerView.setNestedScrollingEnabled(false);
             recyclerView.setLayoutManager(new NestedLinearLayoutManager(context));
 
-            float[] radii = {0.0f, 0.0f, 0.0f, 0.0f, 15.0f, 15.0f, 15.0f, 15.0f};
+            float radius = UnitConverter.convertDpToPx(5.0f);
+            float[] radii = {0.0f, 0.0f, 0.0f, 0.0f, radius, radius, radius, radius};
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 RevealFrameLayout revealFrameLayout = (RevealFrameLayout) itemView.findViewById(R.id.group_reveal_frame_layout);
                 changeBackgroundDrawable(revealFrameLayout, R.color.white, radii);
@@ -260,7 +262,8 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
                                 @Override
                                 public void onAnimationEnd(Animator animator) {
-                                    float[] radii = {0.0f, 0.0f, 0.0f, 0.0f, 15.0f, 15.0f, 15.0f, 15.0f};
+                                    float radius = UnitConverter.convertDpToPx(5.0f);
+                                    float[] radii = {0.0f, 0.0f, 0.0f, 0.0f, radius, radius, radius, radius};
                                     changeBackgroundDrawable(recyclerView, R.color.white, radii);
                                 }
 
@@ -315,7 +318,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                         final KakaoTalkLinkMessageBuilder kakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder();
 
                         StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append(Date.getDate(Date.TYPE_NORMAL) + " " + Date.getTimeSlot(index)).append("\n");
+                        stringBuilder.append(Date.getPrimaryTimestamp(Date.TYPE_NORMAL) + " " + Date.getTimeSlot(index)).append("\n");
                         stringBuilder.append("[" + name + "]").append("\n");
 
                         int size = data.get(position).foods.size();

@@ -53,7 +53,7 @@ public class JSONDownloader {
         String latestDownload = Preference.loadStringValue(context, Preference.PREF_APP_NAME, Preference.PREF_KEY_LATEST_MENU_DATA);
         Log.d("isJSONUpdated()", "latest_download : " + latestDownload);
 
-        return latestDownload.equals(Date.getDate(Date.TYPE_NORMAL));
+        return latestDownload.equals(Date.getPrimaryTimestamp(Date.TYPE_NORMAL));
     }
 
     private void compareLocalAndServerData(final UpdateCallback callback) {
@@ -234,7 +234,7 @@ public class JSONDownloader {
                 @Override
                 public void onSuccess(String response) {
                     writeJSONOnInternalStorage(response);
-                    updateLatestDownloadTime(Preference.PREF_KEY_LATEST_MENU_DATA, Date.getDate(Date.TYPE_NORMAL));
+                    updateLatestDownloadTime(Preference.PREF_KEY_LATEST_MENU_DATA, Date.getPrimaryTimestamp(Date.TYPE_NORMAL));
                     updateRefreshTimestamp();
 
                     if (action.equals(JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD))

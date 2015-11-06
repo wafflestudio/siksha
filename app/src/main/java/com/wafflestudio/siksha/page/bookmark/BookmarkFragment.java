@@ -90,7 +90,7 @@ public class BookmarkFragment extends Fragment {
     }
 
     private void setPageIndicators(int position) {
-        dateView.setText(new StringBuilder().append(Date.getDate(Date.TYPE_NORMAL)).append(" ").append(Date.getTimeSlot(position)).toString());
+        dateView.setText(new StringBuilder().append(Date.getPrimaryTimestamp(Date.TYPE_NORMAL)).append(" ").append(Date.getTimeSlot(position)).toString());
 
         for (int i = 0; i < pageIndicatorDots.size(); i++) {
             if (i == position)

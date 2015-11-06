@@ -8,7 +8,7 @@ public class Date {
     public static final int TYPE_CONCISE = 0;
     public static final int TYPE_NORMAL = 1;
 
-    public static String getDate(int type) {
+    public static String getPrimaryTimestamp(int type) {
         Calendar calendar = Calendar.getInstance();
         String dayOfWeek = "";
 
@@ -101,8 +101,8 @@ public class Date {
         int minute = getMinute();
 
         if (minute >= 0 && minute <= 9)
-            return getDate(Date.TYPE_NORMAL) + " " + getHour() + ":" + "0" + getMinute();
+            return getPrimaryTimestamp(Date.TYPE_NORMAL) + " " + getHour() + ":" + "0" + getMinute();
         else
-            return getDate(Date.TYPE_NORMAL) + " " + getHour() + ":" + getMinute();
+            return getPrimaryTimestamp(Date.TYPE_NORMAL) + " " + getHour() + ":" + getMinute();
     }
 }

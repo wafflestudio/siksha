@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.AppData;
 import com.wafflestudio.siksha.util.Fonts;
+import com.wafflestudio.siksha.util.UnitConverter;
 
 public class InformationDialog extends Dialog {
     private Context context;
@@ -29,7 +30,8 @@ public class InformationDialog extends Dialog {
         TextView locationMessageView = (TextView) findViewById(R.id.location_message_view);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            float[] radii = {40.0f, 40.0f, 40.0f, 40.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+            float radius = UnitConverter.convertDpToPx(15.0f);
+            float[] radii = {radius, radius, radius, radius, 0.0f, 0.0f, 0.0f, 0.0f};
             changeBackgroundDrawable(headerView, R.color.color_primary, radii);
         }
         nameView.setTextColor(context.getResources().getColor(R.color.color_primary));

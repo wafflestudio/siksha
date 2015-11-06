@@ -65,10 +65,10 @@ public class WidgetProvider extends AppWidgetProvider {
         if (success) {
             remoteViews.setRemoteAdapter(R.id.widget_provider_list_view, remoteIntent);
             remoteViews.setEmptyView(R.id.widget_provider_list_view, R.id.widget_provider_empty_view);
-            remoteViews.setTextViewText(R.id.widget_provider_date_view, Date.getDate(Date.TYPE_CONCISE) + " " + Date.getTimeSlot(Date.getTimeSlotIndexForWidget(context, appWidgetID)));
+            remoteViews.setTextViewText(R.id.widget_provider_date_view, Date.getPrimaryTimestamp(Date.TYPE_CONCISE) + " " + Date.getTimeSlot(Date.getTimeSlotIndexForWidget(context, appWidgetID)));
         } else {
             remoteViews.setEmptyView(R.id.widget_provider_list_view, R.id.widget_provider_fetch_failure_view);
-            remoteViews.setTextViewText(R.id.widget_provider_date_view, Date.getDate(Date.TYPE_CONCISE) + " " + Date.getTimeSlot(Date.getTimeSlotIndexForWidget(context, appWidgetID)));
+            remoteViews.setTextViewText(R.id.widget_provider_date_view, Date.getPrimaryTimestamp(Date.TYPE_CONCISE) + " " + Date.getTimeSlot(Date.getTimeSlotIndexForWidget(context, appWidgetID)));
         }
 
         Intent refreshIntent = new Intent(context, WidgetProvider.class);
