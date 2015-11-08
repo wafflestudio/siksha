@@ -12,6 +12,10 @@ import java.util.List;
  */
 
 public class SwipeDisabledViewPagerAdapter extends FragmentPagerAdapter {
+    public static final int INDEX_BOOKMARK_PAGE = 0;
+    public static final int INDEX_MENU_PAGE = 1;
+    public static final int INDEX_SETTINGS_PAGE = 2;
+
     private List<Fragment> fragments;
     private List<String> pageTitles;
 

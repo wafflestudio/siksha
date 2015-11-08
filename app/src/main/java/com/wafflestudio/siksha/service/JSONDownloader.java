@@ -58,7 +58,7 @@ public class JSONDownloader {
 
     private void compareLocalAndServerData(final UpdateCallback callback) {
         final String localLatestData = Preference.loadStringValue(context, Preference.PREF_APP_NAME, Preference.PREF_KEY_LATEST_INFORMATION_DATA);
-        Log.d("cmpLocalAndServerData()", "local_latest_data" + localLatestData);
+        Log.d("cmpLocalAndServerData()", "local_latest_data : " + localLatestData);
 
         fetchJSONFromServer(new VolleyCallback() {
             @Override
@@ -165,10 +165,13 @@ public class JSONDownloader {
         }
     }
 
-    private void updateLatestDownloadTime(String key, String time) {
-        Preference.save(context, Preference.PREF_APP_NAME, key, time);
-        Log.d("updLatestDownloadTime()", action);
-        Log.d("updLatestDownloadTime()", key + " / " + time);
+    private void updateLatestDownloadDate(String key, String date) {
+        Preference.save(context, Preference.PREF_APP_NAME, key, date);
+        Log.d("updLatestDownloadTime()", action + " / " + key + " / " + date);
+    }
+
+    private String getLatestDownloadDate() {
+        return Preference.loadStringValue(context, Preference.PREF_APP_NAME, Preference.PREF_KEY_LATEST_MENU_DATA);
     }
 
     private void updateRefreshTimestamp() {
@@ -217,7 +220,7 @@ public class JSONDownloader {
                         @Override
                         public void onSuccess(String response) {
                             writeJSONOnInternalStorage(response);
-                            updateLatestDownloadTime(Preference.PREF_KEY_LATEST_INFORMATION_DATA, new Gson().fromJson(response, Information.class).time);
+                            updateLatestDownloadDate(Preference.PREF_KEY_LATEST_INFORMATION_DATA, new Gson().fromJson(response, Information.class).time);
                             sendSignalToApp(action, JSONDownloadReceiver.TYPE_ON_SUCCESS);
                         }
 
@@ -234,11 +237,13 @@ public class JSONDownloader {
                 @Override
                 public void onSuccess(String response) {
                     writeJSONOnInternalStorage(response);
-                    updateLatestDownloadTime(Preference.PREF_KEY_LATEST_MENU_DATA, Date.getPrimaryTimestamp(Date.TYPE_NORMAL));
-                    updateRefreshTimestamp();
 
-                    if (action.equals(JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD))
-                        Preference.save(context, Preference.PREF_APP_NAME, Preference.PREF_KEY_UPDATE_ON_RESUME, true);
+                    String timestamp = Date.getPrimaryTimestamp(Date.TYPE_NORMAL);
+                    if (!timestamp.equals(getLatestDownloadDate()) && action.equals(JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD))
+                        Preference.save(context, Preference.PREF_APP_NAME, Preference.PREF_KEY_REFRESH_ON_RESUME, true);
+
+                    updateLatestDownloadDate(Preference.PREF_KEY_LATEST_MENU_DATA, timestamp);
+                    updateRefreshTimestamp();
 
                     sendSignalToWidget(WidgetProvider.STATE_NEW_DATA_FETCHED);
                     sendSignalToApp(action, JSONDownloadReceiver.TYPE_ON_SUCCESS);
@@ -253,12 +258,12 @@ public class JSONDownloader {
         }
     }
 
-    interface VolleyCallback {
+    private interface VolleyCallback {
         void onSuccess(String response);
         void onFailure();
     }
 
-    interface UpdateCallback {
+    private interface UpdateCallback {
         void onUpdated();
         void onNotUpdated();
     }

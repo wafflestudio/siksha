@@ -19,7 +19,7 @@ import com.wafflestudio.siksha.MainActivity;
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.SequenceActivity;
 import com.wafflestudio.siksha.service.JSONDownloadReceiver;
-import com.wafflestudio.siksha.util.DeviceNetwork;
+import com.wafflestudio.siksha.util.NetworkChecker;
 import com.wafflestudio.siksha.util.Fonts;
 import com.wafflestudio.siksha.util.Preference;
 
@@ -77,7 +77,7 @@ public class SettingsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     context.startActivity(new Intent(context, AppVersionActivity.class));
                     break;
                 case 2:
-                    if (DeviceNetwork.getInstance().isOnline())
+                    if (NetworkChecker.getInstance().isOnline())
                         ((MainActivity) context).downloadMenuData(JSONDownloadReceiver.ACTION_MENU_REFRESH, false);
                     else
                         Toast.makeText(context, R.string.check_network_state, Toast.LENGTH_SHORT).show();
@@ -127,9 +127,13 @@ public class SettingsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         public void onClick(View view) {
             switch (getAdapterPosition()) {
                 case 5:
-                    Intent intent = new Intent(context, SequenceActivity.class);
-                    intent.putExtra("about_bookmark", true);
-                    context.startActivity(intent);
+                    if (Preference.loadStringValue(context, Preference.PREF_APP_NAME, Preference.PREF_KEY_BOOKMARKS).equals(""))
+                        Toast.makeText(context, R.string.empty_bookmark, Toast.LENGTH_SHORT).show();
+                    else {
+                        Intent intent = new Intent(context, SequenceActivity.class);
+                        intent.putExtra("about_bookmark", true);
+                        context.startActivity(intent);
+                    }
                     break;
                 case 8:
                     context.startActivity(new Intent(context, SequenceActivity.class));

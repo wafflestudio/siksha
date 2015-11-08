@@ -7,16 +7,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.wafflestudio.siksha.R;
-import com.wafflestudio.siksha.form.Restaurant;
+import com.wafflestudio.siksha.form.Menu;
 import com.wafflestudio.siksha.util.Fonts;
 
 /**
  * Created by Gyu Kang on 2015-10-13.
  */
 public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Restaurant data;
+    private Menu data;
 
-    public ChildRecyclerViewAdapter(Restaurant data) {
+    public ChildRecyclerViewAdapter(Menu data) {
         this.data = data;
     }
 

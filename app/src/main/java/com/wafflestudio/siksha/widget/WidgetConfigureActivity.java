@@ -14,9 +14,7 @@ import android.widget.TextView;
 
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.form.response.Menu;
-import com.wafflestudio.siksha.service.DownloadAlarm;
-import com.wafflestudio.siksha.util.AppData;
-import com.wafflestudio.siksha.util.DeviceNetwork;
+import com.wafflestudio.siksha.util.AppDataManager;
 import com.wafflestudio.siksha.util.Fonts;
 import com.wafflestudio.siksha.util.JSONParser;
 import com.wafflestudio.siksha.util.Preference;
@@ -42,8 +40,8 @@ public class WidgetConfigureActivity extends AppCompatActivity implements View.O
         if (appWidgetID == AppWidgetManager.INVALID_APPWIDGET_ID)
             finish();
 
-        AppData.getInstance().setDefaultSequence(this);
-        AppData.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(this, Menu.class).data);
+        AppDataManager.getInstance().setDefaultRestaurantSequence(this);
+        AppDataManager.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(this, Menu.class).data);
         Fonts.getInstance().initialize(this);
 
         TextView messageView = (TextView) findViewById(R.id.activity_widget_configure_message_view);

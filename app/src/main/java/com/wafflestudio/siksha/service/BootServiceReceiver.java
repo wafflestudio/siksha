@@ -12,7 +12,7 @@ public class BootServiceReceiver extends BroadcastReceiver {
             Log.d("on_boot", intent.getAction());
 
             // register alarm when booting device is completed
-            DownloadAlarm.setAlarm(context);
+            DownloadAlarmManager.setAlarm(context);
         }
     }
 }

@@ -28,11 +28,11 @@ import com.wafflestudio.siksha.page.SwipeDisabledViewPagerAdapter;
 import com.wafflestudio.siksha.page.bookmark.BookmarkFragment;
 import com.wafflestudio.siksha.page.menu.MenuFragment;
 import com.wafflestudio.siksha.page.settings.SettingsFragment;
-import com.wafflestudio.siksha.service.DownloadAlarm;
+import com.wafflestudio.siksha.service.DownloadAlarmManager;
 import com.wafflestudio.siksha.service.JSONDownloadReceiver;
 import com.wafflestudio.siksha.service.JSONDownloader;
-import com.wafflestudio.siksha.util.AppData;
-import com.wafflestudio.siksha.util.DeviceNetwork;
+import com.wafflestudio.siksha.util.AppDataManager;
+import com.wafflestudio.siksha.util.NetworkChecker;
 import com.wafflestudio.siksha.util.Fonts;
 import com.wafflestudio.siksha.util.JSONParser;
 import com.wafflestudio.siksha.util.Preference;
@@ -57,11 +57,13 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
         JSONDownloadReceiver.setOnDownloadListener(this);
 
         AnalyticsTrackers.getInstance().setDefaultTracker();
-        AppData.getInstance().setDefaultSequence(this);
-        AppData.getInstance().setInformationDictionary(JSONParser.parseJSONFile(this, Information.class).data);
-        DeviceNetwork.getInstance().initialize(this);
-        DownloadAlarm.registerAlarm(this);
+        AppDataManager.getInstance().setDefaultRestaurantSequence(this);
+        NetworkChecker.getInstance().initialize(this);
+        DownloadAlarmManager.registerAlarm(this);
         Fonts.getInstance().initialize(this);
+
+        Preference.save(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_REFRESH_ON_RESUME, false);
+        setupInformationData();
 
         checkMenuData();
         checkInformationData();
@@ -69,17 +71,27 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
         checkLatestAppVersion();
     }
 
+    private void setupInformationData() {
+        Information.Content[] informationData = JSONParser.parseJSONFile(this, Information.class).data;
+        AppDataManager.getInstance().setInformationDictionary(informationData);
+    }
+
+    private void setupMenuData() {
+        Menu.Content[] menuData = JSONParser.parseJSONFile(getApplicationContext(), Menu.class).data;
+        AppDataManager.getInstance().setMenuDictionaries(menuData);
+    }
+
     private void checkMenuData() {
         if (JSONDownloader.isJSONUpdated(this)) {
-            AppData.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(getApplicationContext(), Menu.class).data);
+            setupMenuData();
             setupViewPager();
             selectDefaultTab();
             alertWidgetFeature();
         } else {
-            if (!DeviceNetwork.getInstance().isOnline())
+            if (!NetworkChecker.getInstance().isOnline())
                 new DownloadAlertDialog(this).show();
             else
-                downloadMenuData(JSONDownloadReceiver.ACTION_MENU_DOWNLOAD, true);
+                downloadMenuData(com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_MENU_DOWNLOAD, true);
         }
     }
 
@@ -96,9 +108,8 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
     }
 
     private void checkInformationData() {
-        if (DeviceNetwork.getInstance().isOnline()) {
-            new JSONDownloader(this, JSONDownloadReceiver.ACTION_INFORMATION_DOWNLOAD).start();
-        }
+        if (NetworkChecker.getInstance().isOnline())
+            new JSONDownloader(this, com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_INFORMATION_DOWNLOAD).start();
     }
 
     private void checkCurrentAppVersion() {
@@ -111,8 +122,16 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
     }
 
     private void checkLatestAppVersion() {
-        if (DeviceNetwork.getInstance().isOnline()) {
-            new JSONDownloader(this, JSONDownloadReceiver.ACTION_LATEST_APP_VERSION_CHECK).start();
+        if (NetworkChecker.getInstance().isOnline())
+            new JSONDownloader(this, com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_LATEST_APP_VERSION_CHECK).start();
+    }
+
+    private void alertWidgetFeature() {
+        boolean widgetFeatureAlerted = Preference.loadBooleanValue(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_WIDGET_FEATURE_ALERTED);
+
+        if (!widgetFeatureAlerted) {
+            new WidgetAlertDialog(this).show();
+            Preference.save(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_WIDGET_FEATURE_ALERTED, true);
         }
     }
 
@@ -183,13 +202,8 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
         }
     }
 
-    private void alertWidgetFeature() {
-        boolean widgetFeatureAlerted = Preference.loadBooleanValue(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_WIDGET_FEATURE_ALERTED);
-
-        if (!widgetFeatureAlerted) {
-            new WidgetAlertDialog(this).show();
-            Preference.save(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_WIDGET_FEATURE_ALERTED, true);
-        }
+    public SwipeDisabledViewPagerAdapter getSwipeDisabledViewPagerAdapter() {
+        return adapter;
     }
 
     private void setTabLayout(int tabIndex, boolean selected) {
@@ -250,10 +264,6 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
             tabLayout.getTabAt(0).select();
     }
 
-    public SwipeDisabledViewPagerAdapter getSwipeDisabledViewPagerAdapter() {
-        return adapter;
-    }
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return keyCode == KeyEvent.KEYCODE_MENU || super.onKeyDown(keyCode, event);
@@ -263,11 +273,11 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
         Log.d("register_receiver", "JSONDownloadReceiver");
 
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(JSONDownloadReceiver.ACTION_MENU_REFRESH);
-        intentFilter.addAction(JSONDownloadReceiver.ACTION_MENU_DOWNLOAD);
-        intentFilter.addAction(JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD);
-        intentFilter.addAction(JSONDownloadReceiver.ACTION_INFORMATION_DOWNLOAD);
-        intentFilter.addAction(JSONDownloadReceiver.ACTION_LATEST_APP_VERSION_CHECK);
+        intentFilter.addAction(com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_MENU_REFRESH);
+        intentFilter.addAction(com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_MENU_DOWNLOAD);
+        intentFilter.addAction(com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD);
+        intentFilter.addAction(com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_INFORMATION_DOWNLOAD);
+        intentFilter.addAction(com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_LATEST_APP_VERSION_CHECK);
         intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
 
         registerReceiver(JSONDownloadReceiver, intentFilter);
@@ -309,14 +319,14 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
         registerReceiver();
         super.onResume();
 
-        if (Preference.loadBooleanValue(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_UPDATE_ON_RESUME)) {
-            AppData.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(getApplicationContext(), Menu.class).data);
+        if (Preference.loadBooleanValue(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_REFRESH_ON_RESUME)) {
+            setupMenuData();
 
-            ((BookmarkFragment) adapter.getItem(0)).notifyToAdapters();
-            ((MenuFragment) adapter.getItem(1)).notifyToAdapters();
-            ((SettingsFragment) adapter.getItem(2)).notifyToAdapter();
+            ((BookmarkFragment) adapter.getItem(SwipeDisabledViewPagerAdapter.INDEX_BOOKMARK_PAGE)).notifyToAdapters();
+            ((MenuFragment) adapter.getItem(SwipeDisabledViewPagerAdapter.INDEX_MENU_PAGE)).notifyToAdapters();
+            ((SettingsFragment) adapter.getItem(SwipeDisabledViewPagerAdapter.INDEX_SETTINGS_PAGE)).notifyToAdapter();
 
-            Preference.save(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_UPDATE_ON_RESUME, false);
+            Preference.save(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_REFRESH_ON_RESUME, false);
         }
     }
 
@@ -329,24 +339,27 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
                 ((ProgressDialog) loadingDialog).quit();
         }
 
-        if (action.equals(JSONDownloadReceiver.ACTION_LATEST_APP_VERSION_CHECK)) {
-        }
-        else if (action.equals(JSONDownloadReceiver.ACTION_INFORMATION_DOWNLOAD)) {
-            AppData.getInstance().setInformationDictionary(JSONParser.parseJSONFile(this, Information.class).data);
-        }
-        else if (action.equals(JSONDownloadReceiver.ACTION_MENU_REFRESH)) {
-            AppData.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(getApplicationContext(), Menu.class).data);
-            ((SettingsFragment) adapter.getItem(2)).notifyToAdapter();
-        }
-        else if (action.equals(JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD)) {
-            AppData.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(getApplicationContext(), Menu.class).data);
-            Preference.save(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_UPDATE_ON_RESUME, false);
-            ((SettingsFragment) adapter.getItem(2)).notifyToAdapter();
-        } else if (action.equals(JSONDownloadReceiver.ACTION_MENU_DOWNLOAD)) {
-            AppData.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(getApplicationContext(), Menu.class).data);
-            setupViewPager();
-            selectDefaultTab();
-            alertWidgetFeature();
+        switch (action) {
+            case com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_LATEST_APP_VERSION_CHECK:
+                break;
+            case com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_INFORMATION_DOWNLOAD:
+                setupInformationData();
+                break;
+            case com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_MENU_REFRESH:
+                setupMenuData();
+                ((SettingsFragment) adapter.getItem(SwipeDisabledViewPagerAdapter.INDEX_SETTINGS_PAGE)).notifyToAdapter(); // For refreshing timestamp
+                break;
+            case com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD:
+                setupMenuData();
+                Preference.save(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_REFRESH_ON_RESUME, false);
+                ((SettingsFragment) adapter.getItem(SwipeDisabledViewPagerAdapter.INDEX_SETTINGS_PAGE)).notifyToAdapter(); // For refreshing timestamp
+                break;
+            case com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_MENU_DOWNLOAD:
+                setupMenuData();
+                setupViewPager();
+                selectDefaultTab();
+                alertWidgetFeature();
+                break;
         }
     }
 
@@ -359,7 +372,7 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
                 ((ProgressDialog) loadingDialog).quit();
         }
 
-        if (action.equals(JSONDownloadReceiver.ACTION_MENU_DOWNLOAD))
+        if (action.equals(com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_MENU_DOWNLOAD))
             new DownloadAlertDialog(getApplicationContext()).show();
     }
 }

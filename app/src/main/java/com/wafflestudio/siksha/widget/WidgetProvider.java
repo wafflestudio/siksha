@@ -13,9 +13,9 @@ import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.form.response.Menu;
 import com.wafflestudio.siksha.service.JSONDownloadReceiver;
 import com.wafflestudio.siksha.service.JSONDownloader;
-import com.wafflestudio.siksha.util.AppData;
+import com.wafflestudio.siksha.util.AppDataManager;
 import com.wafflestudio.siksha.util.Date;
-import com.wafflestudio.siksha.util.DeviceNetwork;
+import com.wafflestudio.siksha.util.NetworkChecker;
 import com.wafflestudio.siksha.util.JSONParser;
 
 import java.util.Iterator;
@@ -33,7 +33,7 @@ public class WidgetProvider extends AppWidgetProvider {
         Log.d("widget", "onUpdate()");
 
         if (!JSONDownloader.isJSONUpdated(context)) {
-            if (DeviceNetwork.getInstance().isOnline())
+            if (NetworkChecker.getInstance().isOnline())
                 new JSONDownloader(context, JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD).start();
             else {
                 for (int appWidgetID : appWidgetIds) {
@@ -88,10 +88,10 @@ public class WidgetProvider extends AppWidgetProvider {
 
         if (intent.getAction().equals(STATE_CONFIGURATION_FINISHED)) {
             int appWidgetID = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-            DeviceNetwork.getInstance().initialize(context);
+            NetworkChecker.getInstance().initialize(context);
 
             if (!JSONDownloader.isJSONUpdated(context)) {
-                if (DeviceNetwork.getInstance().isOnline())
+                if (NetworkChecker.getInstance().isOnline())
                     new JSONDownloader(context, JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD).start();
                 else {
                     if (WidgetConfigureActivity.isValidAppWidgetID(context, appWidgetID)) {
@@ -110,7 +110,7 @@ public class WidgetProvider extends AppWidgetProvider {
                 }
             }
         } else if (intent.getAction().equals(STATE_DATA_ALREADY_UPDATED)) {
-            AppData.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(context, Menu.class).data);
+            AppDataManager.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(context, Menu.class).data);
 
             Set<String> appWidgetIDSet = WidgetConfigureActivity.getAllAppWidgetIDs(context);
             Iterator<String> iterator = appWidgetIDSet.iterator();
@@ -148,9 +148,9 @@ public class WidgetProvider extends AppWidgetProvider {
             }
         } else if (intent.getAction().equals(STATE_WIDGET_REFRESH)) {
             int appWidgetID = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-            DeviceNetwork.getInstance().initialize(context);
+            NetworkChecker.getInstance().initialize(context);
 
-            if (DeviceNetwork.getInstance().isOnline())
+            if (NetworkChecker.getInstance().isOnline())
                 new JSONDownloader(context, JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD).start();
             else {
                 if (WidgetConfigureActivity.isValidAppWidgetID(context, appWidgetID)) {

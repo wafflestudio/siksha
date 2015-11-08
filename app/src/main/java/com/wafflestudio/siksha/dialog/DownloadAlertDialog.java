@@ -13,7 +13,7 @@ import com.wafflestudio.siksha.MainActivity;
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.service.JSONDownloadReceiver;
 import com.wafflestudio.siksha.util.Fonts;
-import com.wafflestudio.siksha.util.DeviceNetwork;
+import com.wafflestudio.siksha.util.NetworkChecker;
 
 public class DownloadAlertDialog extends Dialog {
     public DownloadAlertDialog(final Context context) {
@@ -36,7 +36,7 @@ public class DownloadAlertDialog extends Dialog {
         positiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (DeviceNetwork.getInstance().isOnline()) {
+                if (NetworkChecker.getInstance().isOnline()) {
                     dismiss();
                     ((MainActivity) context).downloadMenuData(JSONDownloadReceiver.ACTION_MENU_DOWNLOAD, true);
                 }

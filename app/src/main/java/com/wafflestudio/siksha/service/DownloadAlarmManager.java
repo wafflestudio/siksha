@@ -9,7 +9,7 @@ import com.wafflestudio.siksha.util.Preference;
 
 import java.util.Calendar;
 
-public class DownloadAlarm {
+public class DownloadAlarmManager {
     public static void registerAlarm(Context context) {
         boolean alarmAlreadySet = Preference.loadBooleanValue(context, Preference.PREF_ALARM_NAME, Preference.PREF_KEY_ALARM_ALREADY_SET);
 

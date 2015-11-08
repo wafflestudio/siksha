@@ -9,9 +9,8 @@ import android.widget.RemoteViewsService;
 
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.form.Food;
-import com.wafflestudio.siksha.form.response.Menu;
-import com.wafflestudio.siksha.form.Restaurant;
-import com.wafflestudio.siksha.util.AppData;
+import com.wafflestudio.siksha.form.Menu;
+import com.wafflestudio.siksha.util.AppDataManager;
 import com.wafflestudio.siksha.util.Date;
 import com.wafflestudio.siksha.util.JSONParser;
 
@@ -20,7 +19,7 @@ import java.util.List;
 public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFactory {
     private Context context;
     private int appWidgetID;
-    private List<Restaurant> items;
+    private List<Menu> menuList;
 
     public WidgetListViewFactory(Context context, Intent intent) {
         this.context = context;
@@ -29,13 +28,13 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
 
     @Override
     public void onCreate() {
-        AppData.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(context, Menu.class).data);
+        AppDataManager.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(context, com.wafflestudio.siksha.form.response.Menu.class).data);
         populateItems();
     }
 
     @Override
     public void onDataSetChanged() {
-        AppData.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(context, Menu.class).data);
+        AppDataManager.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(context, com.wafflestudio.siksha.form.response.Menu.class).data);
         populateItems();
     }
 
@@ -44,20 +43,20 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
 
         switch (index) {
             case 0:
-                items = AppData.getInstance().getWidgetMenuList(context, AppData.getInstance().breakfastMenuDictionary, appWidgetID);
+                menuList = AppDataManager.getInstance().getMenuListForWidget(context, AppDataManager.getInstance().breakfastMenuDictionary, appWidgetID);
                 break;
             case 1:
-                items = AppData.getInstance().getWidgetMenuList(context, AppData.getInstance().lunchMenuDictionary, appWidgetID);
+                menuList = AppDataManager.getInstance().getMenuListForWidget(context, AppDataManager.getInstance().lunchMenuDictionary, appWidgetID);
                 break;
             case 2:
-                items = AppData.getInstance().getWidgetMenuList(context, AppData.getInstance().dinnerMenuDictionary, appWidgetID);
+                menuList = AppDataManager.getInstance().getMenuListForWidget(context, AppDataManager.getInstance().dinnerMenuDictionary, appWidgetID);
                 break;
         }
     }
 
     @Override
     public int getCount() {
-        return items.size();
+        return menuList.size();
     }
 
     @Override
@@ -67,15 +66,15 @@ public class WidgetListViewFactory implements RemoteViewsService.RemoteViewsFact
 
     @Override
     public RemoteViews getViewAt(int position) {
-        Restaurant item = items.get(position);
+        Menu menu = menuList.get(position);
 
         final RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_list_view_item);
-        remoteViews.setTextViewText(R.id.widget_list_view_name_view, item.name);
+        remoteViews.setTextViewText(R.id.widget_list_view_name_view, menu.restaurant);
         remoteViews.removeAllViews(R.id.widget_not_empty_menu_view);
 
-        if (item.foods.size() != 0) {
-            for (int i = 0; i < item.foods.size(); i++) {
-                Food food = item.foods.get(i);
+        if (menu.foods.size() != 0) {
+            for (int i = 0; i < menu.foods.size(); i++) {
+                Food food = menu.foods.get(i);
                 RemoteViews nestedView = new RemoteViews(context.getPackageName(), R.layout.widget_menu_item);
                 nestedView.setTextViewText(R.id.widget_menu_price_view, food.price);
                 nestedView.setTextViewText(R.id.widget_menu_name_view, food.name);

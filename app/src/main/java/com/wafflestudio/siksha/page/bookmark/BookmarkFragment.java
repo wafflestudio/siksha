@@ -15,7 +15,7 @@ import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.page.GroupRecyclerViewAdapter;
 import com.wafflestudio.siksha.page.TimeSlotPage;
 import com.wafflestudio.siksha.page.ViewPagerAdapter;
-import com.wafflestudio.siksha.util.AppData;
+import com.wafflestudio.siksha.util.AppDataManager;
 import com.wafflestudio.siksha.util.Date;
 import com.wafflestudio.siksha.util.Fonts;
 
@@ -105,16 +105,16 @@ public class BookmarkFragment extends Fragment {
     }
 
     public void notifyToAdapters() {
-        AppData appData = AppData.getInstance();
+        AppDataManager appDataManager = AppDataManager.getInstance();
         List<GroupRecyclerViewAdapter> adapters = new ArrayList<>();
 
         for (int i = 0; i < viewPagerAdapter.getCount(); i++)
             adapters.add(((TimeSlotPage) viewPagerAdapter.getItem(i)).getAdapter());
 
         if (adapters.size() == viewPagerAdapter.getCount()) {
-            adapters.get(0).replaceData(appData.getBookmarkMenuList(context, appData.breakfastMenuDictionary));
-            adapters.get(1).replaceData(appData.getBookmarkMenuList(context, appData.lunchMenuDictionary));
-            adapters.get(2).replaceData(appData.getBookmarkMenuList(context, appData.dinnerMenuDictionary));
+            adapters.get(0).replaceData(appDataManager.getBookmarkRestaurantMenuList(context, appDataManager.breakfastMenuDictionary));
+            adapters.get(1).replaceData(appDataManager.getBookmarkRestaurantMenuList(context, appDataManager.lunchMenuDictionary));
+            adapters.get(2).replaceData(appDataManager.getBookmarkRestaurantMenuList(context, appDataManager.dinnerMenuDictionary));
         }
 
         for (int i = 0; i < viewPagerAdapter.getCount(); i++)

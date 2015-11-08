@@ -15,7 +15,7 @@ import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.page.GroupRecyclerViewAdapter;
 import com.wafflestudio.siksha.page.TimeSlotPage;
 import com.wafflestudio.siksha.page.ViewPagerAdapter;
-import com.wafflestudio.siksha.util.AppData;
+import com.wafflestudio.siksha.util.AppDataManager;
 import com.wafflestudio.siksha.util.Date;
 import com.wafflestudio.siksha.util.Fonts;
 import com.wafflestudio.siksha.util.Preference;
@@ -104,7 +104,7 @@ public class MenuFragment extends Fragment {
     }
 
     public void notifyToAdapters() {
-        AppData appData = AppData.getInstance();
+        AppDataManager appDataManager = AppDataManager.getInstance();
         List<GroupRecyclerViewAdapter> adapters = new ArrayList<>();
 
         for (int i = 0; i < viewPagerAdapter.getCount(); i++)
@@ -112,13 +112,13 @@ public class MenuFragment extends Fragment {
 
         if (adapters.size() == viewPagerAdapter.getCount()) {
             if (Preference.loadBooleanValue(context, Preference.PREF_APP_NAME, Preference.PREF_KEY_EMPTY_MENU_INVISIBLE)) {
-                adapters.get(0).replaceData(appData.getNotEmptyMenuList(context, appData.breakfastMenuDictionary));
-                adapters.get(1).replaceData(appData.getNotEmptyMenuList(context, appData.lunchMenuDictionary));
-                adapters.get(2).replaceData(appData.getNotEmptyMenuList(context, appData.dinnerMenuDictionary));
+                adapters.get(0).replaceData(appDataManager.getNotEmptyMenuList(context, appDataManager.breakfastMenuDictionary));
+                adapters.get(1).replaceData(appDataManager.getNotEmptyMenuList(context, appDataManager.lunchMenuDictionary));
+                adapters.get(2).replaceData(appDataManager.getNotEmptyMenuList(context, appDataManager.dinnerMenuDictionary));
             } else {
-                adapters.get(0).replaceData(appData.getMenuList(context, appData.breakfastMenuDictionary));
-                adapters.get(1).replaceData(appData.getMenuList(context, appData.lunchMenuDictionary));
-                adapters.get(2).replaceData(appData.getMenuList(context, appData.dinnerMenuDictionary));
+                adapters.get(0).replaceData(appDataManager.getMenuList(context, appDataManager.breakfastMenuDictionary));
+                adapters.get(1).replaceData(appDataManager.getMenuList(context, appDataManager.lunchMenuDictionary));
+                adapters.get(2).replaceData(appDataManager.getMenuList(context, appDataManager.dinnerMenuDictionary));
             }
         }
 

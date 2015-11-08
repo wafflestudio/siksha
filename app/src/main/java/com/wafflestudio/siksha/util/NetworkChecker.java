@@ -4,15 +4,15 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-public class DeviceNetwork {
-    private static DeviceNetwork instance;
+public class NetworkChecker {
+    private static NetworkChecker instance;
     private ConnectivityManager connectivityManager;
 
-    private DeviceNetwork() { }
+    private NetworkChecker() { }
 
-    public static synchronized DeviceNetwork getInstance() {
+    public static synchronized NetworkChecker getInstance() {
         if (instance == null)
-            instance = new DeviceNetwork();
+            instance = new NetworkChecker();
 
         return instance;
     }

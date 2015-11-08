@@ -13,4 +13,6 @@
     <color name="light_gray">#10000000</color>
     <color name="transparent">#00ffffff</color>
     <color name="translucent">#50ffffff</color>
+
+    <color name="kakaotalk_color">#ffeb00</color>
 </resources>

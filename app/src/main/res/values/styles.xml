@@ -25,4 +25,9 @@
         <item name="android:windowBackground" >@color/transparent</item>
     </style>
 
+    <style name="ShareDialog" parent="@android:style/Theme.Holo.Light.Dialog" >
+        <item name="android:windowNoTitle" >true</item>
+        <item name="android:windowBackground" >@color/transparent</item>
+    </style>
+
 </resources>

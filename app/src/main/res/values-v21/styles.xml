@@ -11,4 +11,10 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme" ></style>
 
+    <style name="SplashDialog" parent="@android:style/Theme.Holo.Light" >
+        <item name="android:windowNoTitle" >true</item>
+        <item name="android:statusBarColor" >@color/color_primary_dark</item>
+        <item name="android:windowBackground" >@color/color_primary</item>
+    </style>
+
 </resources>

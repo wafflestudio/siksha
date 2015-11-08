@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wafflestudio.siksha.R;
-import com.wafflestudio.siksha.util.AppData;
+import com.wafflestudio.siksha.util.AppDataManager;
 import com.wafflestudio.siksha.util.Fonts;
 import com.wafflestudio.siksha.util.UnitConverter;
 
@@ -34,7 +34,6 @@ public class InformationDialog extends Dialog {
             float[] radii = {radius, radius, radius, radius, 0.0f, 0.0f, 0.0f, 0.0f};
             changeBackgroundDrawable(headerView, R.color.color_primary, radii);
         }
-        nameView.setTextColor(context.getResources().getColor(R.color.color_primary));
 
         nameView.setTypeface(Fonts.fontBMJua);
         operatingHourTitleView.setTypeface(Fonts.fontAPAritaDotumSemiBold);
@@ -43,8 +42,8 @@ public class InformationDialog extends Dialog {
         locationMessageView.setTypeface(Fonts.fontAPAritaDotumMedium);
 
         nameView.setText(name);
-        operatingHourMessageView.setText(AppData.getInstance().getInformationDictionary().get(name).operatingHour);
-        locationMessageView.setText(AppData.getInstance().getInformationDictionary().get(name).location);
+        operatingHourMessageView.setText(AppDataManager.getInstance().getInformationDictionary().get(name).operatingHour);
+        locationMessageView.setText(AppDataManager.getInstance().getInformationDictionary().get(name).location);
     }
 
     private void changeBackgroundDrawable(View view, int colorResourceID, float[] radii) {

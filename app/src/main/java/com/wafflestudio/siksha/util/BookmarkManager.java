@@ -5,7 +5,7 @@ import android.content.Context;
 /**
  * Created by Gyu Kang on 2015-10-10.
  */
-public class Bookmark {
+public class BookmarkManager {
     public static boolean isBookmarked(Context context, String name) {
         String[] bookmarks = Preference.loadStringValue(context, Preference.PREF_APP_NAME, Preference.PREF_KEY_BOOKMARKS).split("/");
 

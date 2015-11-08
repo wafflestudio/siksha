@@ -142,18 +142,18 @@
                     android:layout_marginBottom="2dp">
 
                     <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/group_kakaotalk_button"
+                        android:id="@+id/group_share_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:src="@drawable/ic_talk"
+                        android:src="@drawable/ic_share"
                         app:backgroundTint="@color/color_primary"
                         app:borderWidth="0dp"
                         app:fabSize="mini"
                         app:rippleColor="@color/color_accent" />
 
                     <TextView
-                        android:id="@+id/group_kakaotalk_text_view"
+                        android:id="@+id/group_share_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"

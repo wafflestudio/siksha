@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wafflestudio.siksha.R;
-import com.wafflestudio.siksha.form.Restaurant;
+import com.wafflestudio.siksha.form.Menu;
 
 import java.io.Serializable;
 import java.util.List;
@@ -26,7 +26,7 @@ public class TimeSlotPage extends Fragment {
 
     private GroupRecyclerViewAdapter adapter;
 
-    public static TimeSlotPage newInstance(List<Restaurant> data, boolean onBookmarkTab, int index) {
+    public static TimeSlotPage newInstance(List<Menu> data, boolean onBookmarkTab, int index) {
         TimeSlotPage fragment = new TimeSlotPage();
         Bundle bundle = new Bundle();
         bundle.putSerializable(KEY_DATA, (Serializable) data);
@@ -42,7 +42,7 @@ public class TimeSlotPage extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.time_slot_page, container, false);
 
-        List<Restaurant> data = (List<Restaurant>) getArguments().getSerializable(KEY_DATA);
+        List<Menu> data = (List<Menu>) getArguments().getSerializable(KEY_DATA);
         boolean onBookmarkTab = (boolean) getArguments().getSerializable(KEY_ON_BOOKMARK_TAB);
         int index = (int) getArguments().getSerializable(KEY_INDEX);
 
