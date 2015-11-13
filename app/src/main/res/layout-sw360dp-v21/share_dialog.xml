@@ -55,7 +55,7 @@
                 app:backgroundTint="@color/kakaotalk_color"
                 app:borderWidth="0dp"
                 app:fabSize="mini"
-                app:rippleColor="@color/color_primary" />
+                app:rippleColor="@color/kakaotalk_color" />
 
         </LinearLayout>
 

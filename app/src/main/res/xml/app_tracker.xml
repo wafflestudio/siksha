@@ -9,6 +9,9 @@
 
     <!-- The screen names that will appear in reports -->
     <screenName name="com.wafflestudio.siksha.MainActivity">MainActivity</screenName>
+    <screenName name="com.wafflestudio.siksha.page.bookmark.BookmarkFragment">BookmarkFragment</screenName>
+    <screenName name="com.wafflestudio.siksha.page.menu.MenuFragment">MenuFragment</screenName>
+    <screenName name="com.wafflestudio.siksha.page.settings.SettingsFragment">SettingsFragment</screenName>
 
     <!--  The following value should be replaced with correct property id. -->
     <string name="ga_trackingId">UA-69639124-1</string>
