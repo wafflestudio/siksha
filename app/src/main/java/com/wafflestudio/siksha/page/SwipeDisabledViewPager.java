@@ -10,7 +10,7 @@ import android.view.MotionEvent;
  */
 
 public class SwipeDisabledViewPager extends ViewPager {
-    private boolean swipeEnabled = true;
+    private boolean isSwipeEnabled = true;
 
     public SwipeDisabledViewPager(Context context) {
         super(context);
@@ -22,15 +22,15 @@ public class SwipeDisabledViewPager extends ViewPager {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        return swipeEnabled && super.onTouchEvent(event);
+        return isSwipeEnabled && super.onTouchEvent(event);
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        return swipeEnabled && super.onInterceptTouchEvent(event);
+        return isSwipeEnabled && super.onInterceptTouchEvent(event);
     }
 
     public void setSwipeEnabled(boolean enabled) {
-        swipeEnabled = enabled;
+        isSwipeEnabled = enabled;
     }
 }

@@ -13,16 +13,13 @@ import com.wafflestudio.siksha.util.Fonts;
  * Created by Gyu Kang on 2015-10-29.
  */
 public class LicenseActivity extends AppCompatActivity {
-    private TextView titleView;
-    private RecyclerView recyclerView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_license);
 
-        titleView = (TextView) findViewById(R.id.activity_license_title_view);
-        recyclerView = (RecyclerView) findViewById(R.id.activity_license_recycler_view);
+        TextView titleView = (TextView) findViewById(R.id.activity_license_title_view);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.activity_license_recycler_view);
 
         titleView.setTypeface(Fonts.fontBMJua);
 

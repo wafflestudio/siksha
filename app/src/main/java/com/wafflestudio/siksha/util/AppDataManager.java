@@ -94,9 +94,9 @@ public class AppDataManager {
             lunch.restaurant = content.restaurant;
             dinner.restaurant = content.restaurant;
 
-            breakfast.empty = breakfastFoodList.size() == 0;
-            lunch.empty = lunchFoodList.size() == 0;
-            dinner.empty = dinnerFoodList.size() == 0;
+            breakfast.isEmpty = breakfastFoodList.size() == 0;
+            lunch.isEmpty = lunchFoodList.size() == 0;
+            dinner.isEmpty = dinnerFoodList.size() == 0;
 
             breakfast.foods = breakfastFoodList;
             lunch.foods = lunchFoodList;
@@ -146,7 +146,7 @@ public class AppDataManager {
 
         String[] currentSequence = prefCurrentSequence.split("/");
         for (String restaurant : currentSequence) {
-            if (!menuDictionary.get(restaurant).empty)
+            if (!menuDictionary.get(restaurant).isEmpty)
                 list.add(menuDictionary.get(restaurant));
         }
 

@@ -44,14 +44,14 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private Context context;
     private List<Menu> data;
-    private boolean onBookmarkTab;
+    private boolean isBookmarkTab;
     private int index;
     private List<String> drawerExpandedList;
 
-    public GroupRecyclerViewAdapter(Context context, List<Menu> data, boolean onBookmarkTab, int index) {
+    public GroupRecyclerViewAdapter(Context context, List<Menu> data, boolean isBookmarkTab, int index) {
         this.context = context;
         this.data = data;
-        this.onBookmarkTab = onBookmarkTab;
+        this.isBookmarkTab = isBookmarkTab;
         this.index = index;
         this.drawerExpandedList = new ArrayList<>();
     }
@@ -62,7 +62,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public int getItemViewType(int position) {
-        if (!onBookmarkTab)
+        if (!isBookmarkTab)
             return TYPE_NOT_EMPTY;
         else {
             if (data.size() == 0)
@@ -204,118 +204,10 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 case R.id.not_empty_restaurant_layout_drawer_button:
                     if (!drawerExpandedList.contains(restaurant)) {
                         drawerExpandedList.add(restaurant);
-
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                            AnimatorSet animatorSet = new AnimatorSet();
-                            final ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, 0.0f, -180.0f, 400, false);
-                            rotateAnimator.setInterpolator(new LinearInterpolator());
-                            Animator expandAnimator = Animations.makeExpandAnimator(actionContainer, 150);
-                            final com.nineoldandroids.animation.Animator revealAnimator = (com.nineoldandroids.animation.Animator) ((SupportAnimator) Animations.makeRevealAnimator(actionContainer, 250)).get();
-
-                            animatorSet.play(expandAnimator);
-                            animatorSet.addListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animator) {
-                                    rotateAnimator.start();
-
-                                    float[] radii = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
-                                    changeBackgroundDrawable(recyclerView, R.color.white, radii);
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animator animator) {
-                                    revealAnimator.start();
-                                }
-
-                                @Override
-                                public void onAnimationCancel(Animator animator) {
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animator animator) {
-                                }
-                            });
-
-                            animatorSet.start();
-                        } else {
-                            AnimatorSet animatorSet = new AnimatorSet();
-                            Animator expandAnimator = Animations.makeExpandAnimator(actionContainer, 150);
-                            Animator revealAnimator = (Animator) Animations.makeRevealAnimator(actionContainer, 250);
-                            ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, 0.0f, -180.0f, 400, false);
-                            rotateAnimator.setInterpolator(new LinearInterpolator());
-
-                            animatorSet.play(rotateAnimator).with(expandAnimator);
-                            animatorSet.play(expandAnimator).before(revealAnimator);
-
-                            animatorSet.start();
-                        }
+                        expandDrawer();
                     } else {
                         drawerExpandedList.remove(restaurant);
-
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                            final AnimatorSet animatorSet = new AnimatorSet();
-                            com.nineoldandroids.animation.AnimatorSet supportAnimatorSet = new com.nineoldandroids.animation.AnimatorSet();
-                            final ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, -180.0f, -360.0f, 400, false);
-                            rotateAnimator.setInterpolator(new LinearInterpolator());
-                            com.nineoldandroids.animation.Animator concealAnimator = (com.nineoldandroids.animation.Animator) ((SupportAnimator) Animations.makeConcealAnimator(actionContainer, 250)).get();
-                            final Animator collapseAnimator = Animations.makeCollapseAnimator(actionContainer, 150);
-
-                            animatorSet.play(collapseAnimator);
-                            animatorSet.addListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animator) {
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animator animator) {
-                                    float radius = UnitConverter.convertDpToPx(5.0f);
-                                    float[] radii = {0.0f, 0.0f, 0.0f, 0.0f, radius, radius, radius, radius};
-                                    changeBackgroundDrawable(recyclerView, R.color.white, radii);
-                                }
-
-                                @Override
-                                public void onAnimationCancel(Animator animator) {
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animator animator) {
-                                }
-                            });
-
-                            supportAnimatorSet.play(concealAnimator);
-                            supportAnimatorSet.addListener(new com.nineoldandroids.animation.Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(com.nineoldandroids.animation.Animator animation) {
-                                    rotateAnimator.start();
-                                }
-
-                                @Override
-                                public void onAnimationEnd(com.nineoldandroids.animation.Animator animation) {
-                                    animatorSet.start();
-                                }
-
-                                @Override
-                                public void onAnimationCancel(com.nineoldandroids.animation.Animator animation) {
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(com.nineoldandroids.animation.Animator animation) {
-                                }
-                            });
-
-                            supportAnimatorSet.start();
-                        } else {
-                            AnimatorSet animatorSet = new AnimatorSet();
-                            Animator collapseAnimator = Animations.makeCollapseAnimator(actionContainer, 150);
-                            Animator concealAnimator = (Animator) Animations.makeConcealAnimator(actionContainer, 250);
-                            ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, -180.0f, -360.0f, 400, false);
-                            rotateAnimator.setInterpolator(new LinearInterpolator());
-
-                            animatorSet.play(rotateAnimator).with(concealAnimator);
-                            animatorSet.play(concealAnimator).before(collapseAnimator);
-
-                            animatorSet.start();
-                        }
+                        collapseDrawer();
                     }
                     break;
                 case R.id.group_share_button:
@@ -325,7 +217,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                     new InformationDialog(context, restaurant).show();
                     break;
                 case R.id.group_bookmark_button:
-                    if (onBookmarkTab) {
+                    if (isBookmarkTab) {
                         if (BookmarkManager.isBookmarked(context, restaurant)) {
                             BookmarkManager.unsetFromBookmark(context, restaurant);
                             bookmarkButton.setImageResource(R.drawable.ic_star);
@@ -347,6 +239,120 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
                     Log.d("Bookmark", Preference.loadStringValue(context, Preference.PREF_APP_NAME, Preference.PREF_KEY_BOOKMARKS));
                     break;
+            }
+        }
+
+        private void expandDrawer() {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                AnimatorSet animatorSet = new AnimatorSet();
+                final ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, 0.0f, -180.0f, 400, false);
+                rotateAnimator.setInterpolator(new LinearInterpolator());
+                Animator expandAnimator = Animations.makeExpandAnimator(actionContainer, 150);
+                final com.nineoldandroids.animation.Animator revealAnimator = (com.nineoldandroids.animation.Animator) ((SupportAnimator) Animations.makeRevealAnimator(actionContainer, 250)).get();
+
+                animatorSet.play(expandAnimator);
+                animatorSet.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+                        rotateAnimator.start();
+
+                        float[] radii = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+                        changeBackgroundDrawable(recyclerView, R.color.white, radii);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        revealAnimator.start();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+                    }
+                });
+
+                animatorSet.start();
+            } else {
+                AnimatorSet animatorSet = new AnimatorSet();
+                Animator expandAnimator = Animations.makeExpandAnimator(actionContainer, 150);
+                Animator revealAnimator = (Animator) Animations.makeRevealAnimator(actionContainer, 250);
+                ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, 0.0f, -180.0f, 400, false);
+                rotateAnimator.setInterpolator(new LinearInterpolator());
+
+                animatorSet.play(rotateAnimator).with(expandAnimator);
+                animatorSet.play(expandAnimator).before(revealAnimator);
+
+                animatorSet.start();
+            }
+        }
+
+        private void collapseDrawer() {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                final AnimatorSet animatorSet = new AnimatorSet();
+                com.nineoldandroids.animation.AnimatorSet supportAnimatorSet = new com.nineoldandroids.animation.AnimatorSet();
+                final ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, -180.0f, -360.0f, 400, false);
+                rotateAnimator.setInterpolator(new LinearInterpolator());
+                com.nineoldandroids.animation.Animator concealAnimator = (com.nineoldandroids.animation.Animator) ((SupportAnimator) Animations.makeConcealAnimator(actionContainer, 250)).get();
+                final Animator collapseAnimator = Animations.makeCollapseAnimator(actionContainer, 150);
+
+                animatorSet.play(collapseAnimator);
+                animatorSet.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        float radius = UnitConverter.convertDpToPx(5.0f);
+                        float[] radii = {0.0f, 0.0f, 0.0f, 0.0f, radius, radius, radius, radius};
+                        changeBackgroundDrawable(recyclerView, R.color.white, radii);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+                    }
+                });
+
+                supportAnimatorSet.play(concealAnimator);
+                supportAnimatorSet.addListener(new com.nineoldandroids.animation.Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(com.nineoldandroids.animation.Animator animation) {
+                        rotateAnimator.start();
+                    }
+
+                    @Override
+                    public void onAnimationEnd(com.nineoldandroids.animation.Animator animation) {
+                        animatorSet.start();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(com.nineoldandroids.animation.Animator animation) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(com.nineoldandroids.animation.Animator animation) {
+                    }
+                });
+
+                supportAnimatorSet.start();
+            } else {
+                AnimatorSet animatorSet = new AnimatorSet();
+                Animator collapseAnimator = Animations.makeCollapseAnimator(actionContainer, 150);
+                Animator concealAnimator = (Animator) Animations.makeConcealAnimator(actionContainer, 250);
+                ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, -180.0f, -360.0f, 400, false);
+                rotateAnimator.setInterpolator(new LinearInterpolator());
+
+                animatorSet.play(rotateAnimator).with(concealAnimator);
+                animatorSet.play(concealAnimator).before(collapseAnimator);
+
+                animatorSet.start();
             }
         }
     }

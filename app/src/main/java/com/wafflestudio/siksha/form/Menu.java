@@ -6,7 +6,7 @@ import java.util.List;
 public class Menu implements Serializable {
     public String restaurant;
 
-    public boolean empty;
+    public boolean isEmpty;
 
     public List<Food> foods;
 }

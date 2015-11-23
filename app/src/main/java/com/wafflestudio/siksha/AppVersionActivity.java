@@ -15,7 +15,6 @@ import com.wafflestudio.siksha.util.Preference;
 public class AppVersionActivity extends Activity {
     private CardView feedbackWrapper;
 
-    private TextView messageView;
     private TextView feedbackMessageView;
     private ImageView feedbackImageView;
 
@@ -27,7 +26,7 @@ public class AppVersionActivity extends Activity {
         setContentView(R.layout.activity_app_version);
 
         TextView titleView = (TextView) findViewById(R.id.app_version_activity_title_view);
-        messageView = (TextView) findViewById(R.id.app_version_activity_message_view);
+        TextView messageView = (TextView) findViewById(R.id.app_version_activity_message_view);
 
         feedbackWrapper = (CardView) findViewById(R.id.feedback_wrapper);
         feedbackMessageView = (TextView) findViewById(R.id.feedback_message_view);

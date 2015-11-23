@@ -22,7 +22,7 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (!data.empty) {
+        if (!data.isEmpty) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.menu_item, parent, false);
             return new MenuViewHolder(view);
         } else {
@@ -33,7 +33,7 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        if (!data.empty) {
+        if (!data.isEmpty) {
             MenuViewHolder menuViewHolder = (MenuViewHolder) viewHolder;
             menuViewHolder.priceView.setText(data.foods.get(position).price);
             menuViewHolder.nameView.setText(data.foods.get(position).name);
@@ -42,7 +42,7 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public int getItemCount() {
-        if (data.empty)
+        if (data.isEmpty)
             return 1;
         else
             return data.foods.size();
@@ -54,6 +54,7 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         public MenuViewHolder(View itemView) {
             super(itemView);
+
             priceView = (TextView) itemView.findViewById(R.id.menu_price_view);
             nameView = (TextView) itemView.findViewById(R.id.menu_name_view);
             priceView.setTypeface(Fonts.fontAPAritaDotumSemiBold);
@@ -66,6 +67,7 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         public EmptyMenuViewHolder(View itemView) {
             super(itemView);
+
             messageView = (TextView) itemView.findViewById(R.id.empty_menu_message_view);
             messageView.setTypeface(Fonts.fontAPAritaDotumMedium);
         }

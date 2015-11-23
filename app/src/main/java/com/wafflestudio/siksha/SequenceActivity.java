@@ -32,18 +32,18 @@ public class SequenceActivity extends AppCompatActivity implements View.OnClickL
 
     private SequenceRecyclerViewAdapter adapter;
 
-    private boolean aboutBookmark;
-    private boolean editMode;
+    private boolean isAboutBookmark;
+    private boolean isEditMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sequence);
 
-        aboutBookmark = getIntent().getBooleanExtra("about_bookmark", false);
-        editMode = false;
+        isAboutBookmark = getIntent().getBooleanExtra("about_bookmark", false);
+        isEditMode = false;
 
-        if (aboutBookmark)
+        if (isAboutBookmark)
             AnalyticsTrackers.getInstance().trackScreenView("BookmarkSequenceActivity");
         else
             AnalyticsTrackers.getInstance().trackScreenView("SequenceActivity");
@@ -69,7 +69,7 @@ public class SequenceActivity extends AppCompatActivity implements View.OnClickL
         List<String> list = new ArrayList<String>();
         String[] restaurants;
 
-        if (!aboutBookmark) {
+        if (!isAboutBookmark) {
             restaurants = Preference.loadStringValue(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_CURRENT_SEQUENCE).split("/");
         } else {
             restaurants = Preference.loadStringValue(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_BOOKMARKS).split("/");
@@ -91,7 +91,7 @@ public class SequenceActivity extends AppCompatActivity implements View.OnClickL
             }
         }
 
-        if (!aboutBookmark) {
+        if (!isAboutBookmark) {
             Preference.save(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_CURRENT_SEQUENCE, stringBuilder.toString());
             Log.d(Preference.PREF_KEY_CURRENT_SEQUENCE, stringBuilder.toString());
         } else {
@@ -104,9 +104,9 @@ public class SequenceActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.activity_sequence_floating_action_button:
-                editMode = !editMode;
+                isEditMode = !isEditMode;
 
-                if (editMode) {
+                if (isEditMode) {
                     actionButton.setImageResource(R.drawable.ic_confirm);
                     messageView.setText(R.string.message_to_touch_confirm_button);
                     ObjectAnimator fadeInAnimator = Animations.makeFadeAnimator(recyclerView, 0.25f, 1.0f, 300);

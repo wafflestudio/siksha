@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
     private SwipeDisabledViewPagerAdapter adapter;
     private JSONDownloadReceiver JSONDownloadReceiver;
 
-    private boolean defaultTabSelect;
-    private boolean backPressedTwice;
+    private boolean isDefaultTabSelection;
+    private boolean isBackButtonPressedTwice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +95,8 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
         }
     }
 
-    public void downloadMenuData(String action, boolean splash) {
-        if (splash) {
+    public void downloadMenuData(String action, boolean isSplash) {
+        if (isSplash) {
             loadingDialog = new SplashDialog(this);
             ((SplashDialog) loadingDialog).start();
         } else {
@@ -127,9 +127,9 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
     }
 
     private void alertWidgetFeature() {
-        boolean widgetFeatureAlerted = Preference.loadBooleanValue(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_WIDGET_FEATURE_ALERTED);
+        boolean isWidgetFeatureAlerted = Preference.loadBooleanValue(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_WIDGET_FEATURE_ALERTED);
 
-        if (!widgetFeatureAlerted) {
+        if (!isWidgetFeatureAlerted) {
             new WidgetAlertDialog(this).show();
             Preference.save(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_WIDGET_FEATURE_ALERTED, true);
         }
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
 
             @Override
             public void onPageSelected(int position) {
-                if (!defaultTabSelect) {
+                if (!isDefaultTabSelection) {
                     switch (position) {
                         case 0:
                             BookmarkFragment bookmarkFragment = (BookmarkFragment) adapter.getItem(position);
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
                     }
                 }
 
-                defaultTabSelect = false;
+                isDefaultTabSelection = false;
             }
 
             @Override
@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
         return adapter;
     }
 
-    private void setTabLayout(int tabIndex, boolean selected) {
+    private void setTabLayout(int tabIndex, boolean isSelected) {
         tabLayout.getTabAt(tabIndex).setCustomView(null);
 
         View view = LayoutInflater.from(this).inflate(R.layout.tab, null);
@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
         TextView tabTitle = (TextView) view.findViewById(R.id.tab_text_view);
         tabTitle.setTypeface(Fonts.fontAPAritaDotumMedium);
 
-        if (selected) {
+        if (isSelected) {
             switch (tabIndex) {
                 case 0:
                     tabImage.setImageResource(R.drawable.ic_tab_star_selected);
@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
     }
 
     private void selectDefaultTab() {
-        defaultTabSelect = true;
+        isDefaultTabSelection = true;
 
         if (Preference.loadStringValue(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_BOOKMARKS).equals(""))
             tabLayout.getTabAt(1).select();
@@ -292,18 +292,18 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
 
     @Override
     public void onBackPressed() {
-        if (backPressedTwice) {
+        if (isBackButtonPressedTwice) {
             super.onBackPressed();
             return;
         }
 
-        backPressedTwice = true;
+        isBackButtonPressedTwice = true;
         Toast.makeText(this, R.string.back_pressed_twice_quit, Toast.LENGTH_SHORT).show();
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                backPressedTwice = false;
+                isBackButtonPressedTwice = false;
             }
         }, 2000);
     }

@@ -11,9 +11,9 @@ import java.util.Calendar;
 
 public class DownloadAlarmManager {
     public static void registerAlarm(Context context) {
-        boolean alarmAlreadySet = Preference.loadBooleanValue(context, Preference.PREF_ALARM_NAME, Preference.PREF_KEY_ALARM_ALREADY_SET);
+        boolean isAlarmSet = Preference.loadBooleanValue(context, Preference.PREF_ALARM_NAME, Preference.PREF_KEY_ALARM_SET);
 
-        if (!alarmAlreadySet)
+        if (!isAlarmSet)
             setAlarm(context);
     }
 
@@ -38,6 +38,6 @@ public class DownloadAlarmManager {
         }
 
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, moment.getTimeInMillis(), AlarmManager.INTERVAL_DAY, sender);
-        Preference.save(context, Preference.PREF_ALARM_NAME, Preference.PREF_KEY_ALARM_ALREADY_SET, true);
+        Preference.save(context, Preference.PREF_ALARM_NAME, Preference.PREF_KEY_ALARM_SET, true);
     }
 }

@@ -21,16 +21,16 @@ import java.util.List;
 
 public class TimeSlotPage extends Fragment {
     private static final String KEY_DATA = "data";
-    private static final String KEY_ON_BOOKMARK_TAB = "on_bookmark_tab";
+    private static final String KEY_IS_BOOKMARK_TAB = "is_bookmark_tab";
     private static final String KEY_INDEX = "index";
 
     private GroupRecyclerViewAdapter adapter;
 
-    public static TimeSlotPage newInstance(List<Menu> data, boolean onBookmarkTab, int index) {
+    public static TimeSlotPage newInstance(List<Menu> data, boolean isBookmarkTab, int index) {
         TimeSlotPage fragment = new TimeSlotPage();
         Bundle bundle = new Bundle();
         bundle.putSerializable(KEY_DATA, (Serializable) data);
-        bundle.putSerializable(KEY_ON_BOOKMARK_TAB, onBookmarkTab);
+        bundle.putSerializable(KEY_IS_BOOKMARK_TAB, isBookmarkTab);
         bundle.putSerializable(KEY_INDEX, index);
         fragment.setArguments(bundle);
 
@@ -43,12 +43,12 @@ public class TimeSlotPage extends Fragment {
         View view = inflater.inflate(R.layout.time_slot_page, container, false);
 
         List<Menu> data = (List<Menu>) getArguments().getSerializable(KEY_DATA);
-        boolean onBookmarkTab = (boolean) getArguments().getSerializable(KEY_ON_BOOKMARK_TAB);
+        boolean isBookmarkTab = (boolean) getArguments().getSerializable(KEY_IS_BOOKMARK_TAB);
         int index = (int) getArguments().getSerializable(KEY_INDEX);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.time_slot_page_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new GroupRecyclerViewAdapter(getContext(), data, onBookmarkTab, index);
+        adapter = new GroupRecyclerViewAdapter(getContext(), data, isBookmarkTab, index);
         recyclerView.setAdapter(adapter);
 
         return view;

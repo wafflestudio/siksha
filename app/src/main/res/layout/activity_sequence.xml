@@ -26,7 +26,7 @@
                 android:paddingTop="15dp"
                 android:text="@string/message_to_touch_edit_button"
                 android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
 
         </android.support.v7.widget.Toolbar>
 
