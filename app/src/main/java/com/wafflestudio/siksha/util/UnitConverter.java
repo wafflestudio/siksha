@@ -3,9 +3,6 @@ package com.wafflestudio.siksha.util;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 
-/**
- * Created by Gyu Kang on 2015-11-06.
- */
 public class UnitConverter {
     public static float STANDARD_DPI = 160.0f;
 

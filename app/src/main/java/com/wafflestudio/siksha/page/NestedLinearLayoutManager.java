@@ -6,9 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * Created by Gyu Kang on 2015-10-13.
- */
 public class NestedLinearLayoutManager extends LinearLayoutManager {
     private int[] measuredDimension = new int[2];
 

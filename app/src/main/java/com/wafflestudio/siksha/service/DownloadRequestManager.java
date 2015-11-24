@@ -5,9 +5,6 @@ import android.content.Context;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-/**
- * Created by Gyu Kang on 2015-10-12.
- */
 public class DownloadRequestManager {
     private static DownloadRequestManager instance;
     private RequestQueue requestQueue;

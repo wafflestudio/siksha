@@ -23,9 +23,6 @@ import com.wafflestudio.siksha.util.Preference;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Gyu Kang on 2015-09-17.
- */
 public class MenuFragment extends Fragment {
     private TextView dateView;
     private ArrayList<ImageView> pageIndicatorDots;

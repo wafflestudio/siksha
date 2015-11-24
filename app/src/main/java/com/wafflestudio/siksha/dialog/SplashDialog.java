@@ -11,9 +11,6 @@ import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.Animations;
 import com.wafflestudio.siksha.util.Fonts;
 
-/**
- * Created by Gyu Kang on 2015-11-05.
- */
 public class SplashDialog extends Dialog {
     private ImageView progressView;
 

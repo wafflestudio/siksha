@@ -10,9 +10,6 @@ import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.form.Menu;
 import com.wafflestudio.siksha.util.Fonts;
 
-/**
- * Created by Gyu Kang on 2015-10-13.
- */
 public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Menu data;
 

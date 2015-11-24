@@ -22,9 +22,6 @@ import com.wafflestudio.siksha.util.UnitConverter;
 
 import java.util.List;
 
-/**
- * Created by Gyu Kang on 2015-11-09.
- */
 public class ShareDialog extends Dialog implements View.OnClickListener {
     private Context context;
 

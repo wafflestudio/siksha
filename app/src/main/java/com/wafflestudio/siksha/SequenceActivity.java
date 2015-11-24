@@ -22,9 +22,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by Gyu Kang on 2015-10-14.
- */
 public class SequenceActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView messageView;
     private RecyclerView recyclerView;

@@ -44,7 +44,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
                 android:textColor="@color/color_primary"
-                android:textSize="22sp" />
+                android:textSize="23sp" />
 
             <TextView
                 android:id="@+id/operating_hour_title_view"

@@ -15,10 +15,6 @@ import com.wafflestudio.siksha.form.Menu;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by Gyu Kang on 2015-09-11.
- */
-
 public class TimeSlotPage extends Fragment {
     private static final String KEY_DATA = "data";
     private static final String KEY_IS_BOOKMARK_TAB = "is_bookmark_tab";

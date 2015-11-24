@@ -35,9 +35,6 @@ import java.util.List;
 import io.codetail.animation.SupportAnimator;
 import io.codetail.widget.RevealFrameLayout;
 
-/**
- * Created by Gyu Kang on 2015-10-13.
- */
 public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_NOT_EMPTY = 0;
     private static final int TYPE_EMPTY = 1;

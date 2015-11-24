@@ -13,9 +13,6 @@ import android.view.animation.Animation;
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
 
-/**
- * Created by Gyu Kang on 2015-10-23.
- */
 public class Animations {
     private static ValueAnimator makeSlideAnimator(final View view, int start, int end, int duration) {
         ValueAnimator animator = ValueAnimator.ofInt(start, end);

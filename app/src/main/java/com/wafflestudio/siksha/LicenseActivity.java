@@ -9,9 +9,6 @@ import android.widget.TextView;
 import com.wafflestudio.siksha.page.settings.LicenseRecyclerViewAdapter;
 import com.wafflestudio.siksha.util.Fonts;
 
-/**
- * Created by Gyu Kang on 2015-10-29.
- */
 public class LicenseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
