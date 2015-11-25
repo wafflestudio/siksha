@@ -98,11 +98,39 @@ public class Date {
     }
 
     public static String getRefreshTimestamp() {
+        Calendar calendar = Calendar.getInstance();
+        String dayOfWeek = "";
         int minute = getMinute();
 
+        switch (calendar.get(Calendar.DAY_OF_WEEK)) {
+            case 1:
+                dayOfWeek = "(일)";
+                break;
+            case 2:
+                dayOfWeek = "(월)";
+                break;
+            case 3:
+                dayOfWeek = "(화)";
+                break;
+            case 4:
+                dayOfWeek = "(수)";
+                break;
+            case 5:
+                dayOfWeek = "(목)";
+                break;
+            case 6:
+                dayOfWeek = "(금)";
+                break;
+            case 7:
+                dayOfWeek = "(토)";
+                break;
+        }
+
         if (minute >= 0 && minute <= 9)
-            return getPrimaryTimestamp(Date.TYPE_NORMAL) + " " + getHour() + ":" + "0" + getMinute();
+            return (calendar.get(Calendar.MONTH) + 1) + "월 " + calendar.get(Calendar.DAY_OF_MONTH) + "일 " + dayOfWeek
+                    + " " + getHour() + ":" + "0" + getMinute();
         else
-            return getPrimaryTimestamp(Date.TYPE_NORMAL) + " " + getHour() + ":" + getMinute();
+            return (calendar.get(Calendar.MONTH) + 1) + "월 " + calendar.get(Calendar.DAY_OF_MONTH) + "일 " + dayOfWeek
+                    + " " + getHour() + ":" + getMinute();
     }
 }

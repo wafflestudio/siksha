@@ -194,6 +194,7 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+                setTabLayout(tab.getPosition(), true);
             }
         });
 
