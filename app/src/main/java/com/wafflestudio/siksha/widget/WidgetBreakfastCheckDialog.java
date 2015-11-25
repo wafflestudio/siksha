@@ -17,10 +17,6 @@ import com.wafflestudio.siksha.util.Preference;
 
 import java.util.List;
 
-/**
- * Created by Gyeongin on 2015-03-26.
- */
-
 public class WidgetBreakfastCheckDialog extends Dialog implements View.OnClickListener {
     private Context context;
     private int appWidgetID;

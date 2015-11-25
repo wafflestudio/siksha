@@ -17,9 +17,6 @@ import com.wafflestudio.siksha.util.Preference;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Gyu Kang on 2015-10-30.
- */
 public class WidgetConfigureRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private String[] restuarants;
     private List<String> checkList;

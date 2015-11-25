@@ -18,6 +18,7 @@
 
 	<string name="empty_menu">메뉴가 없습니다.</string>
     <string name="now_downloading">식단을 다운로드하고 있습니다...</string>
+    <string name="now_refreshing">식단을 새로 불러오는 중입니다...</string>
     <string name="back_pressed_twice_quit">\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.</string>
 
     <string name="empty_bookmark">즐겨 찾는 식당이 없습니다.</string>

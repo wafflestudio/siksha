@@ -30,7 +30,7 @@ public class BookmarkFragment extends Fragment {
     private Context context;
     private ViewPagerAdapter viewPagerAdapter;
 
-    private int selectedPosition;
+    private int selectedPosition = -1;
 
     @Override
     public void onAttach(Context context) {
@@ -41,7 +41,7 @@ public class BookmarkFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        viewPager.setCurrentItem(Date.getTimeSlotIndex());
+        viewPager.setCurrentItem(getSelectedPosition());
     }
 
     @Nullable
@@ -98,7 +98,7 @@ public class BookmarkFragment extends Fragment {
     }
 
     public int getSelectedPosition() {
-        return selectedPosition;
+        return selectedPosition == -1 ? Date.getTimeSlotIndex() : selectedPosition;
     }
 
     public void notifyToAdapters() {

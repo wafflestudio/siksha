@@ -12,9 +12,6 @@ import com.wafflestudio.siksha.util.Fonts;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by Gyu Kang on 2015-10-14.
- */
 public class SequenceRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements SequenceItemTouchHelperCallback.ItemTouchHelperAdapter {
     private List<String> data;
 

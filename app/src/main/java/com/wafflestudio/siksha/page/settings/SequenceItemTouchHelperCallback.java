@@ -3,9 +3,6 @@ package com.wafflestudio.siksha.page.settings;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
-/**
- * Created by Gyu Kang on 2015-10-14.
- */
 public class SequenceItemTouchHelperCallback extends ItemTouchHelper.Callback {
     private ItemTouchHelperAdapter adapter;
 

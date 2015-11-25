@@ -12,6 +12,8 @@
         android:layout_gravity="center"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="15dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:gravity="center"
         android:text="@string/breakfast_check_dialog_message"
         android:textSize="21sp" />

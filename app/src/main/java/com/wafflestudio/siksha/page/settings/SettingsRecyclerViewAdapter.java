@@ -23,10 +23,6 @@ import com.wafflestudio.siksha.util.NetworkChecker;
 import com.wafflestudio.siksha.util.Fonts;
 import com.wafflestudio.siksha.util.Preference;
 
-/**
- * Created by Gyu Kang on 2015-09-18.
- */
-
 public class SettingsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_EMPTY = 1;

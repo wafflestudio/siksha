@@ -10,9 +10,6 @@ import android.widget.TextView;
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.util.Fonts;
 
-/**
- * Created by Gyu Kang on 2015-10-29.
- */
 public class LicenseRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private String[] libraries;
     private String[] links;

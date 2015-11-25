@@ -11,15 +11,18 @@ import android.view.ViewGroup;
 
 import com.wafflestudio.siksha.R;
 
-/**
- * Created by Gyu Kang on 2015-09-17.
- */
 public class SettingsFragment extends Fragment {
     private SettingsRecyclerViewAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        notifyToAdapter();
     }
 
     @Nullable

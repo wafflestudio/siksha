@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.form.response.Menu;
@@ -38,7 +39,7 @@ public class WidgetProvider extends AppWidgetProvider {
             else {
                 for (int appWidgetID : appWidgetIds) {
                     if (WidgetConfigureActivity.isValidAppWidgetID(context, appWidgetID)) {
-                        RemoteViews remoteViews = updateWidgetRemoteViews(context, appWidgetID, false);
+                        RemoteViews remoteViews = getExtendedRemoteViews(context, appWidgetID, false);
                         appWidgetManager.updateAppWidget(appWidgetID, remoteViews);
                         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetID, R.id.widget_provider_list_view);
                     }
@@ -47,7 +48,7 @@ public class WidgetProvider extends AppWidgetProvider {
         } else {
             for (int appWidgetID : appWidgetIds) {
                 if (WidgetConfigureActivity.isValidAppWidgetID(context, appWidgetID)) {
-                    RemoteViews remoteViews = updateWidgetRemoteViews(context, appWidgetID, true);
+                    RemoteViews remoteViews = getExtendedRemoteViews(context, appWidgetID, true);
                     appWidgetManager.updateAppWidget(appWidgetID, remoteViews);
                     appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetID, R.id.widget_provider_list_view);
                 }
@@ -55,14 +56,14 @@ public class WidgetProvider extends AppWidgetProvider {
         }
     }
 
-    private RemoteViews updateWidgetRemoteViews(Context context, int appWidgetID, boolean success) {
+    private RemoteViews getExtendedRemoteViews(Context context, int appWidgetID, boolean isSuccess) {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_provider);
 
         Intent remoteIntent = new Intent(context, WidgetRemoteService.class);
         remoteIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetID);
         remoteIntent.setData(Uri.parse(remoteIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
-        if (success) {
+        if (isSuccess) {
             remoteViews.setRemoteAdapter(R.id.widget_provider_list_view, remoteIntent);
             remoteViews.setEmptyView(R.id.widget_provider_list_view, R.id.widget_provider_empty_view);
             remoteViews.setTextViewText(R.id.widget_provider_date_view, Date.getPrimaryTimestamp(Date.TYPE_CONCISE) + " " + Date.getTimeSlot(Date.getTimeSlotIndexForWidget(context, appWidgetID)));
@@ -75,6 +76,7 @@ public class WidgetProvider extends AppWidgetProvider {
         refreshIntent.setAction(STATE_WIDGET_REFRESH);
         remoteIntent.setData(Uri.parse(remoteIntent.toUri(Intent.URI_INTENT_SCHEME)));
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, refreshIntent, 0);
+
         remoteViews.setOnClickPendingIntent(R.id.widget_provider_header_view, pendingIntent);
         remoteViews.setOnClickPendingIntent(R.id.widget_provider_refresh_button, pendingIntent);
 
@@ -86,6 +88,8 @@ public class WidgetProvider extends AppWidgetProvider {
         super.onReceive(context, intent);
         Log.d("widget", intent.getAction());
 
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+
         if (intent.getAction().equals(STATE_CONFIGURATION_FINISHED)) {
             int appWidgetID = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             NetworkChecker.getInstance().initialize(context);
@@ -95,16 +99,14 @@ public class WidgetProvider extends AppWidgetProvider {
                     new JSONDownloader(context, JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD).start();
                 else {
                     if (WidgetConfigureActivity.isValidAppWidgetID(context, appWidgetID)) {
-                        RemoteViews remoteViews = updateWidgetRemoteViews(context, appWidgetID, false);
-                        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                        RemoteViews remoteViews = getExtendedRemoteViews(context, appWidgetID, false);
                         appWidgetManager.updateAppWidget(appWidgetID, remoteViews);
                         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetID, R.id.widget_provider_list_view);
                     }
                 }
             } else {
                 if (WidgetConfigureActivity.isValidAppWidgetID(context, appWidgetID)) {
-                    RemoteViews remoteViews = updateWidgetRemoteViews(context, appWidgetID, true);
-                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                    RemoteViews remoteViews = getExtendedRemoteViews(context, appWidgetID, true);
                     appWidgetManager.updateAppWidget(appWidgetID, remoteViews);
                     appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetID, R.id.widget_provider_list_view);
                 }
@@ -117,8 +119,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
             while (iterator.hasNext()) {
                 int appWidgetID = Integer.valueOf(iterator.next());
-                RemoteViews remoteViews = updateWidgetRemoteViews(context, appWidgetID, true);
-                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                RemoteViews remoteViews = getExtendedRemoteViews(context, appWidgetID, true);
                 appWidgetManager.updateAppWidget(appWidgetID, remoteViews);
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetID, R.id.widget_provider_list_view);
             }
@@ -129,8 +130,7 @@ public class WidgetProvider extends AppWidgetProvider {
             while (iterator.hasNext()) {
                 int appWidgetID = Integer.valueOf(iterator.next());
 
-                RemoteViews remoteViews = updateWidgetRemoteViews(context, appWidgetID, true);
-                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                RemoteViews remoteViews = getExtendedRemoteViews(context, appWidgetID, true);
                 appWidgetManager.updateAppWidget(appWidgetID, remoteViews);
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetID, R.id.widget_provider_list_view);
             }
@@ -141,8 +141,7 @@ public class WidgetProvider extends AppWidgetProvider {
             while (iterator.hasNext()) {
                 int appWidgetID = Integer.valueOf(iterator.next());
 
-                RemoteViews remoteViews = updateWidgetRemoteViews(context, appWidgetID, false);
-                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                RemoteViews remoteViews = getExtendedRemoteViews(context, appWidgetID, false);
                 appWidgetManager.updateAppWidget(appWidgetID, remoteViews);
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetID, R.id.widget_provider_list_view);
             }
@@ -150,12 +149,14 @@ public class WidgetProvider extends AppWidgetProvider {
             int appWidgetID = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             NetworkChecker.getInstance().initialize(context);
 
-            if (NetworkChecker.getInstance().isOnline())
+            if (NetworkChecker.getInstance().isOnline()) {
+                Toast.makeText(context, R.string.now_refreshing, Toast.LENGTH_SHORT).show();
                 new JSONDownloader(context, JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD).start();
+            }
             else {
+                Toast.makeText(context, R.string.check_network_state, Toast.LENGTH_SHORT).show();
                 if (WidgetConfigureActivity.isValidAppWidgetID(context, appWidgetID)) {
-                    RemoteViews remoteViews = updateWidgetRemoteViews(context, appWidgetID, false);
-                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                    RemoteViews remoteViews = getExtendedRemoteViews(context, appWidgetID, false);
                     appWidgetManager.updateAppWidget(appWidgetID, remoteViews);
                     appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetID, R.id.widget_provider_list_view);
                 }

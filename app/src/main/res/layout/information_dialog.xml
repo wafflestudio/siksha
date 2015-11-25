@@ -29,64 +29,71 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal">
 
-            <TextView
-                android:id="@+id/information_dialog_title_view"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center"
-                android:textColor="@color/color_primary"
-                android:textSize="23sp" />
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="15dp"
+                android:paddingBottom="10dp">
 
-            <TextView
-                android:id="@+id/operating_hour_title_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="15dp"
-                android:gravity="center"
-                android:text="@string/operating_hour"
-                android:textSize="17sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/information_dialog_title_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:textColor="@color/color_primary"
+                    android:textSize="23sp" />
 
-            <TextView
-                android:id="@+id/operating_hour_message_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/operating_hour_title_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center"
+                    android:text="@string/operating_hour"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/location_title_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center"
-                android:text="@string/location"
-                android:textSize="17sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/operating_hour_message_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/location_message_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/location_title_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:text="@string/location"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/location_message_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </ScrollView>
 
     </LinearLayout>
 

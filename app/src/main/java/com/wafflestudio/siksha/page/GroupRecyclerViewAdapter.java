@@ -23,6 +23,7 @@ import com.wafflestudio.siksha.dialog.InformationDialog;
 import com.wafflestudio.siksha.dialog.ShareDialog;
 import com.wafflestudio.siksha.form.Menu;
 import com.wafflestudio.siksha.page.bookmark.BookmarkFragment;
+import com.wafflestudio.siksha.page.menu.MenuFragment;
 import com.wafflestudio.siksha.util.Animations;
 import com.wafflestudio.siksha.util.BookmarkManager;
 import com.wafflestudio.siksha.util.Fonts;
@@ -232,6 +233,8 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                             bookmarkButton.setImageResource(R.drawable.ic_star_selected);
                             AnalyticsTrackers.getInstance().trackEvent("Restaurant", "Bookmark", restaurant);
                         }
+
+                        ((MenuFragment) ((MainActivity) context).getSwipeDisabledViewPagerAdapter().getItem(1)).notifyToAdapters();
                     }
 
                     Log.d("Bookmark", Preference.loadStringValue(context, Preference.PREF_APP_NAME, Preference.PREF_KEY_BOOKMARKS));
@@ -242,15 +245,14 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         private void expandDrawer() {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 AnimatorSet animatorSet = new AnimatorSet();
-                final ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, 0.0f, -180.0f, 400, false);
-                rotateAnimator.setInterpolator(new LinearInterpolator());
                 Animator expandAnimator = Animations.makeExpandAnimator(actionContainer, 150);
-                final com.nineoldandroids.animation.Animator revealAnimator = (com.nineoldandroids.animation.Animator) ((SupportAnimator) Animations.makeRevealAnimator(actionContainer, 250)).get();
 
                 animatorSet.play(expandAnimator);
                 animatorSet.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animator) {
+                        ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, 0.0f, -180.0f, 400, false);
+                        rotateAnimator.setInterpolator(new LinearInterpolator());
                         rotateAnimator.start();
 
                         float[] radii = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
@@ -259,6 +261,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
                     @Override
                     public void onAnimationEnd(Animator animator) {
+                        com.nineoldandroids.animation.Animator revealAnimator = (com.nineoldandroids.animation.Animator) ((SupportAnimator) Animations.makeRevealAnimator(actionContainer, 250)).get();
                         revealAnimator.start();
                     }
 
@@ -275,12 +278,30 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             } else {
                 AnimatorSet animatorSet = new AnimatorSet();
                 Animator expandAnimator = Animations.makeExpandAnimator(actionContainer, 150);
-                Animator revealAnimator = (Animator) Animations.makeRevealAnimator(actionContainer, 250);
-                ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, 0.0f, -180.0f, 400, false);
-                rotateAnimator.setInterpolator(new LinearInterpolator());
 
-                animatorSet.play(rotateAnimator).with(expandAnimator);
-                animatorSet.play(expandAnimator).before(revealAnimator);
+                animatorSet.play(expandAnimator);
+                animatorSet.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+                        ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, 0.0f, -180.0f, 400, false);
+                        rotateAnimator.setInterpolator(new LinearInterpolator());
+                        rotateAnimator.start();
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        Animator revealAnimator = (Animator) Animations.makeRevealAnimator(actionContainer, 250);
+                        revealAnimator.start();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+                    }
+                });
 
                 animatorSet.start();
             }
@@ -288,12 +309,33 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         private void collapseDrawer() {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                final AnimatorSet animatorSet = new AnimatorSet();
                 com.nineoldandroids.animation.AnimatorSet supportAnimatorSet = new com.nineoldandroids.animation.AnimatorSet();
-                final ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, -180.0f, -360.0f, 400, false);
-                rotateAnimator.setInterpolator(new LinearInterpolator());
                 com.nineoldandroids.animation.Animator concealAnimator = (com.nineoldandroids.animation.Animator) ((SupportAnimator) Animations.makeConcealAnimator(actionContainer, 250)).get();
-                final Animator collapseAnimator = Animations.makeCollapseAnimator(actionContainer, 150);
+                final AnimatorSet animatorSet = new AnimatorSet();
+                Animator collapseAnimator = Animations.makeCollapseAnimator(actionContainer, 150);
+
+                supportAnimatorSet.play(concealAnimator);
+                supportAnimatorSet.addListener(new com.nineoldandroids.animation.Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(com.nineoldandroids.animation.Animator animation) {
+                        ObjectAnimator rotateAnimator = Animations.makeRotateAnimator(drawerButton, -180.0f, -360.0f, 400, false);
+                        rotateAnimator.setInterpolator(new LinearInterpolator());
+                        rotateAnimator.start();
+                    }
+
+                    @Override
+                    public void onAnimationEnd(com.nineoldandroids.animation.Animator animation) {
+                        animatorSet.start();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(com.nineoldandroids.animation.Animator animation) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(com.nineoldandroids.animation.Animator animation) {
+                    }
+                });
 
                 animatorSet.play(collapseAnimator);
                 animatorSet.addListener(new Animator.AnimatorListener() {
@@ -314,27 +356,6 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
                     @Override
                     public void onAnimationRepeat(Animator animator) {
-                    }
-                });
-
-                supportAnimatorSet.play(concealAnimator);
-                supportAnimatorSet.addListener(new com.nineoldandroids.animation.Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(com.nineoldandroids.animation.Animator animation) {
-                        rotateAnimator.start();
-                    }
-
-                    @Override
-                    public void onAnimationEnd(com.nineoldandroids.animation.Animator animation) {
-                        animatorSet.start();
-                    }
-
-                    @Override
-                    public void onAnimationCancel(com.nineoldandroids.animation.Animator animation) {
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(com.nineoldandroids.animation.Animator animation) {
                     }
                 });
 
