@@ -6,13 +6,13 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -95,9 +95,9 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                     notEmptyRestaurantViewHolder.recyclerView.setAdapter(adapter);
 
                     if (BookmarkManager.isBookmarked(context, restaurant))
-                        notEmptyRestaurantViewHolder.bookmarkButton.setImageResource(R.drawable.ic_star_selected);
+                        notEmptyRestaurantViewHolder.bookmarkButton.setImageResource(R.drawable.star_filled_button_src);
                     else
-                        notEmptyRestaurantViewHolder.bookmarkButton.setImageResource(R.drawable.ic_star);
+                        notEmptyRestaurantViewHolder.bookmarkButton.setImageResource(R.drawable.star_button_src);
 
                     if (!drawerExpandedList.contains(restaurant)) {
                         float radius = UnitConverter.convertDpToPx(5.0f);
@@ -156,10 +156,10 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         private RecyclerView recyclerView;
         private RevealFrameLayout revealFrameLayout;
         private LinearLayout actionContainer;
-        private FloatingActionButton drawerButton;
-        private FloatingActionButton infoPopupButton;
-        private FloatingActionButton bookmarkButton;
-        private FloatingActionButton kakaotalkButton;
+        private ImageButton drawerButton;
+        private ImageButton infoPopupButton;
+        private ImageButton bookmarkButton;
+        private ImageButton kakaotalkButton;
         private TextView infoPopupTextView;
         private TextView bookmarkTextView;
         private TextView kakaotalkTextView;
@@ -170,10 +170,10 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             nameView = (TextView) itemView.findViewById(R.id.group_name_view);
             revealFrameLayout = (RevealFrameLayout) itemView.findViewById(R.id.group_reveal_frame_layout);
             actionContainer = (LinearLayout) itemView.findViewById(R.id.group_action_button_container);
-            drawerButton = (FloatingActionButton) itemView.findViewById(R.id.not_empty_restaurant_layout_drawer_button);
-            infoPopupButton = (FloatingActionButton) itemView.findViewById(R.id.group_info_popup_button);
-            bookmarkButton = (FloatingActionButton) itemView.findViewById(R.id.group_bookmark_button);
-            kakaotalkButton = (FloatingActionButton) itemView.findViewById(R.id.group_share_button);
+            drawerButton = (ImageButton) itemView.findViewById(R.id.not_empty_restaurant_layout_drawer_button);
+            infoPopupButton = (ImageButton) itemView.findViewById(R.id.group_info_popup_button);
+            bookmarkButton = (ImageButton) itemView.findViewById(R.id.group_bookmark_button);
+            kakaotalkButton = (ImageButton) itemView.findViewById(R.id.group_share_button);
             infoPopupTextView = (TextView) itemView.findViewById(R.id.group_info_popup_text_view);
             bookmarkTextView = (TextView) itemView.findViewById(R.id.group_bookmark_text_view);
             kakaotalkTextView = (TextView) itemView.findViewById(R.id.group_share_text_view);
@@ -218,7 +218,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                     if (isBookmarkTab) {
                         if (BookmarkManager.isBookmarked(context, restaurant)) {
                             BookmarkManager.unsetFromBookmark(context, restaurant);
-                            bookmarkButton.setImageResource(R.drawable.ic_star);
+                            bookmarkButton.setImageResource(R.drawable.star_button_src);
                             drawerExpandedList.remove(restaurant);
                             data.remove(position);
 
@@ -227,10 +227,10 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                     } else {
                         if (BookmarkManager.isBookmarked(context, restaurant)) {
                             BookmarkManager.unsetFromBookmark(context, restaurant);
-                            bookmarkButton.setImageResource(R.drawable.ic_star);
+                            bookmarkButton.setImageResource(R.drawable.star_button_src);
                         } else {
                             BookmarkManager.setAsBookmark(context, restaurant);
-                            bookmarkButton.setImageResource(R.drawable.ic_star_selected);
+                            bookmarkButton.setImageResource(R.drawable.star_filled_button_src);
                             AnalyticsTrackers.getInstance().trackEvent("Restaurant", "Bookmark", restaurant);
                         }
 
