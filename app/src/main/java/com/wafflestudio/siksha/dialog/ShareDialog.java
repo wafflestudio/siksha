@@ -75,7 +75,7 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
 
                     int size = foods.size();
                     if (size == 0)
-                        stringBuilder.append("\n").append(R.string.empty_menu);
+                        stringBuilder.append("\n").append("메뉴가 없습니다");
                     else {
                         for (int i = 0; i < size; i++) {
                             Food food = foods.get(i);
