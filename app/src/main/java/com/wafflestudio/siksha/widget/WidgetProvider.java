@@ -24,7 +24,6 @@ import java.util.Set;
 
 public class WidgetProvider extends AppWidgetProvider {
     public static final String STATE_CONFIGURATION_FINISHED = "com.wafflestudio.siksha.widget.STATE_CONFIGURATION_FINISHED";
-    public static final String STATE_DATA_ALREADY_UPDATED = "com.wafflestudio.siksha.widget.STATE_DATA_ALREADY_UPDATED";
     public static final String STATE_NEW_DATA_FETCHED = "com.wafflestudio.siksha.widget.STATE_NEW_DATA_FETCHED";
     public static final String STATE_UPDATE_FAILURE = "com.wafflestudio.siksha.widget.STATE_UPDATE_FAILURE";
     public static final String STATE_WIDGET_REFRESH = "com.wafflestudio.siksha.widget.STATE_WIDGET_REFRESH";
@@ -109,18 +108,6 @@ public class WidgetProvider extends AppWidgetProvider {
                     appWidgetManager.updateAppWidget(appWidgetID, remoteViews);
                     appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetID, R.id.widget_provider_list_view);
                 }
-            }
-        } else if (intent.getAction().equals(STATE_DATA_ALREADY_UPDATED)) {
-            AppDataManager.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(context, Menu.class).data);
-
-            Set<String> appWidgetIDSet = WidgetConfigureActivity.getAllAppWidgetIDs(context);
-            Iterator<String> iterator = appWidgetIDSet.iterator();
-
-            while (iterator.hasNext()) {
-                int appWidgetID = Integer.valueOf(iterator.next());
-                RemoteViews remoteViews = getExtendedRemoteViews(context, appWidgetID, true);
-                appWidgetManager.updateAppWidget(appWidgetID, remoteViews);
-                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetID, R.id.widget_provider_list_view);
             }
         } else if (intent.getAction().equals(STATE_NEW_DATA_FETCHED)) {
             Set<String> appWidgetIDSet = WidgetConfigureActivity.getAllAppWidgetIDs(context);
