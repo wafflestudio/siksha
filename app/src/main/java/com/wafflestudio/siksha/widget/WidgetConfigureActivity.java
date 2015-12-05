@@ -41,7 +41,6 @@ public class WidgetConfigureActivity extends AppCompatActivity implements View.O
             finish();
 
         AppDataManager.getInstance().setDefaultRestaurantSequence(this);
-        AppDataManager.getInstance().setMenuDictionaries(JSONParser.parseJSONFile(this, Menu.class).data);
         Fonts.getInstance().initialize(this);
 
         TextView messageView = (TextView) findViewById(R.id.activity_widget_configure_message_view);
