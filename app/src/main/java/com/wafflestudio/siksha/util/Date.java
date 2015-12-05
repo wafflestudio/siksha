@@ -90,8 +90,7 @@ public class Date {
                 return 0;
             else
                 return 1;
-        }
-        else if (hour >= 10 && hour <= 14)
+        } else if (hour >= 10 && hour <= 14)
             return 1;
         else
             return 2;
@@ -132,5 +131,11 @@ public class Date {
         else
             return (calendar.get(Calendar.MONTH) + 1) + "월 " + calendar.get(Calendar.DAY_OF_MONTH) + "일 " + dayOfWeek
                     + " " + getHour() + ":" + getMinute();
+    }
+
+    public static boolean isVetDataUpdateTime() {
+        Calendar calendar = Calendar.getInstance();
+
+        return calendar.get(Calendar.DAY_OF_WEEK) == 2 && calendar.get(Calendar.HOUR_OF_DAY) >= 10 && calendar.get(Calendar.HOUR_OF_DAY) < 20;
     }
 }

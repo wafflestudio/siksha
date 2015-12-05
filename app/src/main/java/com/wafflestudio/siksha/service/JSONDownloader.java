@@ -56,6 +56,13 @@ public class JSONDownloader {
         return latestDownload.equals(Date.getPrimaryTimestamp(Date.TYPE_NORMAL));
     }
 
+    public static boolean isVetDataUpdated(Context context) {
+        String recordedDate = Preference.loadStringValue(context, Preference.PREF_APP_NAME, Preference.PREF_KEY_VET_DATA);
+        Log.d("recorded_vet_date", recordedDate);
+
+        return recordedDate.equals(Date.getPrimaryTimestamp(Date.TYPE_NORMAL));
+    }
+
     private void compareLocalAndServerData(final UpdateCallback callback) {
         final String localLatestData = Preference.loadStringValue(context, Preference.PREF_APP_NAME, Preference.PREF_KEY_LATEST_INFORMATION_DATA);
         Log.d("cmpLocalAndServerData()", "local_latest_data : " + localLatestData);
@@ -242,6 +249,8 @@ public class JSONDownloader {
                     if (!timestamp.equals(getLatestDownloadDate()) && action.equals(JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD))
                         Preference.save(context, Preference.PREF_APP_NAME, Preference.PREF_KEY_REFRESH_ON_RESUME, true);
 
+                    if (Date.isVetDataUpdateTime())
+                        updateLatestDownloadDate(Preference.PREF_KEY_VET_DATA, timestamp);
                     updateLatestDownloadDate(Preference.PREF_KEY_LATEST_MENU_DATA, timestamp);
                     updateRefreshTimestamp();
 

@@ -13,6 +13,7 @@ public class Preference {
 
     public static final String PREF_KEY_LATEST_MENU_DATA = "latest_menu_data";
     public static final String PREF_KEY_LATEST_INFORMATION_DATA = "latest_information_data";
+    public static final String PREF_KEY_VET_DATA = "vet_data";
 
     public static final String PREF_KEY_ALARM_SET = "alarm_set";
     public static final String PREF_KEY_WIDGET_FEATURE_ALERTED = "widget_feature_alerted";

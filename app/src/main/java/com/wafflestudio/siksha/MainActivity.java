@@ -32,6 +32,7 @@ import com.wafflestudio.siksha.service.DownloadAlarmManager;
 import com.wafflestudio.siksha.service.JSONDownloadReceiver;
 import com.wafflestudio.siksha.service.JSONDownloader;
 import com.wafflestudio.siksha.util.AppDataManager;
+import com.wafflestudio.siksha.util.Date;
 import com.wafflestudio.siksha.util.NetworkChecker;
 import com.wafflestudio.siksha.util.Fonts;
 import com.wafflestudio.siksha.util.JSONParser;
@@ -83,10 +84,18 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
 
     private void checkMenuData() {
         if (JSONDownloader.isJSONUpdated(this)) {
-            setupMenuData();
-            setupViewPager();
-            selectDefaultTab();
-            alertWidgetFeature();
+            if (Date.isVetDataUpdateTime() && !JSONDownloader.isVetDataUpdated(this)) {
+                if (!NetworkChecker.getInstance().isOnline())
+                    new DownloadAlertDialog(this).show();
+                else
+                    downloadMenuData(com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_MENU_DOWNLOAD, true);
+            }
+            else {
+                setupMenuData();
+                setupViewPager();
+                selectDefaultTab();
+                alertWidgetFeature();
+            }
         } else {
             if (!NetworkChecker.getInstance().isOnline())
                 new DownloadAlertDialog(this).show();
