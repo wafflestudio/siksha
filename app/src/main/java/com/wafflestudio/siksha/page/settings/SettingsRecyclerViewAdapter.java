@@ -73,7 +73,7 @@ public class SettingsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     context.startActivity(new Intent(context, AppVersionActivity.class));
                     break;
                 case 2:
-                    if (NetworkChecker.getInstance().isOnline())
+                    if (NetworkChecker.getInstance().isOnline(context))
                         ((MainActivity) context).downloadMenuData(JSONDownloadReceiver.ACTION_MENU_REFRESH, false);
                     else
                         Toast.makeText(context, R.string.check_network_state, Toast.LENGTH_SHORT).show();

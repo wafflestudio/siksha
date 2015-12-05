@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
 
         AnalyticsTrackers.getInstance().setDefaultTracker();
         AppDataManager.getInstance().setDefaultRestaurantSequence(this);
-        NetworkChecker.getInstance().initialize(this);
         DownloadAlarmManager.registerAlarm(this);
         Fonts.getInstance().initialize(this);
 
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
     private void checkMenuData() {
         if (JSONDownloader.isJSONUpdated(this)) {
             if (Date.isVetDataUpdateTime() && !JSONDownloader.isVetDataUpdated(this)) {
-                if (!NetworkChecker.getInstance().isOnline())
+                if (!NetworkChecker.getInstance().isOnline(this))
                     new DownloadAlertDialog(this).show();
                 else
                     downloadMenuData(com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_MENU_DOWNLOAD, true);
@@ -97,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
                 alertWidgetFeature();
             }
         } else {
-            if (!NetworkChecker.getInstance().isOnline())
+            if (!NetworkChecker.getInstance().isOnline(this))
                 new DownloadAlertDialog(this).show();
             else
                 downloadMenuData(com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_MENU_DOWNLOAD, true);
@@ -117,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
     }
 
     private void checkInformationData() {
-        if (NetworkChecker.getInstance().isOnline())
+        if (NetworkChecker.getInstance().isOnline(this))
             new JSONDownloader(this, com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_INFORMATION_DOWNLOAD).start();
     }
 
@@ -131,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
     }
 
     private void checkLatestAppVersion() {
-        if (NetworkChecker.getInstance().isOnline())
+        if (NetworkChecker.getInstance().isOnline(this))
             new JSONDownloader(this, com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_LATEST_APP_VERSION_CHECK).start();
     }
 
