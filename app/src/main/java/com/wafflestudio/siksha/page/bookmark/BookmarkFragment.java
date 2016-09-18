@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.viewpagerindicator.CirclePageIndicator;
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.page.GroupRecyclerViewAdapter;
 import com.wafflestudio.siksha.page.TimeSlotPage;
@@ -24,11 +25,12 @@ import java.util.List;
 
 public class BookmarkFragment extends Fragment {
     private TextView dateView;
-    private ArrayList<ImageView> pageIndicatorDots;
     private ViewPager viewPager;
 
     private Context context;
     private ViewPagerAdapter viewPagerAdapter;
+
+    private CirclePageIndicator mCirclePageIndicator;
 
     private int selectedPosition = -1;
 
@@ -52,12 +54,6 @@ public class BookmarkFragment extends Fragment {
         dateView = (TextView) view.findViewById(R.id.bookmark_date_view);
         dateView.setTypeface(Fonts.fontAPAritaDotumMedium);
 
-        pageIndicatorDots = new ArrayList<>();
-        pageIndicatorDots.add((ImageView) view.findViewById(R.id.bookmark_page_indicator_dot_1));
-        pageIndicatorDots.add((ImageView) view.findViewById(R.id.bookmark_page_indicator_dot_2));
-        pageIndicatorDots.add((ImageView) view.findViewById(R.id.bookmark_page_indicator_dot_3));
-        refreshPageIndicators(Date.getTimeSlotIndex());
-
         viewPager = (ViewPager) view.findViewById(R.id.bookmark_view_pager);
         viewPagerAdapter = new ViewPagerAdapter(context, getChildFragmentManager(), true);
         viewPager.setAdapter(viewPagerAdapter);
@@ -79,18 +75,15 @@ public class BookmarkFragment extends Fragment {
         });
         viewPager.setCurrentItem(Date.getTimeSlotIndex());
 
+        mCirclePageIndicator = (CirclePageIndicator)view.findViewById(R.id.circle_page_indicator);
+        mCirclePageIndicator.setViewPager(viewPager);
+        refreshPageIndicators(Date.getTimeSlotIndex());
         return view;
     }
 
     public void refreshPageIndicators(int position) {
         dateView.setText(new StringBuilder().append(Date.getPrimaryTimestamp(Date.TYPE_NORMAL)).append(" ").append(Date.getTimeSlot(position)).toString());
-
-        for (int i = 0; i < pageIndicatorDots.size(); i++) {
-            if (i == position)
-                pageIndicatorDots.get(i).setImageResource(R.drawable.dot_selected);
-            else
-                pageIndicatorDots.get(i).setImageResource(R.drawable.dot_unselected);
-        }
+        mCirclePageIndicator.setCurrentItem(position);
     }
 
     private void setSelectedPosition(int position) {

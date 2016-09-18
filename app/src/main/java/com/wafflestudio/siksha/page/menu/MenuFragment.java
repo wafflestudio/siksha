@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.viewpagerindicator.CirclePageIndicator;
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.page.GroupRecyclerViewAdapter;
 import com.wafflestudio.siksha.page.TimeSlotPage;
@@ -25,11 +26,12 @@ import java.util.List;
 
 public class MenuFragment extends Fragment {
     private TextView dateView;
-    private ArrayList<ImageView> pageIndicatorDots;
     private ViewPager viewPager;
 
     private Context context;
     private ViewPagerAdapter viewPagerAdapter;
+
+    private CirclePageIndicator mCirclePageIndicator;
 
     private int selectedPosition = -1;
 
@@ -53,24 +55,23 @@ public class MenuFragment extends Fragment {
         dateView = (TextView) view.findViewById(R.id.menu_date_view);
         dateView.setTypeface(Fonts.fontAPAritaDotumMedium);
 
-        pageIndicatorDots = new ArrayList<>();
-        pageIndicatorDots.add((ImageView) view.findViewById(R.id.menu_page_indicator_dot_1));
-        pageIndicatorDots.add((ImageView) view.findViewById(R.id.menu_page_indicator_dot_2));
-        pageIndicatorDots.add((ImageView) view.findViewById(R.id.menu_page_indicator_dot_3));
-        refreshPageIndicators(Date.getTimeSlotIndex());
-
         viewPager = (ViewPager) view.findViewById(R.id.menu_view_pager);
         viewPagerAdapter = new ViewPagerAdapter(context, getChildFragmentManager(), false);
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setOffscreenPageLimit(2);
+
+        mCirclePageIndicator = (CirclePageIndicator)view.findViewById(R.id.circle_page_indicator);
+        mCirclePageIndicator.setViewPager(viewPager);
+        refreshPageIndicators(Date.getTimeSlotIndex());
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
 
             @Override
             public void onPageSelected(int position) {
-                refreshPageIndicators(position);
-                setSelectedPosition(position);
+                    refreshPageIndicators(position);
+                    setSelectedPosition(position);
             }
 
             @Override
@@ -83,13 +84,7 @@ public class MenuFragment extends Fragment {
 
     public void refreshPageIndicators(int position) {
         dateView.setText(new StringBuilder().append(Date.getPrimaryTimestamp(Date.TYPE_NORMAL)).append(" ").append(Date.getTimeSlot(position)).toString());
-
-        for (int i = 0; i < pageIndicatorDots.size(); i++) {
-            if (i == position)
-                pageIndicatorDots.get(i).setImageResource(R.drawable.dot_selected);
-            else
-                pageIndicatorDots.get(i).setImageResource(R.drawable.dot_unselected);
-        }
+        mCirclePageIndicator.setCurrentItem(position);
     }
 
     private void setSelectedPosition(int position) {

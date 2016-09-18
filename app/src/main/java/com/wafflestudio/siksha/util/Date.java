@@ -71,7 +71,7 @@ public class Date {
         return timeSlot;
     }
 
-    public static int getTimeSlotIndex() {
+    public static int getTimeSlotIndex() { // get today's hour and find today's time slot.
         int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
 
         if (hour <= 9 || hour >= 20)
