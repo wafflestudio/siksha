@@ -37,7 +37,7 @@ public class LicenseRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public int getItemCount() {
-        return 3;
+        return libraries.length;
     }
 
     private class LicenseItemViewHolder extends RecyclerView.ViewHolder {
