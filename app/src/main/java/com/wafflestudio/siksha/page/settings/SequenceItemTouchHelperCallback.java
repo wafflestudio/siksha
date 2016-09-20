@@ -5,14 +5,19 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 
 public class SequenceItemTouchHelperCallback extends ItemTouchHelper.Callback {
     private ItemTouchHelperAdapter adapter;
+    private boolean LongPressDragEnabled = false;
 
     public SequenceItemTouchHelperCallback(ItemTouchHelperAdapter adapter) {
         this.adapter = adapter;
     }
 
+    public void setLongPressDragEnabled(boolean b) {
+        this.LongPressDragEnabled = b;
+    }
+
     @Override
     public boolean isLongPressDragEnabled() {
-        return true;
+        return LongPressDragEnabled;
     }
 
     @Override

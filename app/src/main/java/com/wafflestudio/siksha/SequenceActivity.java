@@ -26,6 +26,7 @@ public class SequenceActivity extends AppCompatActivity implements View.OnClickL
     private TextView messageView;
     private RecyclerView recyclerView;
     private FloatingActionButton actionButton;
+    private SequenceItemTouchHelperCallback callback;
 
     private SequenceRecyclerViewAdapter adapter;
 
@@ -55,7 +56,7 @@ public class SequenceActivity extends AppCompatActivity implements View.OnClickL
         adapter = new SequenceRecyclerViewAdapter(getCurrentSequence());
         recyclerView.setAdapter(adapter);
 
-        SequenceItemTouchHelperCallback callback = new SequenceItemTouchHelperCallback(adapter);
+        callback = new SequenceItemTouchHelperCallback(adapter);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
@@ -109,6 +110,7 @@ public class SequenceActivity extends AppCompatActivity implements View.OnClickL
                     ObjectAnimator fadeInAnimator = Animations.makeFadeAnimator(recyclerView, 0.25f, 1.0f, 300);
                     fadeInAnimator.setInterpolator(new AccelerateInterpolator());
                     fadeInAnimator.start();
+                    callback.setLongPressDragEnabled(true);
                 } else {
                     updateCurrentSequence();
                     actionButton.setImageResource(R.drawable.ic_edit);
@@ -116,6 +118,7 @@ public class SequenceActivity extends AppCompatActivity implements View.OnClickL
                     ObjectAnimator fadeOutAnimator = Animations.makeFadeAnimator(recyclerView, 1.0f, 0.25f, 300);
                     fadeOutAnimator.setInterpolator(new AccelerateInterpolator());
                     fadeOutAnimator.start();
+                    callback.setLongPressDragEnabled(false);
                 }
                 break;
         }
