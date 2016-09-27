@@ -24,7 +24,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="15dp"
-                android:text="@string/message_to_touch_edit_button"
+                android:text="@string/message_to_touch_confirm_button"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
 
@@ -44,8 +44,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:background="@color/sub_color"
-            android:scrollbars="vertical"
-            android:alpha="0.25" />
+            android:scrollbars="vertical" />
 
     </io.codetail.widget.RevealFrameLayout>
 

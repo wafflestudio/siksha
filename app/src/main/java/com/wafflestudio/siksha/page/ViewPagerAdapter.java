@@ -20,6 +20,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         AppDataManager appDataManager = AppDataManager.getInstance();
         fragments = new ArrayList<>();
 
+
         if (isBookmarkTab) {
             fragments.add(TimeSlotPage.newInstance(appDataManager.getBookmarkRestaurantMenuList(context, appDataManager.breakfastMenuDictionary), true, 0));
             fragments.add(TimeSlotPage.newInstance(appDataManager.getBookmarkRestaurantMenuList(context, appDataManager.lunchMenuDictionary), true, 1));

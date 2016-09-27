@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.TextView;
 
-import com.wafflestudio.siksha.page.settings.SequenceItemTouchHelperCallback;
 import com.wafflestudio.siksha.page.settings.SequenceRecyclerViewAdapter;
 import com.wafflestudio.siksha.util.Animations;
 import com.wafflestudio.siksha.util.Fonts;
@@ -26,12 +25,10 @@ public class SequenceActivity extends AppCompatActivity implements View.OnClickL
     private TextView messageView;
     private RecyclerView recyclerView;
     private FloatingActionButton actionButton;
-    private SequenceItemTouchHelperCallback callback;
 
     private SequenceRecyclerViewAdapter adapter;
 
     private boolean isAboutBookmark;
-    private boolean isEditMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +36,6 @@ public class SequenceActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_sequence);
 
         isAboutBookmark = getIntent().getBooleanExtra("about_bookmark", false);
-        isEditMode = false;
 
         if (isAboutBookmark)
             AnalyticsTrackers.getInstance().trackScreenView("BookmarkSequenceActivity");
@@ -53,12 +49,35 @@ public class SequenceActivity extends AppCompatActivity implements View.OnClickL
         messageView.setTypeface(Fonts.fontAPAritaDotumMedium);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new SequenceRecyclerViewAdapter(getCurrentSequence());
-        recyclerView.setAdapter(adapter);
 
-        callback = new SequenceItemTouchHelperCallback(adapter);
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+                int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+                return makeMovementFlags(dragFlags, swipeFlags);
+            }
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                adapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+
+            }
+        });
         itemTouchHelper.attachToRecyclerView(recyclerView);
+
+        adapter = new SequenceRecyclerViewAdapter(getCurrentSequence(), new SequenceRecyclerViewAdapter.OnStartDragListener() {
+            @Override
+            public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+                itemTouchHelper.startDrag(viewHolder);
+            }
+        });
+        recyclerView.setAdapter(adapter);
 
         actionButton.setOnClickListener(this);
     }
@@ -102,24 +121,24 @@ public class SequenceActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.activity_sequence_floating_action_button:
-                isEditMode = !isEditMode;
 
-                if (isEditMode) {
-                    actionButton.setImageResource(R.drawable.ic_confirm);
-                    messageView.setText(R.string.message_to_touch_confirm_button);
-                    ObjectAnimator fadeInAnimator = Animations.makeFadeAnimator(recyclerView, 0.25f, 1.0f, 300);
-                    fadeInAnimator.setInterpolator(new AccelerateInterpolator());
-                    fadeInAnimator.start();
-                    callback.setLongPressDragEnabled(true);
-                } else {
-                    updateCurrentSequence();
-                    actionButton.setImageResource(R.drawable.ic_edit);
-                    messageView.setText(R.string.message_to_touch_edit_button);
-                    ObjectAnimator fadeOutAnimator = Animations.makeFadeAnimator(recyclerView, 1.0f, 0.25f, 300);
-                    fadeOutAnimator.setInterpolator(new AccelerateInterpolator());
-                    fadeOutAnimator.start();
-                    callback.setLongPressDragEnabled(false);
-                }
+                updateCurrentSequence();
+                messageView.setText("저장되었습니다.");
+
+//                if (isEditMode) {
+//                    actionButton.setImageResource(R.drawable.ic_confirm);
+//                    messageView.setText(R.string.message_to_touch_confirm_button);
+//                    ObjectAnimator fadeInAnimator = Animations.makeFadeAnimator(recyclerView, 0.25f, 1.0f, 300);
+//                    fadeInAnimator.setInterpolator(new AccelerateInterpolator());
+//                    fadeInAnimator.start();
+//                } else {
+//                    updateCurrentSequence();
+//                    actionButton.setImageResource(R.drawable.ic_edit);
+//                    messageView.setText(R.string.message_to_touch_edit_button);
+//                    ObjectAnimator fadeOutAnimator = Animations.makeFadeAnimator(recyclerView, 1.0f, 0.25f, 300);
+//                    fadeOutAnimator.setInterpolator(new AccelerateInterpolator());
+//                    fadeOutAnimator.start();
+//                }
                 break;
         }
     }
