@@ -65,6 +65,11 @@ public class SequenceActivity extends AppCompatActivity implements View.OnClickL
             }
 
             @Override
+            public boolean isItemViewSwipeEnabled() { // make swipe disabled
+                return false;
+            }
+
+            @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
 
             }

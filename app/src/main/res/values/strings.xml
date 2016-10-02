@@ -25,7 +25,7 @@
     <string name="alert_how_to_bookmark">식단 탭에서 즐겨 찾는 식당을 추가해보세요.</string>
 
     <string name="message_to_touch_edit_button">하단의 편집 버튼을 눌러 순서를 바꿔보세요.</string>
-    <string name="message_to_touch_confirm_button">우측 손잡이를 드래그하여 순서를 바꿔보세요.\n그리고 확인 버튼을 눌러 저장하세요.</string>
+    <string name="message_to_touch_confirm_button">우측 손잡이를 드래그하여 순서를 바꿔보세요.\n그리고 아래의 확인 버튼을 눌러 저장하세요.</string>
 
     <string name="restaurant_information">식당 정보</string>
     <string name="bookmark">즐겨찾기</string>
