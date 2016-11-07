@@ -91,7 +91,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                     final String restaurant = data.get(position).restaurant;
                     notEmptyRestaurantViewHolder.nameView.setText(restaurant);
 
-                    ChildRecyclerViewAdapter adapter = new ChildRecyclerViewAdapter(data.get(position));
+                    ChildRecyclerViewAdapter adapter = new ChildRecyclerViewAdapter(data.get(position),context);
                     notEmptyRestaurantViewHolder.recyclerView.setAdapter(adapter);
 
                     if (BookmarkManager.isBookmarked(context, restaurant))

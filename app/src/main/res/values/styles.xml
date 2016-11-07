@@ -30,4 +30,16 @@
         <item name="android:windowBackground" >@color/transparent</item>
     </style>
 
+    <style name="RatingDialog" parent="@android:style/Theme.Holo.Light.Dialog" >
+        <item name="android:windowNoTitle" >true</item>
+        <item name="android:windowBackground" >@color/transparent</item>
+    </style>
+
+    <style name="StarRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/ratingbar_selector</item>
+        <item name="android:minHeight">50dp</item>
+        <item name="android:maxHeight">50dp</item>
+    </style>
+
+
 </resources>
