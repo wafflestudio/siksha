@@ -54,9 +54,18 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp"
                 android:gravity="center_horizontal"
-                android:text="@string/restaurant_name"
-                android:textSize="17sp"
-                android:textStyle="bold" />
+                android:text="@string/restaurant"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/restaurant_name_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:text="@string/restaurant"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/food_textview"
@@ -65,9 +74,18 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp"
                 android:gravity="center_horizontal"
-                android:text="@string/food_name"
-                android:textSize="17sp"
-                android:textStyle="bold" />
+                android:text="@string/menu"
+                android:textSize="17sp"/>
+
+            <TextView
+                android:id="@+id/food_name_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:text="@string/menu"
+                android:textSize="14sp"/>
 
             <RatingBar
                 style="@style/StarRatingBar"
@@ -78,7 +96,7 @@
                 android:numStars="5"
                 android:stepSize="0.5"
                 android:layout_marginTop="20dp"
-                android:rating="0.0"
+                android:rating="0.5"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:soundEffectsEnabled="true" />
@@ -98,7 +116,7 @@
             android:orientation="horizontal"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5sp"
-            android:layout_marginBottom="10sp">
+            android:layout_marginBottom="5sp">
 
                 <ImageButton
                     android:id="@+id/rating_no"

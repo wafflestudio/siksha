@@ -39,7 +39,11 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             MenuViewHolder menuViewHolder = (MenuViewHolder) viewHolder;
             menuViewHolder.priceView.setText(data.foods.get(position).price);
             menuViewHolder.nameView.setText(data.foods.get(position).name);
-            menuViewHolder.ratingView.setText("5"); // TODO : get rating data from server
+
+            if(data.foods.get(position).rating != null)
+                menuViewHolder.ratingView.setText(data.foods.get(position).rating);
+            else
+                menuViewHolder.ratingView.setText(""); // this food isn't rated yet. Show nothing in star.
 
         }
     }

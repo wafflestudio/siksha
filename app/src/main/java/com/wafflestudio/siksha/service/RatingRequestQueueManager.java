@@ -6,7 +6,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 /**
- * Created by Administrator on 2016-11-02.
+ * Created by Jooh on 2016-11-02.
  */
 public class RatingRequestQueueManager {
 

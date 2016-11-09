@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wafflestudio.siksha.dialog.RatingDialog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +20,9 @@ import java.util.Map;
  */
 public class RatingRequestManager {
 
+    private static final String SERVER_URL = "http://siksha.kr:8230";
+    private static final String ROUTE_RATE = "/rate";
+
     private String url;
     private Context context;
 
@@ -26,10 +30,12 @@ public class RatingRequestManager {
         this.context = context;
     }
 
-    public void postRating(final String restaurant, final String food, final double rating) {
+    public void postRating(final String restaurant, final String food, final double rating, final RatingDialog.VolleyCallback volleyCallBack) {
 
         RequestQueue queue = RatingRequestQueueManager.getInstance(context.getApplicationContext()).getRequestQueue();
-        url = "localhost:8230/rate/" + restaurant + "/" + food;
+//        url = SERVER_URL+ROUTE_RATE+"/"+restaurant+"/"+food;
+        url = "http://dev.wafflestudio.com:8230/rate";
+        url = url.replaceAll(" ","%20");
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>()
@@ -37,14 +43,14 @@ public class RatingRequestManager {
                     @Override
                     public void onResponse(String response) {
                         // response
-                        Log.d("Response", response);
+                        volleyCallBack.onSuccess(response);
                     }
                 },
                 new Response.ErrorListener()
                 {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // error
+                        volleyCallBack.onFailure();
                     }
                 }
         ) {
@@ -52,6 +58,8 @@ public class RatingRequestManager {
             protected Map<String, String> getParams()
             {
                 Map<String, String>  params = new HashMap<String, String>();
+                params.put("restaurant",restaurant);
+                params.put("meal",food);
                 params.put("rating", String.valueOf(rating));
 
                 return params;

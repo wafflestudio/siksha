@@ -38,6 +38,10 @@ import com.wafflestudio.siksha.util.Fonts;
 import com.wafflestudio.siksha.util.JSONParser;
 import com.wafflestudio.siksha.util.Preference;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
 public class MainActivity extends AppCompatActivity implements JSONDownloadReceiver.OnDownloadListener {
     private TabLayout tabLayout;
     private SwipeDisabledViewPager swipeDisabledViewPager;
@@ -111,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
             loadingDialog = new ProgressDialog(this);
             ((ProgressDialog) loadingDialog).start();
         }
-
+//        new JSONDownloader(this, JSONDownloadReceiver.ACTION_RATING_INFORMATION_DOWNLOAD).start();
         new JSONDownloader(this, action).start();
     }
 

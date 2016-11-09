@@ -10,6 +10,7 @@ public class JSONDownloadReceiver extends BroadcastReceiver {
     public static final String ACTION_MENU_BACKGROUND_DOWNLOAD = "com.wafflestudio.siksha.service.JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD";
     public static final String ACTION_INFORMATION_DOWNLOAD = "com.wafflestudio.siksha.service.JSONDownloadReceiver.INFORMATION_DOWNLOAD";
     public static final String ACTION_LATEST_APP_VERSION_CHECK = "com.wafflestudio.siksha.service.JSONDownloadReceiver.LATEST_APP_VERSION_CHECK";
+    public static final String ACTION_RATING_INFORMATION_DOWNLOAD = "com.wafflestudio.siksha.service.JSONDownloadReceiver.RATING_INFORMATION_DOWNLOAD";
 
     public static final int TYPE_ON_SUCCESS = 0;
     public static final int TYPE_ON_FAILURE = 1;

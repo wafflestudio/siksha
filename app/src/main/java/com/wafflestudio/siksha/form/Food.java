@@ -13,4 +13,7 @@ public class Food implements Serializable {
 
     @SerializedName("price")
     public String price;
+
+    @SerializedName("rating")
+    public String rating;
 }

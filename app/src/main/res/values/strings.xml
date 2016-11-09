@@ -8,7 +8,10 @@
    	<string name="location">식당 위치</string>
     <string name="food_name">음식 이름</string>
     <string name="restaurant_name">식당 이름</string>
-    <string name="rating_dialog_title"> 평가 </string>
+    <string name="restaurant">식당</string>
+    <string name="menu">메뉴</string>
+    <string name="rating_dialog_title">평가</string>
+    <string name="rating_finished_dialog_title">평가 완료</string>
 
     <string name="download_error">식단 다운로드 실패!</string>
     <string name="download_retry">다시 하기</string>
@@ -63,6 +66,7 @@
     <string name="rating_yes">평가</string>
     <string name="rating_no">취소</string>
     <string name="rating_alert">※평가는 하루에 세 번 가능합니다.</string>
+    <string name="rating_finished"> 평가가 완료되었습니다.</string>
 
     <!-- Widget -->
     <string name="message_to_select_restaurant">위젯에 넣을 식당을 고르세요.\n그리고 확인 버튼을 눌러 저장하세요.</string>

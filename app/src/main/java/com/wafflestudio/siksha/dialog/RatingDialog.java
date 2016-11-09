@@ -2,6 +2,7 @@ package com.wafflestudio.siksha.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.media.Rating;
 import android.os.Build;
@@ -11,10 +12,14 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wafflestudio.siksha.R;
+import com.wafflestudio.siksha.service.JSONDownloadReceiver;
 import com.wafflestudio.siksha.service.RatingRequestManager;
+import com.wafflestudio.siksha.service.RatingRequestQueueManager;
 import com.wafflestudio.siksha.util.Fonts;
+import com.wafflestudio.siksha.util.NetworkChecker;
 import com.wafflestudio.siksha.util.UnitConverter;
 
 /**
@@ -47,19 +52,34 @@ public class RatingDialog extends Dialog implements View.OnClickListener{
 
         TextView title_view = (TextView)  findViewById(R.id.rating_dialog_title_view);
         TextView restaurant_view = (TextView) findViewById(R.id.restaurant_textview);
+        TextView restaurant_nameview = (TextView) findViewById(R.id.restaurant_name_textview);
         TextView food_view = (TextView) findViewById(R.id.food_textview);
+        TextView food_nameview = (TextView) findViewById(R.id.food_name_textview);
         TextView alert_view = (TextView) findViewById(R.id.rating_alert);
 
-        restaurant_view.setText("식당 : "+restaurant);
-        food_view.setText("메뉴 : "+food);
+        restaurant_nameview.setText(restaurant);
+        food_nameview.setText(food);
 
         title_view.setTypeface(Fonts.fontBMJua);
+
         restaurant_view.setTypeface(Fonts.fontAPAritaDotumSemiBold);
+        restaurant_nameview.setTypeface(Fonts.fontAPAritaDotumMedium);
         food_view.setTypeface(Fonts.fontAPAritaDotumSemiBold);
-        alert_view.setTypeface(Fonts.fontAPAritaDotumSemiBold);
+        food_nameview.setTypeface(Fonts.fontAPAritaDotumMedium);
+        alert_view.setTypeface(Fonts.fontAPAritaDotumMedium);
 
         ratingbar = (RatingBar) findViewById(R.id.ratingbar);
-        ratingbar.setRating(0);
+        ratingbar.setRating((float) 0.5); // initial Value = 0.5
+
+        ratingbar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+
+            @Override public void onRatingChanged(RatingBar ratingBar, float rating,
+                                                  boolean fromUser) {
+                if(rating < 0.5) {
+                    ratingbar.setRating((float) 0.5);  // set minimum value -> 0.5
+                }
+            }
+        });
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             float radius = UnitConverter.convertDpToPx(15.0f);
@@ -81,16 +101,50 @@ public class RatingDialog extends Dialog implements View.OnClickListener{
         switch (v.getId()) {
             case R.id.rating_yes:
 
-                float rating = ratingbar.getRating();
-                RatingRequestManager requestmanager = new RatingRequestManager(context);
-                requestmanager.postRating(restaurant,food,rating);
+                // progress dialog
+                if (!NetworkChecker.getInstance().isOnline(context)){
+                    Toast.makeText(context, R.string.check_network_state, Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    float rating = ratingbar.getRating();
+                    RatingRequestManager requestmanager = new RatingRequestManager(context);
+                    requestmanager.postRating(restaurant,food,rating, new VolleyCallback() {
 
-                dismiss();
+                        @Override
+                        public void onSuccess(String response) {
+                            RatingSuccess();
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            sendSignalToApp("POST_RATING", JSONDownloadReceiver.TYPE_ON_FAILURE);
+                        }
+
+                    });
+                }
+
                 break;
             case R.id.rating_no:
 
                 dismiss();
                 break;
         }
+    }
+
+    private void sendSignalToApp(String action, int callbackType) {
+        Intent intent = new Intent();
+        intent.setAction(action);
+        intent.putExtra("callback_type", callbackType);
+        context.sendBroadcast(intent);
+    }
+
+    public void RatingSuccess() {
+
+        new RatingFinishedDialog(this,context).show();
+    }
+
+    public interface VolleyCallback {
+        void onSuccess(String response);
+        void onFailure();
     }
 }
