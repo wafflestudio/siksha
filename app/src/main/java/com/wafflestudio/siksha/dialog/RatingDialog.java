@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.wafflestudio.siksha.MainActivity;
 import com.wafflestudio.siksha.R;
+import com.wafflestudio.siksha.page.ChildRecyclerViewAdapter;
 import com.wafflestudio.siksha.service.JSONDownloadReceiver;
 import com.wafflestudio.siksha.service.RatingRequestManager;
 import com.wafflestudio.siksha.util.Date;
@@ -158,7 +159,6 @@ public class RatingDialog extends Dialog implements View.OnClickListener{
         Preference.save(context, Preference.PREF_APP_NAME, Preference.PREF_KEY_LAST_RATING_TIMESTAMP, Date.getDayOfYear());
         Preference.save(context,Preference.PREF_APP_NAME,Preference.PREF_KEY_NUMBER_OF_RATING_TODAY, numOfRatingToday +1);
 
-        ((MainActivity) context).downloadMenuData(JSONDownloadReceiver.ACTION_MENU_REFRESH, false); // TODO : // menu is refreshed, but view isn't refreshed.
         new RatingFinishedDialog(this,context,2-numOfRatingToday).show();
     }
 

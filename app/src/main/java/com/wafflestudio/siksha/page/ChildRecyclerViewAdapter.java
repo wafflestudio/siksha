@@ -17,9 +17,11 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     private Menu data;
     private Context context;
 
+
     public ChildRecyclerViewAdapter(Menu data,Context context) {
         this.data = data;
         this.context = context;
+
     }
 
     @Override
@@ -61,14 +63,18 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             return data.foods.size();
     }
 
-    private class MenuViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public void refreshAll() {
+        this.notifyDataSetChanged();
+    }
+
+    public class MenuViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView priceView;
         private TextView nameView;
         private Button ratingView;
         private Context context;
         private String restaurant;
 
-        public MenuViewHolder(View itemView,Context context,String restaurant) {
+        public MenuViewHolder(View itemView, Context context, String restaurant) {
             super(itemView);
 
             this.context = context;
@@ -88,7 +94,7 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         @Override
         public void onClick(View v) {
 
-            new RatingDialog(context, restaurant, nameView.getText().toString()).show();
+            new RatingDialog(context,restaurant, nameView.getText().toString()).show();
         }
     }
 

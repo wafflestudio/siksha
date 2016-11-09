@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
         Preference.save(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_REFRESH_ON_RESUME, false);
         setupInformationData();
 
-        Preference.save(this,Preference.PREF_APP_NAME,Preference.PREF_KEY_NUMBER_OF_RATING_TODAY,0);
         checkRatingTimeStamp();
         checkMenuData();
         checkInformationData();

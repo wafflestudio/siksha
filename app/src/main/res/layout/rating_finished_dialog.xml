@@ -41,24 +41,24 @@
             android:text="@string/rating_finished_dialog_title"/>
 
         <TextView
-            android:id="@+id/rating_finished_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp"
-            android:gravity="center_horizontal"
-            android:text="@string/rating_finished"
-            android:textSize="17sp" />
-
-        <TextView
             android:id="@+id/rating_remain_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginTop="25dp"
             android:gravity="center_horizontal"
             android:text="@string/rating_remain"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/rating_refresh_alert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="25dp"
+            android:gravity="center_horizontal"
+            android:text="@string/refresh_alert"
             android:textSize="14sp" />
 
     </LinearLayout>

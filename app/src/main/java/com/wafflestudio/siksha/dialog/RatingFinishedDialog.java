@@ -31,11 +31,11 @@ public class RatingFinishedDialog extends Dialog {
 
         LinearLayout headerView = (LinearLayout) findViewById(R.id.rating_finished_dialog_header_view);
 
-        TextView finishedTextView = (TextView) findViewById(R.id.rating_finished_textview);
         TextView remainTextView = (TextView) findViewById(R.id.rating_remain_textview);
+        TextView alertRefreshTextView = (TextView) findViewById(R.id.rating_refresh_alert);
 
-        finishedTextView.setTypeface(Fonts.fontAPAritaDotumMedium);
-        remainTextView.setTypeface(Fonts.fontAPAritaDotumMedium);
+        remainTextView.setTypeface(Fonts.fontAPAritaDotumSemiBold);
+        alertRefreshTextView.setTypeface(Fonts.fontAPAritaDotumMedium);
         remainTextView.setText(remainTextView.getText() + " " + ratingRemain);
 
 
