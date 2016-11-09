@@ -20,6 +20,7 @@ import java.util.Map;
  */
 public class RatingRequestManager {
 
+
     private static final String SERVER_URL = "http://siksha.kr:8230";
     private static final String ROUTE_RATE = "/rate";
 
@@ -33,9 +34,8 @@ public class RatingRequestManager {
     public void postRating(final String restaurant, final String food, final double rating, final RatingDialog.VolleyCallback volleyCallBack) {
 
         RequestQueue queue = RatingRequestQueueManager.getInstance(context.getApplicationContext()).getRequestQueue();
-//        url = SERVER_URL+ROUTE_RATE+"/"+restaurant+"/"+food;
-        url = "http://dev.wafflestudio.com:8230/rate";
-        url = url.replaceAll(" ","%20");
+
+        url = SERVER_URL+ROUTE_RATE;
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>()

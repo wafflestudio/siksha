@@ -69,10 +69,23 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
         Preference.save(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_REFRESH_ON_RESUME, false);
         setupInformationData();
 
+        Preference.save(this,Preference.PREF_APP_NAME,Preference.PREF_KEY_NUMBER_OF_RATING_TODAY,0);
+        checkRatingTimeStamp();
         checkMenuData();
         checkInformationData();
         checkCurrentAppVersion();
         checkLatestAppVersion();
+    }
+
+    private void checkRatingTimeStamp() {
+
+        int lastday = Preference.loadIntValue(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_LAST_RATING_TIMESTAMP);
+        int today = Date.getDayOfYear();
+
+        if(lastday < today) {
+            Preference.save(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_LAST_RATING_TIMESTAMP, Date.getDayOfYear());
+            Preference.save(this,Preference.PREF_APP_NAME,Preference.PREF_KEY_NUMBER_OF_RATING_TODAY,0);
+        }
     }
 
     private void setupInformationData() {
@@ -115,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
             loadingDialog = new ProgressDialog(this);
             ((ProgressDialog) loadingDialog).start();
         }
-//        new JSONDownloader(this, JSONDownloadReceiver.ACTION_RATING_INFORMATION_DOWNLOAD).start();
         new JSONDownloader(this, action).start();
     }
 

@@ -21,13 +21,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class JSONDownloader {
-//    private static final String SERVER_URL = "http://siksha.kr:8230";
-    private static final String SERVER_URL = "http://dev.wafflestudio.com:8230";
-
+    private static final String SERVER_URL = "http://siksha.kr:8230";
     private static final String REDIRECT_SERVER_URL = "http://kanggyu94.fun25.co.kr:13204";
 
-    private static final String ROUTE_MENU_VIEW = "/menu/view";
-    private static final String ROUTE_RATING = "/rate/today?date=today";
+    private static final String ROUTE_MENU_VIEW = "/rate/view";
     private static final String ROUTE_INFORMATION_VIEW = "/information/view";
     private static final String ROUTE_INFORMATION_LATEST = "/information/latest";
     private static final String ROUTE_LATEST_APP_VERSION_CHECK = "/version";
@@ -112,10 +109,6 @@ public class JSONDownloader {
             else if (requestType == REQUEST_TYPE_CHECK)
                 URL = BASE_URL + ROUTE_INFORMATION_LATEST;
         }
-//        else if (action.equals(JSONDownloadReceiver.ACTION_RATING_INFORMATION_DOWNLOAD)) {
-//            if (requestType == REQUEST_TYPE_DOWNLOAD)
-//                URL = BASE_URL + ROUTE_RATING;
-//        }
         else {
             if (option == OPTION_CACHED_TODAY)
                 URL = BASE_URL + ROUTE_MENU_VIEW + QUERY_TODAY;

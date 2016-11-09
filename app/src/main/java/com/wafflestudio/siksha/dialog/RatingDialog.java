@@ -4,22 +4,22 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
-import android.media.Rating;
 import android.os.Build;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wafflestudio.siksha.MainActivity;
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.service.JSONDownloadReceiver;
 import com.wafflestudio.siksha.service.RatingRequestManager;
-import com.wafflestudio.siksha.service.RatingRequestQueueManager;
+import com.wafflestudio.siksha.util.Date;
 import com.wafflestudio.siksha.util.Fonts;
 import com.wafflestudio.siksha.util.NetworkChecker;
+import com.wafflestudio.siksha.util.Preference;
 import com.wafflestudio.siksha.util.UnitConverter;
 
 /**
@@ -32,6 +32,7 @@ public class RatingDialog extends Dialog implements View.OnClickListener{
     private String food;
 
     private RatingBar ratingbar;
+    private int numOfRatingToday;
 
     
 
@@ -42,8 +43,8 @@ public class RatingDialog extends Dialog implements View.OnClickListener{
         this.context = context;
         this.restaurant = restaurant;
         this.food = food;
+        numOfRatingToday = Preference.loadIntValue(context,Preference.PREF_APP_NAME,Preference.PREF_KEY_NUMBER_OF_RATING_TODAY);
 
-    
         LinearLayout headerView = (LinearLayout) findViewById(R.id.rating_dialog_header_view);
         ImageButton cancelButton = (ImageButton) findViewById(R.id.rating_no);
         ImageButton ratingButton = (ImageButton) findViewById(R.id.rating_yes);
@@ -59,6 +60,7 @@ public class RatingDialog extends Dialog implements View.OnClickListener{
 
         restaurant_nameview.setText(restaurant);
         food_nameview.setText(food);
+        alert_view.setText(alert_view.getText() + "(" + (3 - numOfRatingToday) + "회 남음)");
 
         title_view.setTypeface(Fonts.fontBMJua);
 
@@ -100,8 +102,11 @@ public class RatingDialog extends Dialog implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rating_yes:
+                if(!checkDuplication()) {
+                    Toast.makeText(context, R.string.already_rated_three_time, Toast.LENGTH_SHORT).show();
+                    break;
+                }
 
-                // progress dialog
                 if (!NetworkChecker.getInstance().isOnline(context)){
                     Toast.makeText(context, R.string.check_network_state, Toast.LENGTH_SHORT).show();
                 }
@@ -130,6 +135,16 @@ public class RatingDialog extends Dialog implements View.OnClickListener{
                 break;
         }
     }
+    private boolean checkDuplication() { // check
+
+        if (numOfRatingToday < 3) {
+            return true;
+        }
+        else {
+
+            return false;
+        }
+    }
 
     private void sendSignalToApp(String action, int callbackType) {
         Intent intent = new Intent();
@@ -138,9 +153,13 @@ public class RatingDialog extends Dialog implements View.OnClickListener{
         context.sendBroadcast(intent);
     }
 
-    public void RatingSuccess() {
+    private void RatingSuccess() {
 
-        new RatingFinishedDialog(this,context).show();
+        Preference.save(context, Preference.PREF_APP_NAME, Preference.PREF_KEY_LAST_RATING_TIMESTAMP, Date.getDayOfYear());
+        Preference.save(context,Preference.PREF_APP_NAME,Preference.PREF_KEY_NUMBER_OF_RATING_TODAY, numOfRatingToday +1);
+
+        ((MainActivity) context).downloadMenuData(JSONDownloadReceiver.ACTION_MENU_REFRESH, false); // TODO : // menu is refreshed, but view isn't refreshed.
+        new RatingFinishedDialog(this,context,2-numOfRatingToday).show();
     }
 
     public interface VolleyCallback {

@@ -17,6 +17,7 @@
     <string name="download_retry">다시 하기</string>
     <string name="download_cancel">취소</string>
     <string name="check_network_state">데이터 네트워크 또는 Wi-Fi를 연결하고, 다시 시도해주세요.</string>
+    <string name="already_rated_three_time">오늘은 이미 세 번 평가하셨습니다.</string>
 
     <string name="widget_alert_dialog_title">식샤 위젯을 아시나요?</string>
     <string name="widget_alert_dialog_message">홈 화면에 식샤 위젯을 추가하시면\n식단 정보를 더욱 간편하게\n보실 수 있습니다.</string>
@@ -67,6 +68,7 @@
     <string name="rating_no">취소</string>
     <string name="rating_alert">※평가는 하루에 세 번 가능합니다.</string>
     <string name="rating_finished"> 평가가 완료되었습니다.</string>
+    <string name="rating_remain">오늘 남은 평가횟수 :</string>
 
     <!-- Widget -->
     <string name="message_to_select_restaurant">위젯에 넣을 식당을 고르세요.\n그리고 확인 버튼을 눌러 저장하세요.</string>

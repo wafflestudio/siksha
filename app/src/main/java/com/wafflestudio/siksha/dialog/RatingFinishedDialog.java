@@ -6,9 +6,13 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.wafflestudio.siksha.R;
+import com.wafflestudio.siksha.util.Fonts;
 import com.wafflestudio.siksha.util.UnitConverter;
+
+import org.w3c.dom.Text;
 
 /**
  * Created by Jooh on 2016-11-07.
@@ -16,12 +20,23 @@ import com.wafflestudio.siksha.util.UnitConverter;
 public class RatingFinishedDialog extends Dialog {
     private Context context;
 
-    public RatingFinishedDialog(Dialog predialog, Context context) {
+    private int ratingRemain;
+
+    public RatingFinishedDialog(Dialog predialog, Context context,int ratingRemain) {
         super(context, R.style.RatingFinishedDialog);
         setContentView(R.layout.rating_finished_dialog);
+
+        this.ratingRemain = ratingRemain;
         predialog.dismiss();
 
         LinearLayout headerView = (LinearLayout) findViewById(R.id.rating_finished_dialog_header_view);
+
+        TextView finishedTextView = (TextView) findViewById(R.id.rating_finished_textview);
+        TextView remainTextView = (TextView) findViewById(R.id.rating_remain_textview);
+
+        finishedTextView.setTypeface(Fonts.fontAPAritaDotumMedium);
+        remainTextView.setTypeface(Fonts.fontAPAritaDotumMedium);
+        remainTextView.setText(remainTextView.getText() + " " + ratingRemain);
 
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {

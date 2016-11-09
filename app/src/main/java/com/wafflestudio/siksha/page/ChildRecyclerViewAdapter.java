@@ -40,8 +40,12 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             menuViewHolder.priceView.setText(data.foods.get(position).price);
             menuViewHolder.nameView.setText(data.foods.get(position).name);
 
-            if(data.foods.get(position).rating != null)
-                menuViewHolder.ratingView.setText(data.foods.get(position).rating);
+
+            if(data.foods.get(position).rating != null) {
+                float rate = Float.parseFloat(data.foods.get(position).rating);
+                menuViewHolder.ratingView.setText(String.format("%.1f", rate));
+            }
+
             else
                 menuViewHolder.ratingView.setText(""); // this food isn't rated yet. Show nothing in star.
 

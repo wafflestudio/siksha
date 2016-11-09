@@ -138,4 +138,9 @@ public class Date {
 
         return calendar.get(Calendar.DAY_OF_WEEK) == 2 && calendar.get(Calendar.HOUR_OF_DAY) >= 10 && calendar.get(Calendar.HOUR_OF_DAY) < 20;
     }
+
+    public static int getDayOfYear() {
+        Calendar cal = Calendar.getInstance();
+        return cal.get(Calendar.DAY_OF_YEAR);
+    }
 }
