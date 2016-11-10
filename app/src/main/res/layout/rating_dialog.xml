@@ -115,24 +115,24 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="5sp"
-            android:layout_marginBottom="5sp">
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp">
 
                 <ImageButton
                     android:id="@+id/rating_no"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/rating_dialog_no_button"
-                    android:backgroundTint="@color/transparent"
-                    android:layout_gravity="left"/>
+                    android:background="@color/transparent"
+                    android:layout_marginRight="10dp" />
 
                 <ImageButton
                     android:id="@+id/rating_yes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/rating_dialog_yes_button"
-                    android:backgroundTint="@color/transparent"
-                    android:layout_gravity="right"/>
+                    android:background="@color/transparent"
+                    android:layout_marginLeft="10dp"/>
 
             </LinearLayout>
 

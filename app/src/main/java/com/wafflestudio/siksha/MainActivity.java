@@ -38,9 +38,6 @@ import com.wafflestudio.siksha.util.Fonts;
 import com.wafflestudio.siksha.util.JSONParser;
 import com.wafflestudio.siksha.util.Preference;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 
 public class MainActivity extends AppCompatActivity implements JSONDownloadReceiver.OnDownloadListener {
     private TabLayout tabLayout;

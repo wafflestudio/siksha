@@ -35,6 +35,7 @@ public class Preference {
     public static final String PREF_KEY_LAST_RATING_TIMESTAMP = "last_rating_timestamp";
     public static final String PREF_KEY_NUMBER_OF_RATING_TODAY = "number_of_rating_today";
 
+
     public static void save(Context context, String prefName, String key, String value) {
         SharedPreferences.Editor editor = context.getSharedPreferences(prefName, Context.MODE_PRIVATE).edit();
         editor.putString(key, value);

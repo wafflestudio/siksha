@@ -26,6 +26,8 @@ public class RatingFinishedDialog extends Dialog {
         super(context, R.style.RatingFinishedDialog);
         setContentView(R.layout.rating_finished_dialog);
 
+        this.context= context;
+
         this.ratingRemain = ratingRemain;
         predialog.dismiss();
 
@@ -34,16 +36,16 @@ public class RatingFinishedDialog extends Dialog {
         TextView remainTextView = (TextView) findViewById(R.id.rating_remain_textview);
         TextView alertRefreshTextView = (TextView) findViewById(R.id.rating_refresh_alert);
 
-        remainTextView.setTypeface(Fonts.fontAPAritaDotumSemiBold);
-        alertRefreshTextView.setTypeface(Fonts.fontAPAritaDotumMedium);
-        remainTextView.setText(remainTextView.getText() + " " + ratingRemain);
-
-
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             float radius = UnitConverter.convertDpToPx(15.0f);
             float[] radii = {radius, radius, radius, radius, 0.0f, 0.0f, 0.0f, 0.0f};
             changeBackgroundDrawable(headerView, R.color.color_primary, radii);
         }
+
+        remainTextView.setTypeface(Fonts.fontAPAritaDotumSemiBold);
+        alertRefreshTextView.setTypeface(Fonts.fontAPAritaDotumMedium);
+        String temp = remainTextView.getText().toString();
+        remainTextView.setText(temp + " " + ratingRemain);
     }
 
     private void changeBackgroundDrawable(View view, int colorResourceID, float[] radii) {

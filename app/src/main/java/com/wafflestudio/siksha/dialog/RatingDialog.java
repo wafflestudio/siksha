@@ -61,7 +61,9 @@ public class RatingDialog extends Dialog implements View.OnClickListener{
 
         restaurant_nameview.setText(restaurant);
         food_nameview.setText(food);
-        alert_view.setText(alert_view.getText() + "(" + (3 - numOfRatingToday) + "회 남음)");
+
+        String temp = alert_view.getText().toString();
+        alert_view.setText( temp + "(" + (3 - numOfRatingToday) + "회 남음)");
 
         title_view.setTypeface(Fonts.fontBMJua);
 
@@ -70,6 +72,8 @@ public class RatingDialog extends Dialog implements View.OnClickListener{
         food_view.setTypeface(Fonts.fontAPAritaDotumSemiBold);
         food_nameview.setTypeface(Fonts.fontAPAritaDotumMedium);
         alert_view.setTypeface(Fonts.fontAPAritaDotumMedium);
+
+
 
         ratingbar = (RatingBar) findViewById(R.id.ratingbar);
         ratingbar.setRating((float) 0.5); // initial Value = 0.5

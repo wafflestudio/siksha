@@ -68,7 +68,7 @@
     <string name="rating_no">취소</string>
     <string name="rating_alert">※평가는 하루에 세 번 가능합니다.</string>
     <string name="rating_finished"> 평가가 완료되었습니다.</string>
-    <string name="refresh_alert">내 평점이 반영된 별점을 보고싶으면, 설정 탭-새로고침을 눌러주세요.</string>
+    <string name="refresh_alert">내 평점이 반영된 별점을 보고싶으면,\n\n설정 탭-새로고침을 눌러주세요.</string>
     <string name="rating_remain">오늘 남은 평가횟수 :</string>
 
     <!-- Widget -->

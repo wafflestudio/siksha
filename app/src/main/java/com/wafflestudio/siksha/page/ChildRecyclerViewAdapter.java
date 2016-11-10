@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wafflestudio.siksha.R;
@@ -21,7 +22,6 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     public ChildRecyclerViewAdapter(Menu data,Context context) {
         this.data = data;
         this.context = context;
-
     }
 
     @Override
@@ -29,6 +29,7 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         if (!data.isEmpty) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.menu_item, parent, false);
             return new MenuViewHolder(view,context,data.restaurant);
+
         } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.empty_menu_item, parent, false);
             return new EmptyMenuViewHolder(view);
@@ -42,14 +43,13 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             menuViewHolder.priceView.setText(data.foods.get(position).price);
             menuViewHolder.nameView.setText(data.foods.get(position).name);
 
-
             if(data.foods.get(position).rating != null) {
                 float rate = Float.parseFloat(data.foods.get(position).rating);
-                menuViewHolder.ratingView.setText(String.format("%.1f", rate));
+                menuViewHolder.ratingView.setText("★ "+String.format("%.1f", rate));
             }
 
             else
-                menuViewHolder.ratingView.setText(""); // this food isn't rated yet. Show nothing in star.
+                menuViewHolder.ratingView.setText("☆ 0.0"); // this food isn't rated yet. Show nothing in star.
 
         }
     }
@@ -67,12 +67,13 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         this.notifyDataSetChanged();
     }
 
-    public class MenuViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MenuViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView priceView;
         private TextView nameView;
-        private Button ratingView;
+        private TextView ratingView;
         private Context context;
         private String restaurant;
+        private LinearLayout holderLayout;
 
         public MenuViewHolder(View itemView, Context context, String restaurant) {
             super(itemView);
@@ -80,21 +81,21 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             this.context = context;
             this.restaurant = restaurant;
 
+            holderLayout = (LinearLayout) itemView.findViewById(R.id.holder_layout);
+            holderLayout.setOnClickListener(this);
+
             priceView = (TextView) itemView.findViewById(R.id.menu_price_view);
             nameView = (TextView) itemView.findViewById(R.id.menu_name_view);
-            ratingView = (Button) itemView.findViewById(R.id.menu_rating_view);
+            ratingView = (TextView) itemView.findViewById(R.id.menu_rating_view);
 
             priceView.setTypeface(Fonts.fontAPAritaDotumSemiBold);
             nameView.setTypeface(Fonts.fontAPAritaDotumMedium);
-            ratingView.setTypeface(Fonts.fontAPAritaDotumSemiBold);
-
-            ratingView.setOnClickListener(this);
+            ratingView.setTypeface(Fonts.fontBMJua);
         }
 
         @Override
         public void onClick(View v) {
-
-            new RatingDialog(context,restaurant, nameView.getText().toString()).show();
+            new RatingDialog(context,restaurant,nameView.getText().toString()).show();
         }
     }
 
