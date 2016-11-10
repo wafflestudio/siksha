@@ -49,7 +49,7 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             }
 
             else
-                menuViewHolder.ratingView.setText("☆ 0.0"); // this food isn't rated yet. Show nothing in star.
+                menuViewHolder.ratingView.setText("☆ - -"); // this food isn't rated yet. Show nothing in star.
 
         }
     }
