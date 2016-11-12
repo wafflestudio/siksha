@@ -4,16 +4,16 @@
 
     <item android:state_pressed="true"
         android:state_window_focused="true"
-        android:drawable="@drawable/ic_star_yellow_500_36dp" />
+        android:drawable="@drawable/ic_star_yellow_600_36dp" />
 
     <item android:state_focused="true"
         android:state_window_focused="true"
-        android:drawable="@drawable/ic_star_yellow_500_36dp" />
+        android:drawable="@drawable/ic_star_yellow_600_36dp" />
 
     <item android:state_selected="true"
         android:state_window_focused="true"
-        android:drawable="@drawable/ic_star_yellow_500_36dp" />
+        android:drawable="@drawable/ic_star_yellow_600_36dp" />
 
-    <item android:drawable="@drawable/ic_star_yellow_500_36dp" />
+    <item android:drawable="@drawable/ic_star_yellow_600_36dp" />
 
 </selector>

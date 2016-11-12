@@ -50,6 +50,10 @@ public class TimeSlotPage extends Fragment {
         return view;
     }
 
+    public void refresh() {
+        adapter.notifyDataSetChanged();
+    }
+
     public GroupRecyclerViewAdapter getAdapter() {
         return adapter;
     }

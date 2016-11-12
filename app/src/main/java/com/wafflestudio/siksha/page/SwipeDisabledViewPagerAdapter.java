@@ -44,4 +44,6 @@ public class SwipeDisabledViewPagerAdapter extends FragmentPagerAdapter {
         fragments.add(fragment);
         pageTitles.add(title);
     }
+
+
 }

@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha.dialog;
+package com.wafflestudio.siksha.rate;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -15,8 +15,11 @@ import android.widget.Toast;
 import com.wafflestudio.siksha.MainActivity;
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.page.ChildRecyclerViewAdapter;
+import com.wafflestudio.siksha.page.SwipeDisabledViewPagerAdapter;
+import com.wafflestudio.siksha.page.bookmark.BookmarkFragment;
+import com.wafflestudio.siksha.page.menu.MenuFragment;
+import com.wafflestudio.siksha.page.settings.SettingsFragment;
 import com.wafflestudio.siksha.service.JSONDownloadReceiver;
-import com.wafflestudio.siksha.service.RatingRequestManager;
 import com.wafflestudio.siksha.util.Date;
 import com.wafflestudio.siksha.util.Fonts;
 import com.wafflestudio.siksha.util.NetworkChecker;
@@ -35,13 +38,14 @@ public class RatingDialog extends Dialog implements View.OnClickListener{
     private RatingBar ratingbar;
     private int numOfRatingToday;
 
-    
+    private ChildRecyclerViewAdapter.RefreshListener refreshListener;
 
-    public RatingDialog(Context context, String restaurant, String food) {
+    public RatingDialog(Context context, String restaurant, String food, ChildRecyclerViewAdapter.RefreshListener refreshListener) {
         super(context, R.style.RatingDialog);
         setContentView(R.layout.rating_dialog);
 
         this.context = context;
+        this.refreshListener = refreshListener;
         this.restaurant = restaurant;
         this.food = food;
         numOfRatingToday = Preference.loadIntValue(context,Preference.PREF_APP_NAME,Preference.PREF_KEY_NUMBER_OF_RATING_TODAY);
@@ -163,6 +167,7 @@ public class RatingDialog extends Dialog implements View.OnClickListener{
         Preference.save(context, Preference.PREF_APP_NAME, Preference.PREF_KEY_LAST_RATING_TIMESTAMP, Date.getDayOfYear());
         Preference.save(context,Preference.PREF_APP_NAME,Preference.PREF_KEY_NUMBER_OF_RATING_TODAY, numOfRatingToday +1);
 
+        refreshListener.refresh(ratingbar.getRating());
         new RatingFinishedDialog(this,context,2-numOfRatingToday).show();
     }
 

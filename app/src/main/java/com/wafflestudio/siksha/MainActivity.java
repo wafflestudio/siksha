@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
         AppDataManager.getInstance().setInformationDictionary(informationData);
     }
 
-    private void setupMenuData() {
+    public void setupMenuData() {
         Menu.Content[] menuData = JSONParser.parseJSONFile(getApplicationContext(), Menu.class).data;
         AppDataManager.getInstance().setMenuDictionaries(menuData);
     }

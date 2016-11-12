@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha.dialog;
+package com.wafflestudio.siksha.rate;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -20,21 +20,17 @@ import org.w3c.dom.Text;
 public class RatingFinishedDialog extends Dialog {
     private Context context;
 
-    private int ratingRemain;
-
     public RatingFinishedDialog(Dialog predialog, Context context,int ratingRemain) {
         super(context, R.style.RatingFinishedDialog);
         setContentView(R.layout.rating_finished_dialog);
 
         this.context= context;
 
-        this.ratingRemain = ratingRemain;
         predialog.dismiss();
 
         LinearLayout headerView = (LinearLayout) findViewById(R.id.rating_finished_dialog_header_view);
 
         TextView remainTextView = (TextView) findViewById(R.id.rating_remain_textview);
-        TextView alertRefreshTextView = (TextView) findViewById(R.id.rating_refresh_alert);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             float radius = UnitConverter.convertDpToPx(15.0f);
@@ -43,7 +39,6 @@ public class RatingFinishedDialog extends Dialog {
         }
 
         remainTextView.setTypeface(Fonts.fontAPAritaDotumSemiBold);
-        alertRefreshTextView.setTypeface(Fonts.fontAPAritaDotumMedium);
         String temp = remainTextView.getText().toString();
         remainTextView.setText(temp + " " + ratingRemain);
     }

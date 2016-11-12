@@ -79,7 +79,18 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
                     else {
                         for (int i = 0; i < size; i++) {
                             Food food = foods.get(i);
-                            stringBuilder.append("\n").append(food.price + "원 " + food.name);
+                            String rating;
+
+                            if(food.rating != null) {
+                                float rate = Float.parseFloat(food.rating);
+                                rating = " ★ "+String.format("%.1f", rate);
+                            }
+
+                            else {
+                                rating = " ☆ - -";
+                            }
+
+                            stringBuilder.append("\n").append(food.price + "원 " + food.name + rating);
                         }
                     }
 

@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha.service;
+package com.wafflestudio.siksha.rate;
 
 import android.content.Context;
 

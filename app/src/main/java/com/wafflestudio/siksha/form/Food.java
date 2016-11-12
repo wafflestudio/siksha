@@ -16,4 +16,7 @@ public class Food implements Serializable {
 
     @SerializedName("rating")
     public String rating;
+
+    @SerializedName("numberOfRatings")
+    public String numberOfRatings;
 }

@@ -45,6 +45,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     private boolean isBookmarkTab;
     private int index;
     private List<String> drawerExpandedList;
+    private TimeSlotPage timeSlotPage;
 
     public GroupRecyclerViewAdapter(Context context, List<Menu> data, boolean isBookmarkTab, int index) {
         this.context = context;
@@ -92,6 +93,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                     notEmptyRestaurantViewHolder.nameView.setText(restaurant);
 
                     ChildRecyclerViewAdapter adapter = new ChildRecyclerViewAdapter(data.get(position),context);
+
                     notEmptyRestaurantViewHolder.recyclerView.setAdapter(adapter);
 
                     if (BookmarkManager.isBookmarked(context, restaurant))

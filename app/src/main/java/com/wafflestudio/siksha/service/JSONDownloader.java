@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.wafflestudio.siksha.form.response.AppVersion;
 import com.wafflestudio.siksha.form.response.Information;
 import com.wafflestudio.siksha.form.response.DataVersion;
+import com.wafflestudio.siksha.rate.DownloadRequestManager;
 import com.wafflestudio.siksha.util.Date;
 import com.wafflestudio.siksha.util.Preference;
 import com.wafflestudio.siksha.widget.WidgetProvider;
