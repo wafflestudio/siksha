@@ -1,6 +1,7 @@
 package com.wafflestudio.siksha.page;
 
 import android.content.Context;
+import android.media.Rating;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.page.menu.MenuFragment;
 import com.wafflestudio.siksha.rate.RatingDialog;
 import com.wafflestudio.siksha.form.Menu;
+import com.wafflestudio.siksha.rate.RatingViewManager;
 import com.wafflestudio.siksha.service.JSONDownloadReceiver;
 import com.wafflestudio.siksha.util.Fonts;
 
@@ -21,7 +23,7 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     private Context context;
 
 
-    public ChildRecyclerViewAdapter( Menu data, Context context) {
+    public ChildRecyclerViewAdapter(Menu data, Context context) {
         this.data = data;
         this.context = context;
     }
@@ -30,7 +32,7 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (!data.isEmpty) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.menu_item, parent, false);
-            return new MenuViewHolder(view,context,this,data.restaurant);
+            return new MenuViewHolder(view, context, data.restaurant);
 
         } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.empty_menu_item, parent, false);
@@ -46,14 +48,7 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             menuViewHolder.nameView.setText(data.foods.get(position).name);
             menuViewHolder.setPosition(position);
 
-            if(data.foods.get(position).rating != null) {
-                float rate = Float.parseFloat(data.foods.get(position).rating);
-                menuViewHolder.ratingView.setText("★ "+String.format("%.1f", rate));
-            }
-
-            else
-                menuViewHolder.ratingView.setText("☆ - -");
-
+            RatingViewManager.buildView(data.foods.get(position).rating, menuViewHolder.ratingView);
         }
     }
 
@@ -73,18 +68,31 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         private Context context;
         private String restaurant;
         private LinearLayout holderLayout;
-        private ChildRecyclerViewAdapter adapter;
         private int position;
         private Float rating;
         private int numberOfRatings;
 
-        public MenuViewHolder(View itemView, Context context, ChildRecyclerViewAdapter adapter, String restaurant) {
+        public MenuViewHolder(View itemView, Context context, String restaurant) {
             super(itemView);
 
             this.context = context;
-            this.adapter = adapter;
             this.restaurant = restaurant;
 
+            if (data.foods.get(position).rating != null)
+                this.rating = Float.parseFloat(data.foods.get(position).rating);
+
+            if (data.foods.get(position).numberOfRatings != null) {
+                this.numberOfRatings = Integer.parseInt(data.foods.get(position).numberOfRatings);
+            }
+
+            else {
+                this.numberOfRatings = 0;
+            }
+
+            setViews();
+        }
+
+        private void setViews() {
             holderLayout = (LinearLayout) itemView.findViewById(R.id.holder_layout);
             holderLayout.setOnClickListener(this);
 
@@ -95,34 +103,13 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             priceView.setTypeface(Fonts.fontAPAritaDotumSemiBold);
             nameView.setTypeface(Fonts.fontAPAritaDotumMedium);
             ratingView.setTypeface(Fonts.fontBMJua);
-
-            if(data.foods.get(position).rating != null)
-                this.rating = Float.parseFloat(data.foods.get(position).rating);
-
-            if(data.foods.get(position).numberOfRatings != null)
-                this.numberOfRatings = Integer.parseInt(data.foods.get(position).numberOfRatings);
-
-            else
-                this.numberOfRatings = 0;
         }
 
         @Override
         public void onClick(View v) {
-            new RatingDialog(context,restaurant,nameView.getText().toString(), new RefreshListener(){
+            new RatingDialog(context, restaurant, nameView.getText().toString(), new RefreshListener(){
                 public void refresh(float newRating) {
-
-                    if(rating != null) {
-
-                        rating = ((rating * numberOfRatings) + newRating)/(numberOfRatings+1);
-                        numberOfRatings++;
-                        ratingView.setText("★ "+String.format("%.1f", rating));
-                    }
-
-                    else
-                        rating = newRating;
-                        numberOfRatings++;
-                        ratingView.setText("★ "+String.format("%.1f", rating));
-
+                    RatingViewManager.refreshView(newRating, rating, numberOfRatings, ratingView);
                 }
             }).show();
         }
@@ -144,6 +131,6 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     public interface RefreshListener {
-        public void refresh(float newRating);
+        void refresh(float newRating);
     }
 }

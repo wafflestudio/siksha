@@ -1,12 +1,16 @@
 package com.wafflestudio.siksha.rate;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.wafflestudio.siksha.service.JSONDownloadReceiver;
+import com.wafflestudio.siksha.util.Date;
+import com.wafflestudio.siksha.util.Preference;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,25 +24,39 @@ public class RatingRequestManager {
     private static final String SERVER_URL = "http://siksha.kr:8230";
     private static final String ROUTE_RATE = "/rate";
 
-    private String url;
     private Context context;
+    private RequestQueue queue;
 
     public RatingRequestManager(Context context) {
         this.context = context;
+
+        queue = RatingRequestQueueManager.getInstance(context.getApplicationContext()).getRequestQueue();
     }
 
-    public void postRating(final String restaurant, final String food, final double rating, final RatingDialog.VolleyCallback volleyCallBack) {
+    public void ratingPost(final String restaurant, final String food, final double rating, final RatingDialog ratingDialog) {
 
-        RequestQueue queue = RatingRequestQueueManager.getInstance(context.getApplicationContext()).getRequestQueue();
+        String url = SERVER_URL+ROUTE_RATE;
+        ratingPostStart(url, restaurant, food, rating, new VolleyCallback() {
 
-        url = SERVER_URL+ROUTE_RATE;
+            @Override
+            public void onSuccess(String response) {
+                ratingDialog.ratingSuccess();
+            }
 
+            @Override
+            public void onFailure() {
+                sendSignalToApp("POST_RATING", JSONDownloadReceiver.TYPE_ON_FAILURE);
+            }
+
+        });
+    }
+
+    private void ratingPostStart(String url, final String restaurant, final String food, final double rating, final VolleyCallback volleyCallBack) {
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>()
                 {
                     @Override
                     public void onResponse(String response) {
-                        // response
                         volleyCallBack.onSuccess(response);
                     }
                 },
@@ -62,6 +80,18 @@ public class RatingRequestManager {
             }
         };
         queue.add(postRequest);
+    }
+
+    private void sendSignalToApp(String action, int callbackType) {
+        Intent intent = new Intent();
+        intent.setAction(action);
+        intent.putExtra("callback_type", callbackType);
+        context.sendBroadcast(intent);
+    }
+
+    public interface VolleyCallback {
+        void onSuccess(String response);
+        void onFailure();
     }
 }
 

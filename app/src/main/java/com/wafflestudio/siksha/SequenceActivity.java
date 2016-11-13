@@ -1,6 +1,5 @@
 package com.wafflestudio.siksha;
 
-import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -9,11 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.TextView;
 
 import com.wafflestudio.siksha.page.settings.SequenceRecyclerViewAdapter;
-import com.wafflestudio.siksha.util.Animations;
 import com.wafflestudio.siksha.util.Fonts;
 import com.wafflestudio.siksha.util.Preference;
 
@@ -70,9 +67,7 @@ public class SequenceActivity extends AppCompatActivity implements View.OnClickL
             }
 
             @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-
-            }
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) { }
         });
         itemTouchHelper.attachToRecyclerView(recyclerView);
 

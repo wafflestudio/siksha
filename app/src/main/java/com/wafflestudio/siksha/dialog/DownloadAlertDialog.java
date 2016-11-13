@@ -36,7 +36,7 @@ public class DownloadAlertDialog extends Dialog {
         positiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (NetworkChecker.getInstance().isOnline(context)) {
+                if (NetworkChecker.isOnline(context)) {
                     dismiss();
                     ((MainActivity) context).downloadMenuData(JSONDownloadReceiver.ACTION_MENU_DOWNLOAD, true);
                 }

@@ -33,7 +33,7 @@ public class WidgetProvider extends AppWidgetProvider {
         Log.d("widget", "onUpdate()");
 
         if (!JSONDownloader.isJSONUpdated(context)) {
-            if (NetworkChecker.getInstance().isOnline(context))
+            if (NetworkChecker.isOnline(context))
                 new JSONDownloader(context, JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD).start();
             else {
                 for (int appWidgetID : appWidgetIds) {
@@ -93,7 +93,7 @@ public class WidgetProvider extends AppWidgetProvider {
             int appWidgetID = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 
             if (!JSONDownloader.isJSONUpdated(context)) {
-                if (NetworkChecker.getInstance().isOnline(context))
+                if (NetworkChecker.isOnline(context))
                     new JSONDownloader(context, JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD).start();
                 else {
                     if (WidgetConfigureActivity.isValidAppWidgetID(context, appWidgetID)) {
@@ -134,7 +134,7 @@ public class WidgetProvider extends AppWidgetProvider {
         } else if (intent.getAction().equals(STATE_WIDGET_REFRESH)) {
             int appWidgetID = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 
-            if (NetworkChecker.getInstance().isOnline(context)) {
+            if (NetworkChecker.isOnline(context)) {
                 Toast.makeText(context, R.string.now_refreshing, Toast.LENGTH_SHORT).show();
                 new JSONDownloader(context, JSONDownloadReceiver.ACTION_MENU_BACKGROUND_DOWNLOAD).start();
             }

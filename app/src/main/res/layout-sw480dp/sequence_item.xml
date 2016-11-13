@@ -26,6 +26,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical|right"
         android:scaleType="center"
-        android:src="@drawable/ic_reorder_orange_900_24dp" />
+        android:src="@drawable/sequence_drag_handle" />
 
 </android.support.v7.widget.CardView>

@@ -16,6 +16,7 @@ import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
 import com.kakao.util.KakaoParameterException;
 import com.wafflestudio.siksha.R;
 import com.wafflestudio.siksha.form.Food;
+import com.wafflestudio.siksha.rate.RatingViewManager;
 import com.wafflestudio.siksha.util.Date;
 import com.wafflestudio.siksha.util.Fonts;
 import com.wafflestudio.siksha.util.UnitConverter;
@@ -69,32 +70,7 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
                     final KakaoLink kakaoLink = KakaoLink.getKakaoLink(context);
                     final KakaoTalkLinkMessageBuilder kakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder();
 
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append(Date.getPrimaryTimestamp(Date.TYPE_NORMAL) + " " + Date.getTimeSlot(index)).append("\n");
-                    stringBuilder.append("[" + restaurant + "]").append("\n");
-
-                    int size = foods.size();
-                    if (size == 0)
-                        stringBuilder.append("\n").append(context.getString(R.string.empty_menu));
-                    else {
-                        for (int i = 0; i < size; i++) {
-                            Food food = foods.get(i);
-                            String rating;
-
-                            if(food.rating != null) {
-                                float rate = Float.parseFloat(food.rating);
-                                rating = " ★ "+String.format("%.1f", rate);
-                            }
-
-                            else {
-                                rating = " ☆ - -";
-                            }
-
-                            stringBuilder.append("\n").append(food.price + "원 " + food.name + rating);
-                        }
-                    }
-
-                    kakaoTalkLinkMessageBuilder.addText(stringBuilder.toString());
+                    kakaoTalkLinkMessageBuilder.addText(buildMessage());
                     kakaoTalkLinkMessageBuilder.addAppButton("식샤하러 가기!",
                             new AppActionBuilder()
                                     .addActionInfo(AppActionInfoBuilder
@@ -113,5 +89,24 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
                 }
                 break;
         }
+    }
+
+    private String buildMessage() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(Date.getPrimaryTimestamp(Date.TYPE_NORMAL) + " " + Date.getTimeSlot(index)).append("\n");
+        stringBuilder.append("[" + restaurant + "]").append("\n");
+
+        int size = foods.size();
+        if (size == 0)
+            stringBuilder.append("\n").append(context.getString(R.string.empty_menu));
+        else {
+            for (int i = 0; i < size; i++) {
+                Food food = foods.get(i);
+                String rating = RatingViewManager.buildString(food.rating);
+                stringBuilder.append("\n").append(food.price + "원 " + food.name + rating);
+            }
+        }
+
+        return stringBuilder.toString();
     }
 }

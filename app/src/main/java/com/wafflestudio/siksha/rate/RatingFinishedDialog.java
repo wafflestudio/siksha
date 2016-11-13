@@ -20,27 +20,23 @@ import org.w3c.dom.Text;
 public class RatingFinishedDialog extends Dialog {
     private Context context;
 
-    public RatingFinishedDialog(Dialog predialog, Context context,int ratingRemain) {
+    public RatingFinishedDialog(Context context, int ratingRemain) {
         super(context, R.style.RatingFinishedDialog);
         setContentView(R.layout.rating_finished_dialog);
 
         this.context= context;
 
-        predialog.dismiss();
-
         LinearLayout headerView = (LinearLayout) findViewById(R.id.rating_finished_dialog_header_view);
-
         TextView remainTextView = (TextView) findViewById(R.id.rating_remain_textview);
+        remainTextView.setTypeface(Fonts.fontAPAritaDotumSemiBold);
+        String temp = remainTextView.getText().toString();
+        remainTextView.setText(temp + " " + ratingRemain);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             float radius = UnitConverter.convertDpToPx(15.0f);
             float[] radii = {radius, radius, radius, radius, 0.0f, 0.0f, 0.0f, 0.0f};
             changeBackgroundDrawable(headerView, R.color.color_primary, radii);
         }
-
-        remainTextView.setTypeface(Fonts.fontAPAritaDotumSemiBold);
-        String temp = remainTextView.getText().toString();
-        remainTextView.setText(temp + " " + ratingRemain);
     }
 
     private void changeBackgroundDrawable(View view, int colorResourceID, float[] radii) {

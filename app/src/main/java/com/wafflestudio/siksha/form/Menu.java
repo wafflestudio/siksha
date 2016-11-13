@@ -9,5 +9,4 @@ public class Menu implements Serializable {
     public boolean isEmpty;
 
     public List<Food> foods;
-
 }

@@ -83,7 +83,6 @@ public class BookmarkFragment extends Fragment {
 
     public void refreshPageIndicators(int position) {
         dateView.setText(new StringBuilder().append(Date.getPrimaryTimestamp(Date.TYPE_NORMAL)).append(" ").append(Date.getTimeSlot(position)).toString());
-
     }
 
     private void setSelectedPosition(int position) {
