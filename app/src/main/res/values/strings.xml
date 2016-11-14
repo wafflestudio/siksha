@@ -67,7 +67,8 @@
     <string name="rating_yes">평가</string>
     <string name="rating_no">취소</string>
     <string name="rating_alert">※평가는 하루에 세 번 가능합니다.</string>
-    <string name="rating_finished"> 평가가 완료되었습니다.</string>
+    <string name="rating_leftover">회 남음)</string>
+    <string name="rating_finished">평가가 완료되었습니다.</string>
     <string name="rating_remain">오늘 남은 평가횟수 :</string>
 
     <!-- Widget -->

@@ -64,8 +64,8 @@ public class RatingDialog extends Dialog implements View.OnClickListener {
         restaurantNameView.setText(restaurant);
         mealNameView.setText(meal);
 
-        String temp = alertView.getText().toString();
-        alertView.setText( temp + "(" + (3 - numOfRatingToday) + "회 남음)");
+        String alertString = context.getString(R.string.rating_alert) + "(" + (3-numOfRatingToday) + context.getString(R.string.rating_leftover);
+        alertView.setText(alertString);
 
         titleView.setTypeface(Fonts.fontBMJua);
         restaurantView.setTypeface(Fonts.fontAPAritaDotumSemiBold);
@@ -140,7 +140,6 @@ public class RatingDialog extends Dialog implements View.OnClickListener {
     }
 
     private boolean checkDuplication() {
-
         if (numOfRatingToday < 3) {
             return true;
         }

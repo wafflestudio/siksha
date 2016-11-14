@@ -3,11 +3,11 @@ package com.wafflestudio.siksha.rate;
 import android.widget.TextView;
 
 /**
- * Created by Administrator on 2016-11-13.
+ * Created by Jooh on 2016-11-13.
  */
 public class RatingViewManager {
 
-    public static void buildView(String rating, TextView ratingView) {
+    public static void buildView (String rating, TextView ratingView) {
         if(rating != null) {
             float rate = Float.parseFloat(rating);
             ratingView.setText("★ "+String.format("%.1f", rate));
@@ -18,17 +18,13 @@ public class RatingViewManager {
         }
     }
 
-    public static void refreshView(float newRating, Float rating, int numberOfRatings, TextView ratingView) {
-        if (rating != null) {
-            rating = ((rating * numberOfRatings) + newRating)/(numberOfRatings+1);
-            numberOfRatings++;
+    public static void buildView (Float rating, TextView ratingView) {
+        if(rating != null) {
             ratingView.setText("★ "+String.format("%.1f", rating));
         }
 
         else {
-            rating = newRating;
-            numberOfRatings++;
-            ratingView.setText("★ " + String.format("%.1f", rating));
+            ratingView.setText("☆ - -");
         }
     }
 

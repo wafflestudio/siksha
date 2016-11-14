@@ -109,7 +109,15 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         public void onClick(View v) {
             new RatingDialog(context, restaurant, nameView.getText().toString(), new RefreshListener(){
                 public void refresh(float newRating) {
-                    RatingViewManager.refreshView(newRating, rating, numberOfRatings, ratingView);
+                    if (rating != null) {
+                        rating = (rating * numberOfRatings + newRating)/(numberOfRatings+1);
+                    }
+
+                    else {
+                        rating = newRating;
+                    }
+                    numberOfRatings++;
+                    RatingViewManager.buildView(rating, ratingView);
                 }
             }).show();
         }
