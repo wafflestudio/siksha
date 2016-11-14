@@ -44,10 +44,24 @@ public class SequenceActivity extends AppCompatActivity implements View.OnClickL
         actionButton = (FloatingActionButton) findViewById(R.id.activity_sequence_floating_action_button);
 
         messageView.setTypeface(Fonts.fontAPAritaDotumMedium);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+        final ItemTouchHelper itemTouchHelper = getItemHelper();
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
+        adapter = new SequenceRecyclerViewAdapter(getCurrentSequence(), new SequenceRecyclerViewAdapter.OnStartDragListener() {
+            @Override
+            public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+                itemTouchHelper.startDrag(viewHolder);
+            }
+        });
+        recyclerView.setAdapter(adapter);
+
+        actionButton.setOnClickListener(this);
+    }
+
+    private ItemTouchHelper getItemHelper() {
+        return new ItemTouchHelper(new ItemTouchHelper.Callback() {
             @Override
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
@@ -69,17 +83,6 @@ public class SequenceActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) { }
         });
-        itemTouchHelper.attachToRecyclerView(recyclerView);
-
-        adapter = new SequenceRecyclerViewAdapter(getCurrentSequence(), new SequenceRecyclerViewAdapter.OnStartDragListener() {
-            @Override
-            public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-                itemTouchHelper.startDrag(viewHolder);
-            }
-        });
-        recyclerView.setAdapter(adapter);
-
-        actionButton.setOnClickListener(this);
     }
 
     private List<String> getCurrentSequence() {
