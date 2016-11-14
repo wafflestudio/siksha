@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
 
         if(lastday < today) {
             Preference.save(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_LAST_RATING_TIMESTAMP, Date.getDayOfYear());
-            Preference.save(this,Preference.PREF_APP_NAME,Preference.PREF_KEY_NUMBER_OF_RATING_TODAY,0);
+            Preference.save(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_NUMBER_OF_RATING_TODAY, 0);
         }
     }
 
@@ -342,9 +342,6 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
 
         if (NetworkChecker.isOnline(this))
             downloadMenuData(JSONDownloadReceiver.ACTION_MENU_REFRESH, false);
-        else
-            Toast.makeText(this, R.string.check_network_state, Toast.LENGTH_SHORT).show();
-
 
         if (Preference.loadBooleanValue(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_REFRESH_ON_RESUME)) {
             setupMenuData();

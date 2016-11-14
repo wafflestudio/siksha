@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.wafflestudio.siksha.MainActivity;
 import com.wafflestudio.siksha.R;
+import com.wafflestudio.siksha.form.Food;
 import com.wafflestudio.siksha.page.menu.MenuFragment;
 import com.wafflestudio.siksha.rate.RatingDialog;
 import com.wafflestudio.siksha.form.Menu;
@@ -69,25 +70,12 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         private String restaurant;
         private LinearLayout holderLayout;
         private int position;
-        private Float rating;
-        private int numberOfRatings;
 
         public MenuViewHolder(View itemView, Context context, String restaurant) {
             super(itemView);
 
             this.context = context;
             this.restaurant = restaurant;
-
-            if (data.foods.get(position).rating != null)
-                this.rating = Float.parseFloat(data.foods.get(position).rating);
-
-            if (data.foods.get(position).numberOfRatings != null) {
-                this.numberOfRatings = Integer.parseInt(data.foods.get(position).numberOfRatings);
-            }
-
-            else {
-                this.numberOfRatings = 0;
-            }
 
             setViews();
         }
@@ -109,21 +97,31 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         public void onClick(View v) {
             new RatingDialog(context, restaurant, nameView.getText().toString(), new RefreshListener(){
                 public void refresh(float newRating) {
-                    if (rating != null) {
-                        rating = (rating * numberOfRatings + newRating)/(numberOfRatings+1);
-                    }
-
-                    else {
-                        rating = newRating;
-                    }
-                    numberOfRatings++;
-                    RatingViewManager.buildView(rating, ratingView);
+                    RatingViewManager.buildView(getRefreshedRating(newRating),ratingView);
                 }
             }).show();
         }
 
         private void setPosition(int position) {
             this.position = position;
+        }
+
+        private Float getRefreshedRating(float newRating) {
+            Food food = data.foods.get(position);
+            Float rating;
+
+            if(food.rating != null) {
+                rating = Float.parseFloat(food.rating);
+                int numberOfRatings = Integer.parseInt(food.numberOfRatings);
+                rating = (rating * numberOfRatings + newRating) / (numberOfRatings+1);
+                food.numberOfRatings = Integer.toString(numberOfRatings+1);
+            }
+            else {
+                rating = newRating;
+                food.numberOfRatings = "1";
+            }
+            food.rating = Float.toString(rating);
+            return rating;
         }
     }
 
