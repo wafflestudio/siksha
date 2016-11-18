@@ -23,7 +23,7 @@ import java.io.IOException;
 
 public class JSONDownloader {
     private static final String SERVER_URL = "http://siksha.kr:8230";
-    private static final String REDIRECT_SERVER_URL = "http://kanggyu94.fun25.co.kr:13204";
+    private static final String REDIRECT_SERVER_URL = "http://dev.wafflestudio.com:8230";
 
     private static final String ROUTE_MENU_VIEW = "/rate/view";
     private static final String ROUTE_INFORMATION_VIEW = "/information/view";
@@ -240,20 +240,6 @@ public class JSONDownloader {
                     }, REQUEST_TYPE_DOWNLOAD);
                 }
             });
-        }
-        else if (action.equals(JSONDownloadReceiver.ACTION_RATING_INFORMATION_DOWNLOAD)){ // get rating info
-            fetchJSONFromServer(new VolleyCallback() {
-                @Override
-                public void onSuccess(String response) {
-                    writeJSONOnInternalStorage(response); // TODO : data형식에 맞춰서 때려넣기 이것만하면될듯?
-                    sendSignalToApp(action, JSONDownloadReceiver.TYPE_ON_SUCCESS);
-                }
-
-                @Override
-                public void onFailure() {
-                    sendSignalToApp(action, JSONDownloadReceiver.TYPE_ON_FAILURE);
-                }
-            }, REQUEST_TYPE_DOWNLOAD);
         }
         else {
             fetchJSONFromServer(new VolleyCallback() {

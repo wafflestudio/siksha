@@ -340,9 +340,6 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadRecei
         registerReceiver();
         super.onResume();
 
-        if (NetworkChecker.isOnline(this))
-            downloadMenuData(JSONDownloadReceiver.ACTION_MENU_REFRESH, false);
-
         if (Preference.loadBooleanValue(this, Preference.PREF_APP_NAME, Preference.PREF_KEY_REFRESH_ON_RESUME)) {
             setupMenuData();
 

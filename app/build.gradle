@@ -9,8 +9,8 @@ android {
         applicationId "com.wafflestudio.siksha"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 9
-        versionName "2.1.0"
+        versionCode 12
+        versionName "2.1.2"
     }
     buildTypes {
         release {

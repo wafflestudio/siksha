@@ -72,6 +72,7 @@ public class RatingRequestManager {
             protected Map<String, String> getParams()
             {
                 Map<String, String>  params = new HashMap<String, String>();
+                params.put("key","siksha1996");
                 params.put("restaurant",restaurant);
                 params.put("meal",food);
                 params.put("rating", String.valueOf(rating));
